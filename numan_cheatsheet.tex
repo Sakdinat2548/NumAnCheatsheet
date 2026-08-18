@@ -1,0 +1,316 @@
+\documentclass[9pt]{extarticle}
+\usepackage[a4paper,margin=0.25in]{geometry}
+\usepackage{lmodern}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{0.15in}
+\setlength{\columnseprule}{0.4pt}
+
+% Compact list environment
+\setlist[itemize]{itemsep=0pt,parsep=0pt,topsep=1pt,leftmargin=*,partopsep=0pt}
+\setlist[enumerate]{itemsep=0pt,parsep=0pt,topsep=1pt,leftmargin=*,partopsep=0pt}
+
+\titleformat{\section}{\normalfont\bfseries\small\color{RoyalBlue}}{\thesection}{0.3em}{}
+\titlespacing{\section}{0pt}{3pt}{2pt}
+\titleformat{\subsection}{\normalfont\bfseries\footnotesize\color{OliveGreen}}{}{0em}{}
+\titlespacing{\subsection}{0pt}{2pt}{1pt}
+
+\newcommand{\hl}[1]{\textbf{\textcolor{BrickRed}{#1}}}
+\newcommand{\sepline}{\vspace{1pt}\hrule\vspace{2pt}}
+
+\begin{document}
+\footnotesize
+
+\begin{center}
+{\bfseries\large Numerical Analysis (SCI19 3111) --- Midterm Cheat Sheet}\\
+{\scriptsize Errors $\cdot$ Horner $\cdot$ Taylor/Truncation $\cdot$ Interpolation $\cdot$ Lagrange $\cdot$ Vandermonde}
+\end{center}
+\sepline
+
+\raggedcolumns
+\begin{multicols}{3}
+
+\section{0. Prof's Blueprint (High Priority)}
+\begin{itemize}
+\item \hl{Errors:} abs/rel error, MAE, RMSE on discrete points.
+\item \hl{Polynomial forms:} standard vs nested (Horner) vs centered; FLOP counts.
+\item \hl{Horner:} evaluate $p(c)$; synthetic division by $ax-b$; derivative via repeated Horner.
+\item \hl{Taylor:} construct poly at given center; truncation error integral \& Lagrange form; bound on interval (Sandwich Thm); find $n$ for tolerance; Maclaurin/Taylor series convergence.
+\item \hl{Interpolation:} setup linear system + matrix form $Xa=y$; Vandermonde det (why nonzero); over/underdetermined \& free parameters; Lagrange basis $\ell_i(x)$ \& poly $p(x)$; extrapolation vs interpolation; divided differences (1st/2nd order only, no full Newton); Chebyshev nodes, Runge phenomenon; Bézier curves (basic).
+\item MCQ + written section, 30 pts total. Bring 1 A4 cheat sheet (this one!).
+\end{itemize}
+
+\section{1. Error Formulas}
+\begin{equation*}
+E_{abs}=|f(x)-\tilde f(x)|,\quad E_{rel}=\frac{|f(x)-\tilde f(x)|}{|f(x)|}
+\end{equation*}
+\begin{equation*}
+\text{MAE}=\frac1n\sum_{i=1}^n|f(x_i)-\tilde f(x_i)|
+\end{equation*}
+\begin{equation*}
+\text{RMSE}=\sqrt{\frac1n\sum_{i=1}^n\big(f(x_i)-\tilde f(x_i)\big)^2}
+\end{equation*}
+\hl{Trap:} RMSE penalizes large errors more (squares); MAE treats all equally. Round to 5 dp unless told otherwise.
+
+\section{2. Polynomial Forms}
+\textbf{Standard:} $p_n(x)=a_nx^n+\cdots+a_1x+a_0$ — needs $\sim 2n-1$ mults, $n$ adds (naive) or $n(n+1)/2$ mults w/o precomputed powers.\\
+\textbf{Nested (Horner):} $p_n(x)=(\cdots((a_nx+a_{n-1})x+a_{n-2})x+\cdots)x+a_0$ — $n$ mults, $n$ adds. \hl{Always fewer ops.}\\
+\textbf{Centered at $x_0$:} $p_n(x)=\sum b_k(x-x_0)^k$. Get $b_k$ via repeated synthetic division by $(x-x_0)$, or Taylor: $b_k=p^{(k)}(x_0)/k!$.
+
+\subsection{Horner's Method (synthetic division)}
+Divide $p(x)$ by $(x-c)$: bring down $a_n$, each next coeff $=a_k+c\cdot(\text{prev result})$. Last value = remainder = $p(c)$.
+\[
+\begin{array}{c|cccc}
+ & a_n & a_{n-1} & \cdots & a_0\\[1pt]
+c & & c b_{n-1} & \cdots & c b_0\\[-1pt]
+\hline
+ & b_{n-1} & b_{n-2} & \cdots & r
+\end{array}
+\]
+\begin{itemize}
+\item $p(x)=(x-c)q(x)+r$, $r=p(c)$; bottom row (minus last) $=$ coeffs of $q(x)$.
+\item Divide by $(ax-b)$: divide by $(x-b/a)$ first (root $c=b/a$), get $q^*(x)$; true quotient $q(x)=q^*(x)/a$, same remainder $r$.
+\item \hl{Derivative link:} run the tableau on $p(x)$ to get $q(x)$ \& $r=p(c)$; run \emph{another} tableau on $q(x)$ at same $c$ $\Rightarrow$ new remainder $=p'(c)$. (Repeat on next quotient for $p''(c)/2!$, etc.)
+\item \hl{Trap:} two ways to get $p'(1)$ — direct Horner on $p'(x)$, or double-tableau on $p(x)$ — must match.
+\end{itemize}
+
+\section{3. Taylor \& Maclaurin}
+\begin{equation*}
+f(x)=\sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!}(x-x_0)^k + R_n(x)
+\end{equation*}
+Maclaurin: $x_0=0$.
+
+\subsection{Truncation Error $R_n(x)$}
+\textbf{Integral form:}
+\begin{equation*}
+R_n(x)=\int_{x_0}^x \frac{(x-t)^n}{n!}f^{(n+1)}(t)\,dt
+\end{equation*}
+\textbf{Lagrange form:}
+\begin{equation*}
+R_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}
+\end{equation*}
+for some $\xi$ between $x_0$ and $x$.
+\hl{Relationship:} Lagrange form = Mean Value Thm applied to the integral form (weighted avg of $f^{(n+1)}$ over interval).
+
+\subsection{Bounding $R_n(x)$ on interval $[a,b]$ (Sandwich Thm)}
+\begin{enumerate}
+\item Find $M=\max_{\xi\in[a,b]}|f^{(n+1)}(\xi)|$ (often $=$ bound on derivative amplitude, e.g. for $\sin,\cos$ terms $M\le 3^{n+1}$ etc.)
+\item Find max of $|x-x_0|^{n+1}$ on $[a,b]$ (largest distance from center).
+\item $|R_n(x)|\le \dfrac{M\cdot d^{n+1}}{(n+1)!}$ where $d=\max|x-x_0|$.
+\end{enumerate}
+
+\subsection{Finding $n$ for tolerance $|R_n|<\varepsilon$}
+Set bound expression $<\varepsilon$, solve for smallest integer $n$ (try increasing $n$ until factorial growth beats $d^{n+1}$ growth). Use $n!$ growth dominates exponential — trial/error with a table is acceptable.
+
+\subsection{"Largest $x$" type (Quiz 3 Q5 style)}
+Fix $n$; treat bound $\dfrac{M d^{n+1}}{(n+1)!}<\varepsilon$ as inequality in $x$ (since $d=x-x_0$ here); solve for $x$.
+
+\subsection{Series Convergence}
+Taylor series $=f(x)$ $\iff \lim_{n\to\infty}R_n(x)=0$. Writing the infinite sum from the pattern does \emph{not} by itself prove convergence — must separately verify $R_n\to0$ (true for $\sin,\cos,e^x$ on all $\mathbb R$ since $M$ bounded, $d^{n+1}/(n+1)!\to0$).
+
+\subsection{Maclaurin of $\sin(3x)$}
+\begin{equation*}
+\sin(3x)=\sum_{k=0}^{\infty}\frac{(-1)^k (3x)^{2k+1}}{(2k+1)!}
+\end{equation*}
+\begin{equation*}
+=3x-\frac{27x^3}{6}+\frac{243x^5}{120}-\cdots
+\end{equation*}
+\hl{Trap:} degree-8 Maclaurin poly of an odd function still stops at $x^7$ term (even-degree coeffs are 0) — write poly \emph{through} degree 8, don't force an $x^8$ term.
+
+\columnbreak
+
+\section{4. Chain Rule / Derivative Practice}
+$[f(g(x))]'=f'(g(x))g'(x)$. Common combos: $2\sin x+e^x$; $1+\cos^2 x=1+(\cos x)^2\Rightarrow$ derivative $=-2\cos x\sin x=-\sin(2x)$.
+\hl{Trap:} evaluate derivatives \emph{at the center} $x_0$ before plugging into Taylor coeff $f^{(k)}(x_0)/k!$ — don't leave symbolic.
+Useful values: $\sin(\pi/2)=1,\cos(\pi/2)=0$; $\sin(\pi/4)=\cos(\pi/4)=1/\sqrt2$; $\sin(-\pi/4)=-1/\sqrt2$.
+
+\section{5. Interpolation Basics}
+\hl{Interpolation:} passes exactly through given data points (local fit). \hl{Approximation:} fits overall trend, need not pass through points (global fit, e.g. least squares). \hl{Extrapolation:} evaluate poly \emph{outside} node range — much less reliable than interpolation (points 4-5 pattern in quizzes: always flag extrapolation as less trustworthy).
+
+\subsection{Degree-1 (Linear) Interpolation}
+Given $(x_0,y_0),(x_1,y_1)$: $p_1(x)=y_0+\dfrac{y_1-y_0}{x_1-x_0}(x-x_0)$.
+
+\subsection{Vandermonde System}
+For $n+1$ points, poly degree $n$: $a_0+a_1x_i+\cdots+a_nx_i^n=y_i$ for each $i$. Matrix form $Xa=y$ where
+\begin{equation*}
+X=\begin{pmatrix}1&x_0&x_0^2&\cdots&x_0^n\\ 1&x_1&x_1^2&\cdots&x_1^n\\ \vdots&&&&\vdots\\ 1&x_n&x_n^2&\cdots&x_n^n\end{pmatrix}
+\end{equation*}
+\begin{equation*}
+\det(X)=\prod_{0\le i<j\le n}(x_j-x_i)
+\end{equation*}
+\hl{Why nonzero:} interpolation nodes $x_i$ are \emph{distinct} $\Rightarrow$ every factor $(x_j-x_i)\ne0$ $\Rightarrow$ $\det\ne0$ $\Rightarrow$ unique solution guaranteed.
+
+\subsection{Free Parameters (over/underdetermined)}
+\# points $=m+1$, poly degree $=n$. If $n>m$: \hl{underdetermined} — infinitely many interpolating polys; free parameters $=n-m$ (extra coefficients not pinned down by the $m+1$ equations). If $n<m$: \hl{overdetermined} — generally no exact solution (unless data is consistent) $\to$ use approximation (least squares) instead.
+\hl{Trap:} "degree at most $n$" with only $m+1<n+1$ points $\Rightarrow$ family has $n-m$ free parameters — identify them explicitly as the highest-order coefficients.
+
+\subsection{Lagrange Interpolation}
+\begin{equation*}
+\ell_i(x)=\prod_{\substack{j=0\\ j\ne i}}^{n}\frac{x-x_j}{x_i-x_j},\qquad p(x)=\sum_{i=0}^n y_i\,\ell_i(x)
+\end{equation*}
+Properties: $\ell_i(x_j)=\delta_{ij}$ (1 if $i=j$, else 0); basis \emph{depends only on nodes} $x_i$, not on $y_i$ or $f$ — same $\ell_i$ reused for any function on same nodes.
+\textbf{Steps:} (1) list nodes; (2) build each $\ell_i(x)$ as product of $(x-x_j)/(x_i-x_j)$ over $j\ne i$; (3) sum $y_i\ell_i(x)$; (4) simplify/evaluate at target point; (5) compute abs/rel error vs known true value if given; (6) extrapolate = plug $x$ outside node range into same $p(x)$.
+
+\section{6. Divided Differences (basic)}
+1st order: $f[x_i,x_{i+1}]=\dfrac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}$.\\
+2nd order: $f[x_i,x_{i+1},x_{i+2}]=\dfrac{f[x_{i+1},x_{i+2}]-f[x_i,x_{i+1}]}{x_{i+2}-x_i}$.\\
+(No need for full Newton formula per prof — just compute these building blocks.)
+
+\section{7. Grids, Runge, Chebyshev, Bézier}
+\begin{itemize}
+\item \hl{Uniform grid:} equally spaced nodes. \hl{Non-uniform:} unequal spacing.
+\item \hl{Runge's phenomenon:} high-degree interpolation on \emph{uniform} nodes over $[-1,1]$-type intervals can oscillate wildly near endpoints as $n$ increases.
+\item \hl{Chebyshev nodes:} cluster near interval endpoints; specifically chosen to \emph{minimize} Runge oscillation — preferred over uniform for high-degree interpolation.
+\item \hl{Bézier curves:} defined by control points; curve passes through \emph{endpoint} control points only (not interior ones); used in computer graphics for smooth curve design; based on Bernstein polynomials as blending functions.
+\end{itemize}
+
+\columnbreak
+
+\section{8. Worked-Pattern Checklists}
+
+\subsection{Error Question Checklist}
+$\square$ compute $f(x_i)$ exactly $\square$ compute $\tilde f(x_i)$ $\square$ abs error $=|diff|$ $\square$ rel error $=$ abs/$|f|$ $\square$ if multiple points: MAE (avg of abs), RMSE (sqrt avg of sq).
+
+\subsection{Horner Question Checklist}
+$\square$ write coeffs $a_n,\dots,a_0$ (\hl{include zeros for missing powers!}) $\square$ build synthetic division table (bring down, multiply by $c$, add) $\square$ last entry = $p(c)$ $\square$ row above = coeffs of $q(x)$ $\square$ repeat table on $q(x)$ at same $c$ for $p'(c)$ if asked $\square$ for divisor $ax-b$: use $c=b/a$, remember to divide quotient coeffs by $a$.
+
+\subsection{Taylor Construction Checklist}
+$\square$ pick center $x_0$ $\square$ compute derivatives $f,f',f'',\dots$ at $x_0$ up to needed order $\square$ divide each by $k!$ $\square$ assemble $\sum \tfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k$ $\square$ do \emph{not} simplify away the $(x-x_0)^k$ factors unless asked to expand.
+
+\subsection{Truncation Error Bound Checklist}
+$\square$ identify $f^{(n+1)}(x)$ pattern (for $\sin,\cos$ combos it's bounded by amplitude) $\square$ find $M=$ max$|f^{(n+1)}|$ on given interval $\square$ find max $|x-x_0|=d$ on interval $\square$ plug into $Md^{n+1}/(n+1)!$ $\square$ for "find $n$": increase $n$ until bound $<\varepsilon$, show smallest such $n$ $\square$ for "find $x$": solve bound $<\varepsilon$ for $x$ algebraically or numerically.
+
+\subsection{Interpolation System Checklist}
+$\square$ count points $m+1$ vs desired degree $n$ $\square$ write $m+1$ equations $a_0+a_1x_i+\cdots+a_nx_i^n=y_i$ $\square$ arrange as $Xa=y$ (rows=points, cols=powers $0..n$) $\square$ if square: compute Vandermonde det via product formula $\square$ if not square: state under/overdetermined \& \# free params.
+
+\subsection{Lagrange Checklist}
+$\square$ list all nodes $\square$ for each needed $\ell_i$: multiply $(x-x_j)/(x_i-x_j)$ over all $j\ne i$ (don't forget \emph{every} other node, incl. non-adjacent ones) $\square$ sum $y_i\ell_i(x)$ for full $p(x)$ $\square$ evaluate at target, compare to true value for errors $\square$ extrapolate = same formula outside range, note reduced reliability.
+
+\section{9. Common Traps Summary}
+\begin{itemize}
+\item Forgetting \hl{zero coefficients} for missing powers in Horner tables.
+\item Confusing \hl{quotient} $q(x)$ degree (always one less than $p(x)$) after synthetic division.
+\item Sign errors in $(x-x_0)$ vs $(x_0-x)$ in centered form / Taylor.
+\item Odd/even function Maclaurin series — half the coefficients vanish; don't invent nonzero terms.
+\item Mixing up \hl{integral} vs \hl{Lagrange} form of $R_n$ — integral needs no unknown $\xi$, Lagrange does.
+\item Free parameter count: it's (poly degree $+1$) $-$ (\# data points), not degree itself.
+\item Lagrange basis $\ell_i(x_j)=0$ for $j\ne i$, $=1$ for $j=i$ — sanity check your basis polys.
+\item Vandermonde det $=0$ \emph{only if} two nodes coincide — never zero for distinct interpolation nodes.
+\item Extrapolation error can be large — always flag lower confidence vs interpolation.
+\item Degree of sum of two polys = max(deg); degree of product = sum(degs); watch for \hl{cancellation} making sum degree drop (find $\alpha$ s.t. leading terms cancel).
+\item FLOP counts: nested form always $\le$ standard form; state exact counts ($n$ mult + $n$ add for degree $n$ nested).
+\item Round only final numeric answers to 5 decimals; keep exact fractions/symbols mid-derivation.
+\end{itemize}
+
+\section{10. Quick Reference Values}
+$e\approx2.71828$, $\pi\approx3.14159$, $\sqrt2\approx1.41421$, $1/\sqrt2\approx0.70711$.
+$n!$: $5!=120,6!=720,7!=5040,8!=40320,9!=362880,10!=3628800$.
+
+\section{11. Worked Mini-Examples}
+
+\subsection{Horner: $p(x)=2x^3-3x^2+0x+5$ at $c=2$}
+Coeffs: $2,-3,0,5$.
+\[
+\begin{array}{c|cccc}
+ & 2 & -3 & 0 & 5\\[1pt]
+2 & & 4 & 2 & 4\\[-1pt]
+\hline
+ & 2 & 1 & 2 & 9
+\end{array}
+\]
+So $p(2)=9$; quotient $q(x)=2x^2+x+2$; $p(x)=(x-2)(2x^2+x+2)+9$.
+\textbf{For $p'(2)$:} run another tableau on $q$'s coeffs $2,1,2$ at $c=2$:
+\[
+\begin{array}{c|ccc}
+ & 2 & 1 & 2\\[1pt]
+2 & & 4 & 10\\[-1pt]
+\hline
+ & 2 & 5 & 12
+\end{array}
+\]
+So $p'(2)=12$.
+
+\subsection{Lagrange: nodes $(0,1),(1,3),(2,7)$, find $p(1.5)$}
+\begin{align*}
+\ell_0(x)&=\tfrac{(x-1)(x-2)}{(0-1)(0-2)}=\tfrac{(x-1)(x-2)}{2}\\
+\ell_1(x)&=\tfrac{(x-0)(x-2)}{(1-0)(1-2)}=\tfrac{x(x-2)}{-1}\\
+\ell_2(x)&=\tfrac{(x-0)(x-1)}{(2-0)(2-1)}=\tfrac{x(x-1)}{2}
+\end{align*}
+$p(x)=1\cdot\ell_0(x)+3\cdot\ell_1(x)+7\cdot\ell_2(x)$. At $x=1.5$: $\ell_0=\tfrac{(0.5)(-0.5)}{2}=-0.125$, $\ell_1=\tfrac{(1.5)(-0.5)}{-1}=0.75$, $\ell_2=\tfrac{(1.5)(0.5)}{2}=0.375$.
+$p(1.5)=1(-0.125)+3(0.75)+7(0.375)=-0.125+2.25+2.625=4.75$.
+
+\subsection{Vandermonde det: nodes $0,1,2$}
+\begin{equation*}
+\det(X)=\prod_{0\le i<j\le2}(x_j-x_i)
+\end{equation*}
+\begin{equation*}
+=(1{-}0)(2{-}0)(2{-}1)=1\cdot2\cdot1=2\ne0
+\end{equation*}
+
+\subsection{Free Parameters: 2 points, degree $\le3$}
+Points $(2,5),(5,-1)$: $m+1=2$, so $m=1$; want degree $n=3$ (4 coeffs $a_0,a_1,a_2,a_3$). Equations: 2. Free params $=n-m=3-1=2$ — e.g. $a_2,a_3$ free; solve $a_0,a_1$ in terms of them from the 2 constraints.
+
+\subsection{Truncation error bound example}
+$f(x)=\sin(3x)$, $n=8$ (so $n+1=9$), interval $[-3,4]$, $x_0=0$: $f^{(9)}(x)=\pm3^9\cos(3x)$ or $\pm3^9\sin(3x)\Rightarrow M=3^9=19683$. $d=\max(|{-3}|,|4|)=4$.
+\begin{equation*}
+|R_8(x)|\le\frac{19683\cdot4^9}{9!}=\frac{19683\cdot262144}{362880}\approx14230
+\end{equation*}
+(Large bound is fine — the point is applying the formula correctly, not that it's tight.)
+
+\subsection{Diff./Integration Quick Review}
+Product rule: $(fg)'=f'g+fg'$. Quotient rule: $(f/g)'=\dfrac{f'g-fg'}{g^2}$.
+Chain rule: $[f(g(x))]'=f'(g(x))g'(x)$.
+Integration by parts: $\displaystyle\int u\,dv=uv-\int v\,du$.
+\textbf{Example:} $\int x\sin x\,dx$: let $u=x,dv=\sin x\,dx\Rightarrow du=dx,v=-\cos x$.
+\begin{align*}
+\int x\sin x\,dx&=-x\cos x+\int\cos x\,dx\\
+&=-x\cos x+\sin x+C
+\end{align*}
+
+\subsection{Centered Form: full worked example}
+$p(x)=x^3-2x^2+3x-5$, center $x_0=2$. Repeatedly synthetic-divide by $(x-2)$; each remainder is the next $b_k$ (coefficient of $(x-x_0)^k$).
+\begin{align*}
+&1,{-}2,3,{-}5 \to 1,0,3\mid b_0{=}1\quad\text{(Div.1)}\\
+&1,0,3 \to 1,2\mid b_1{=}7\quad\text{(Div.2)}\\
+&1,2 \to 1\mid b_2{=}4,\,b_3{=}1\quad\text{(Div.3)}
+\end{align*}
+So $p(x)=1+7(x-2)+4(x-2)^2+(x-2)^3$. \textbf{Check:} expand back — matches original. $\square$ Each division: bring down leading coeff, next $=$ coeff $+2\times$prev; last value $=$ remainder.
+
+\subsection{Horner: divide by $ax-b$ (worked)}
+Divide $4x^3-7x^2+5x+8$ by $2x+1$ (i.e. $a=2,b=-1$, root $c=-\tfrac12$).
+\[
+\begin{array}{c|cccc}
+ & 4 & -7 & 5 & 8\\[1pt]
+-\frac12 & & -2 & 4.5 & -4.75\\[-1pt]
+\hline
+ & 4 & -9 & 9.5 & 3.25
+\end{array}
+\]
+$q^*(x)=4x^2-9x+9.5$, remainder $r=3.25$ (remainder unchanged by scaling). True quotient $q(x)=q^*(x)/2=2x^2-4.5x+4.75$.
+\textbf{Check:} $(2x+1)(2x^2-4.5x+4.75)+3.25=4x^3-7x^2+5x+8$. $\checkmark$
+
+\subsection{B\'ezier Curves: construction}
+Bernstein form, $n$ control pts $P_0,\dots,P_n$, $t\in[0,1]$:
+\begin{equation*}
+B(t)=\sum_{i=0}^n \binom{n}{i}(1-t)^{n-i}t^i\,P_i
+\end{equation*}
+Quadratic ($n{=}2$): $B(t)=(1{-}t)^2P_0+2t(1{-}t)P_1+t^2P_2$. Cubic ($n{=}3$): add $3t^2(1{-}t)P_2^{\,\prime}\ldots$ — use full Bernstein sum above.
+\textbf{Key facts:} curve passes through $P_0$ (at $t{=}0$) and $P_n$ (at $t{=}1$) only; interior points \emph{pull} the curve but aren't touched.
+\textbf{Worked example:} quadratic, $P_0=(0,0),P_1=(1,2),P_2=(3,0)$, find $B(0.5)$:
+\begin{align*}
+B(0.5)&=0.25(0,0)+2(0.5)(0.5)(1,2)+0.25(3,0)\\
+&=(0,0)+(0.5,1)+(0.75,0)=(1.25,\,1)
+\end{align*}
+
+\end{multicols}
+\end{document}
