@@ -138,6 +138,7 @@ Taylor series $=f(x)$ $\iff \lim_{n\to\infty}R_n(x)=0$. Writing the infinite sum
 
 \section{5. Chain Rule / Derivative Practice}
 $[f(g(x))]'=f'(g(x))g'(x)$. Common combos: $2\sin x+e^x$; $1+\cos^2 x=1+(\cos x)^2\Rightarrow$ derivative $=-2\cos x\sin x=-\sin(2x)$.
+\hl{Worked (Quiz 2/HW):} $f=2\sin x+e^x$: $f'=2\cos x+e^x$, at $\pi/2$: $2\cos(\pi/2)+e^{\pi/2}=e^{\pi/2}\approx4.810$. $f=\sin^2(2x)$: $f'=2\sin(2x)\cos(2x)\cdot2=2\sin(4x)$ (chain $\times2$ from $2x$). $f=\cos x-\sin x$: $f'=-\sin x-\cos x$.
 \hl{Trap:} evaluate derivatives \emph{at the center} $x_0$ before plugging into Taylor coeff $f^{(k)}(x_0)/k!$ — don't leave symbolic.
 Useful values: $\sin(\pi/2)=1,\cos(\pi/2)=0$; $\sin(\pi/4)=\cos(\pi/4)=1/\sqrt2$; $\sin(-\pi/4)=-1/\sqrt2$.
 
@@ -216,47 +217,11 @@ On $[a,b]$: $x_k=\tfrac{a+b}{2}+\tfrac{b-a}{2}\cos\!\Big(\tfrac{2k+1}{2(n+1)}\pi
 \item \hl{Bézier curves:} defined by control points; curve passes through \emph{endpoint} control points only (not interior ones); used in computer graphics for smooth curve design; based on Bernstein polynomials as blending functions.
 \end{itemize}
 
-\section{9. Worked-Pattern Checklists}
-
-\subsection{Error Question Checklist}
-$\square$ compute $f(x_i)$ exactly $\square$ compute $\tilde f(x_i)$ $\square$ abs error $=|diff|$ $\square$ rel error $=$ abs/$|f|$ $\square$ if multiple points: MAE (avg of abs), RMSE (sqrt avg of sq).
-
-\subsection{Horner Question Checklist}
-$\square$ write coeffs $a_n,\dots,a_0$ (\hl{include zeros for missing powers!}) $\square$ build synthetic division table (bring down, multiply by $c$, add) $\square$ last entry = $p(c)$ $\square$ row above = coeffs of $q(x)$ $\square$ repeat table on $q(x)$ at same $c$ for $p'(c)$ if asked $\square$ for divisor $ax-b$: use $c=b/a$, remember to divide quotient coeffs by $a$.
-
-\subsection{Taylor Construction Checklist}
-$\square$ pick center $x_0$ $\square$ compute derivatives $f,f',f'',\dots$ at $x_0$ up to needed order $\square$ divide each by $k!$ $\square$ assemble $\sum \tfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k$ $\square$ do \emph{not} simplify away the $(x-x_0)^k$ factors unless asked to expand.
-
-\subsection{Truncation Error Bound Checklist}
-$\square$ identify $f^{(n+1)}(x)$ pattern (for $\sin,\cos$ combos it's bounded by amplitude) $\square$ find $M=$ max$|f^{(n+1)}|$ on given interval $\square$ find max $|x-x_0|=d$ on interval $\square$ plug into $Md^{n+1}/(n+1)!$ $\square$ for "find $n$": increase $n$ until bound $<\varepsilon$, show smallest such $n$ $\square$ for "find $x$": solve bound $<\varepsilon$ for $x$ algebraically or numerically.
-
-\subsection{Interpolation System Checklist}
-$\square$ count points $m+1$ vs desired degree $n$ $\square$ write $m+1$ equations $a_0+a_1x_i+\cdots+a_nx_i^n=y_i$ $\square$ arrange as $Xa=y$ (rows=points, cols=powers $0..n$) $\square$ if square: compute Vandermonde det via product formula $\square$ if not square: state under/overdetermined \& \# free params.
-
-\subsection{Lagrange Checklist}
-$\square$ list all nodes $\square$ for each needed $\ell_i$: multiply $(x-x_j)/(x_i-x_j)$ over all $j\ne i$ (don't forget \emph{every} other node, incl. non-adjacent ones) $\square$ sum $y_i\ell_i(x)$ for full $p(x)$ $\square$ evaluate at target, compare to true value for errors $\square$ extrapolate = same formula outside range, note reduced reliability.
-
-\section{10. Common Traps Summary}
-\begin{itemize}
-\item Forgetting \hl{zero coefficients} for missing powers in Horner tables.
-\item Confusing \hl{quotient} $q(x)$ degree (always one less than $p(x)$) after synthetic division.
-\item Sign errors in $(x-x_0)$ vs $(x_0-x)$ in centered form / Taylor.
-\item Odd/even function Maclaurin series — half the coefficients vanish; don't invent nonzero terms.
-\item Mixing up \hl{integral} vs \hl{Lagrange} form of $R_n$ — integral needs no unknown $\xi$, Lagrange does.
-\item Free parameter count: it's (poly degree $+1$) $-$ (\# data points), not degree itself.
-\item Lagrange basis $\ell_i(x_j)=0$ for $j\ne i$, $=1$ for $j=i$ — sanity check your basis polys.
-\item Vandermonde det $=0$ \emph{only if} two nodes coincide — never zero for distinct interpolation nodes.
-\item Extrapolation error can be large — always flag lower confidence vs interpolation.
-\item Degree of sum of two polys = max(deg); degree of product = sum(degs); watch for \hl{cancellation} making sum degree drop (find $\alpha$ s.t. leading terms cancel).
-\item FLOP counts: nested form always $\le$ standard form; state exact counts ($n$ mult + $n$ add for degree $n$ nested).
-\item Round only final numeric answers to 5 decimals; keep exact fractions/symbols mid-derivation.
-\end{itemize}
-
-\section{11. Quick Reference Values}
+\section{9. Quick Reference Values}
 $e\approx2.71828$, $\pi\approx3.14159$, $\sqrt2\approx1.41421$, $1/\sqrt2\approx0.70711$.
 $n!$: $5!=120,6!=720,7!=5040,8!=40320,9!=362880,10!=3628800$.
 
-\section{12. Worked Mini-Examples}
+\section{10. Worked Mini-Examples}
 
 \subsection{Horner: $p(x)=2x^3-3x^2+0x+5$ at $c=2$}
 Coeffs: $2,-3,0,5$.
@@ -349,6 +314,39 @@ $f(x)=\sin(3x)$, $n=8$ (so $n+1=9$), interval $[-3,4]$, $x_0=0$: $f^{(9)}(x)=\pm
 \end{equation*}
 (Large bound is fine — the point is applying the formula correctly, not that it's tight.)
 
+\subsection{Maclaurin: $\cos(4x)$ to degree 8 (HW06)}
+$\cos u=1-\tfrac{u^2}{2!}+\tfrac{u^4}{4!}-\tfrac{u^6}{6!}+\tfrac{u^8}{8!}-\cdots$, so with $u=4x$:
+\begin{equation*}
+\cos(4x)=1-8x^2+\tfrac{256}{24}x^4-\tfrac{4096}{720}x^6+\tfrac{65536}{40320}x^8-\cdots
+\end{equation*}
+\begin{equation*}
+=1-8x^2+\tfrac{32}{3}x^4-\tfrac{256}{45}x^6+\tfrac{512}{315}x^8-\cdots
+\end{equation*}
+\hl{Pattern:} $\cos(4x)=\sum_{k=0}^{\infty}\tfrac{(-1)^k(4x)^{2k}}{(2k)!}$; even powers only (even function), every other coefficient vanishes. $M=4^{n+1}$ (amplitude of derivative).
+
+\subsection{Taylor: $\cos x-\sin x$ at $\pi$ (HW05 Q4)}
+$f(x)=\cos x-\sin x$, $x_0=\pi$. Derivatives: $f'=-\sin x-\cos x$, $f''=-\cos x+\sin x$, $f'''=\sin x+\cos x$. At $\pi$: $f(\pi)=-1$, $f'(\pi)=1$, $f''(\pi)=1$, $f'''(\pi)=-1$.
+\begin{align*}
+T_1&=-1+(x-\pi)\\
+T_2&=-1+(x-\pi)+\tfrac12(x-\pi)^2\\
+T_3&=T_2-\tfrac16(x-\pi)^3
+\end{align*}
+\hl{Key:} each new degree adds one term; recompute all derivatives at the \emph{center} $\pi$, divide by $k!$ (note the alternating $-,+,-$ pattern of coefficients).
+
+\subsection{Taylor: $\sin^2(2x)$ degree 4 at 0 (HW05 Q5)}
+Use identity $\sin^2(2x)=\tfrac12(1-\cos 4x)$. From the $\cos(4x)$ series: $\sin^2(2x)=\tfrac12\big(1-(1-8x^2+\tfrac{32}{3}x^4-\cdots)\big)$
+\begin{equation*}
+\sin^2(2x)=4x^2-\tfrac{16}{3}x^4+\cdots \quad (\text{degree }4)
+\end{equation*}
+\hl{Or by derivatives:} $f''(0)=8\Rightarrow\tfrac8{2!}=4$; $f^{(4)}(0)=-128\Rightarrow\tfrac{-128}{4!}=-\tfrac{16}{3}$. \hl{Trap:} $f(0)=f'(0)=f'''(0)=0$ — don't invent odd/constant terms.
+
+\subsection{Find $n$ for tolerance: $\cos(4x)$, $|R_n|<0.001$ on $[-3,2]$ (HW06 Q4)}
+$M=4^{n+1}$, $d=\max|x|=3$, bound $=\tfrac{4^{n+1}3^{n+1}}{(n+1)!}=\tfrac{12^{n+1}}{(n+1)!}$. Increase $n$ until bound $<0.001$:
+\begin{equation*}
+\tfrac{12^{36}}{36!}\approx0.00191>0.001,\quad \tfrac{12^{37}}{37!}\approx0.00062<0.001
+\end{equation*}
+$\Rightarrow$ smallest $n$ with $|R_n|<0.001$ is \hl{$n=36$}.
+
 \subsection{Diff./Integration Quick Review}
 Product rule: $(fg)'=f'g+fg'$. Quotient rule: $(f/g)'=\dfrac{f'g-fg'}{g^2}$.
 Chain rule: $[f(g(x))]'=f'(g(x))g'(x)$.
@@ -367,6 +365,14 @@ $p(x)=x^3-2x^2+3x-5$, center $x_0=2$. Repeatedly synthetic-divide by $(x-2)$; ea
 &1,2 \to 1\mid b_2{=}4,\,b_3{=}1\quad\text{(Div.3)}
 \end{align*}
 So $p(x)=1+7(x-2)+4(x-2)^2+(x-2)^3$. \textbf{Check:} expand back — matches original. $\square$ Each division: bring down leading coeff, next $=$ coeff $+2\times$prev; last value $=$ remainder.
+
+\subsection{Standard$\leftrightarrow$Nested + FLOPs (HW03/Pract.3)}
+$p_5(x)=x^5+3x^4+x+1$ (missing $x^3,x^2$ $\Rightarrow$ insert $0$'s). Nested:
+\begin{equation*}
+p_5(x)=1+x\big(1+x(0+x(0+x(3+x)))\big)
+\end{equation*}
+\hl{Verify:} matches at $x=0,1,2$. $\checkmark$ \\
+\hl{FLOPs (deg $n$):} nested $=n$ mult$+n$ add $=2n$ total ops; standard (recompute each power) $=$ mults $\tfrac{n(n+1)}{2}$ ($\tfrac{n(n-1)}{2}$ for powers $+n$ for coeffs) $+n$ adds $=\tfrac{n(n+3)}{2}$ total ops. For $n{=}5$: nested $=10$, standard $=20$ $\Rightarrow$ \hl{nested halves the work}.
 
 \subsection{Horner: divide by $ax-b$ (worked)}
 Divide $4x^3-7x^2+5x+8$ by $2x+1$ (i.e. $a=2,b=-1$, root $c=-\tfrac12$).
