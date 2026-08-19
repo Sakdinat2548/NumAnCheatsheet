@@ -54,7 +54,12 @@
 \item MCQ + written section, 30 pts total. Bring 1 A4 cheat sheet (this one!).
 \end{itemize}
 
-\section{1. Error Formulas}
+\section{1. Purpose of NA \& Solution Types (Th.1--2)}
+\hl{Why numerical methods?} Exact answers often \emph{unavailable or impractical}: (a) no closed-form expression exists (e.g. $\int e^{-x^2}dx$, $\sin x=x$); (b) formula exists but is too slow/unstable to evaluate; (c) data only known at discrete measured points.
+\hl{Definitions:} \textbf{exact solution} = satisfies equation exactly (symbolic); \textbf{closed-form/analytical} = explicit expression in known functions/constants; \textbf{approximate (numerical)} = value from an algorithm with controlled error, generally not equal to exact.
+\hl{Locality:} every approximation is built to be good \emph{near} a reference point/interval — Taylor about $x_0$, interpolation on nodes $[x_0,x_n]$. Quality degrades away from that neighborhood $\Rightarrow$ \hl{extrapolation is unreliable}.
+
+\section{2. Error Formulas}
 \begin{equation*}
 E_{abs}=|f(x)-\tilde f(x)|,\quad E_{rel}=\frac{|f(x)-\tilde f(x)|}{|f(x)|}
 \end{equation*}
@@ -66,7 +71,7 @@ E_{abs}=|f(x)-\tilde f(x)|,\quad E_{rel}=\frac{|f(x)-\tilde f(x)|}{|f(x)|}
 \end{equation*}
 \hl{Trap:} RMSE penalizes large errors more (squares); MAE treats all equally. Round to 5 dp unless told otherwise.
 
-\section{2. Polynomial Forms}
+\section{3. Polynomial Forms}
 \textbf{Standard:} $p_n(x)=a_nx^n+\cdots+a_1x+a_0$ — needs $\sim 2n-1$ mults, $n$ adds (naive) or $n(n+1)/2$ mults w/o precomputed powers.\\
 \textbf{Nested (Horner):} $p_n(x)=(\cdots((a_nx+a_{n-1})x+a_{n-2})x+\cdots)x+a_0$ — $n$ mults, $n$ adds. \hl{Always fewer ops.}\\
 \textbf{Centered at $x_0$:} $p_n(x)=\sum b_k(x-x_0)^k$. Get $b_k$ via repeated synthetic division by $(x-x_0)$, or Taylor: $b_k=p^{(k)}(x_0)/k!$.
@@ -88,7 +93,7 @@ c & & c b_{n-1} & \cdots & c b_0\\[-1pt]
 \item \hl{Trap:} two ways to get $p'(1)$ — direct Horner on $p'(x)$, or double-tableau on $p(x)$ — must match.
 \end{itemize}
 
-\section{3. Taylor \& Maclaurin}
+\section{4. Taylor \& Maclaurin}
 \begin{equation*}
 f(x)=\sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!}(x-x_0)^k + R_n(x)
 \end{equation*}
@@ -131,16 +136,35 @@ Taylor series $=f(x)$ $\iff \lim_{n\to\infty}R_n(x)=0$. Writing the infinite sum
 \end{equation*}
 \hl{Trap:} degree-8 Maclaurin poly of an odd function still stops at $x^7$ term (even-degree coeffs are 0) — write poly \emph{through} degree 8, don't force an $x^8$ term.
 
-\section{4. Chain Rule / Derivative Practice}
+\section{5. Chain Rule / Derivative Practice}
 $[f(g(x))]'=f'(g(x))g'(x)$. Common combos: $2\sin x+e^x$; $1+\cos^2 x=1+(\cos x)^2\Rightarrow$ derivative $=-2\cos x\sin x=-\sin(2x)$.
 \hl{Trap:} evaluate derivatives \emph{at the center} $x_0$ before plugging into Taylor coeff $f^{(k)}(x_0)/k!$ — don't leave symbolic.
 Useful values: $\sin(\pi/2)=1,\cos(\pi/2)=0$; $\sin(\pi/4)=\cos(\pi/4)=1/\sqrt2$; $\sin(-\pi/4)=-1/\sqrt2$.
 
-\section{5. Interpolation Basics}
+\section{6. Interpolation Basics}
 \hl{Interpolation:} passes exactly through given data points (local fit). \hl{Approximation:} fits overall trend, need not pass through points (global fit, e.g. least squares). \hl{Extrapolation:} evaluate poly \emph{outside} node range — much less reliable than interpolation (points 4-5 pattern in quizzes: always flag extrapolation as less trustworthy).
 
 \subsection{Degree-1 (Linear) Interpolation}
 Given $(x_0,y_0),(x_1,y_1)$: $p_1(x)=y_0+\dfrac{y_1-y_0}{x_1-x_0}(x-x_0)$.
+
+\subsection{Main Types of Interpolation (Th.8)}
+\begin{itemize}
+\item \hl{Linear (piecewise):} connect consecutive points by line segments. Simple, cheap, $C^0$ only (kinks at nodes). Good for monotone data; crude derivative info.
+\item \hl{Global poly} (Lagrange/Newton/Vandermonde): one degree-$n$ poly through $n{+}1$ pts; $C^\infty$; \hl{unique} for distinct nodes. Limit: high degree $\Rightarrow$ ill-conditioned, Runge.
+\item \hl{Cubic splines:} piecewise cubic with matched $f,f',f''$ at nodes; $C^2$ smooth, local updates, avoids Runge — best for many nodes.
+\item \hl{Hermite:} matches $f$ \emph{and} $f'$ at nodes ($2n{+}2$ conditions $\Rightarrow$ degree $2n{+}1$).
+\end{itemize}
+\hl{Key tradeoff:} more smoothness $\Rightarrow$ more conditions $\Rightarrow$ higher degree (less stable); local (spline) methods avoid Runge, global ones risk it.
+
+\subsection{Interpolation Error Bound}
+\begin{equation*}
+f(x)-p_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^{n}(x-x_i)
+\end{equation*}
+\begin{equation*}
+|f(x)-p_n(x)|\le\frac{M}{(n+1)!}\,\max_x\Big|\prod_{i=0}^n(x-x_i)\Big|
+\end{equation*}
+where $\xi\in[x_{\min},x_{\max}]$, $M=\max|f^{(n+1)}|$.
+\hl{Uses:} bound error at a point; choose nodes to shrink product term — why Chebyshev (minimize $\max|\prod|$) beat uniform; error $=0$ at every node. Analogous to Taylor remainder with $(x-x_0)^{n+1}$ replaced by $\prod(x-x_i)$.
 
 \subsection{Vandermonde System}
 For $n+1$ points, poly degree $n$: $a_0+a_1x_i+\cdots+a_nx_i^n=y_i$ for each $i$. Matrix form $Xa=y$ where
@@ -161,22 +185,38 @@ X=\begin{pmatrix}1&x_0&x_0^2&\cdots&x_0^n\\ 1&x_1&x_1^2&\cdots&x_1^n\\ \vdots&&&
 \ell_i(x)=\prod_{\substack{j=0\\ j\ne i}}^{n}\frac{x-x_j}{x_i-x_j},\qquad p(x)=\sum_{i=0}^n y_i\,\ell_i(x)
 \end{equation*}
 Properties: $\ell_i(x_j)=\delta_{ij}$ (1 if $i=j$, else 0); basis \emph{depends only on nodes} $x_i$, not on $y_i$ or $f$ — same $\ell_i$ reused for any function on same nodes.
+\hl{Why a basis (Th.12):} $\ell_0,\dots,\ell_n$ are $n{+}1$ polys of degree $\le n$ and are \emph{linearly independent} (a combo $\sum c_i\ell_i\equiv0$ evaluated at node $x_j$ gives $c_j=0$). Since $\dim P_n=n{+}1$, they span all polys of degree $\le n$ $\Rightarrow$ they form a basis; any data $(x_i,y_i)$ yields unique coefficients $c_i=y_i$.
 \textbf{Steps:} (1) list nodes; (2) build each $\ell_i(x)$ as product of $(x-x_j)/(x_i-x_j)$ over $j\ne i$; (3) sum $y_i\ell_i(x)$; (4) simplify/evaluate at target point; (5) compute abs/rel error vs known true value if given; (6) extrapolate = plug $x$ outside node range into same $p(x)$.
 
-\section{6. Divided Differences (basic)}
-1st order: $f[x_i,x_{i+1}]=\dfrac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}$.\\
-2nd order: $f[x_i,x_{i+1},x_{i+2}]=\dfrac{f[x_{i+1},x_{i+2}]-f[x_i,x_{i+1}]}{x_{i+2}-x_i}$.\\
-(No need for full Newton formula per prof — just compute these building blocks.)
+\section{7. Divided Differences \& Newton (Th.13)}
+0th order: $f[x_i]=f(x_i)$ (the node value itself).
+\begin{equation*}
+f[x_i,x_{i+1}]=\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}
+\end{equation*}
+\begin{equation*}
+f[x_i,x_{i+1},x_{i+2}]=\frac{f[x_{i+1},x_{i+2}]-f[x_i,x_{i+1}]}{x_{i+2}-x_i}
+\end{equation*}
+General (order $k$): $f[x_i,\dots,x_{i+k}]=\dfrac{f[x_{i+1},\dots,x_{i+k}]-f[x_i,\dots,x_{i+k-1}]}{x_{i+k}-x_i}$, denom $=$ last $-$ first node.
 
-\section{7. Grids, Runge, Chebyshev, Bézier}
+\subsection{Newton Interpolation Formula (Th.13)}
+\begin{equation*}
+p_n(x)=f[x_0]+\sum_{k=1}^{n} f[x_0,\dots,x_k]\prod_{j=0}^{k-1}(x-x_j)
+\end{equation*}
+\hl{Advantages vs Lagrange:} adding a node adds only \emph{one} term (no basis recompute); nested (Horner-like) eval cheaper; incremental DD table. Lagrange pros: no table, basis reusable for \emph{any} $f$ on same nodes. (Per prof: quizzes need only 1st/2nd order DD; know formula \& why Newton wins for incremental data.)
+
+\section{8. Grids, Runge, Chebyshev, Bézier}
 \begin{itemize}
-\item \hl{Uniform grid:} equally spaced nodes. \hl{Non-uniform:} unequal spacing.
-\item \hl{Runge's phenomenon:} high-degree interpolation on \emph{uniform} nodes over $[-1,1]$-type intervals can oscillate wildly near endpoints as $n$ increases.
-\item \hl{Chebyshev nodes:} cluster near interval endpoints; specifically chosen to \emph{minimize} Runge oscillation — preferred over uniform for high-degree interpolation.
+\item \hl{Uniform grid:} equally spaced nodes, $x_i=a+ih$, $h=(b-a)/n$. \hl{Non-uniform:} unequal spacing (e.g. Chebyshev).
+\item \hl{Runge's phenomenon:} high-degree interpolation on \emph{uniform} nodes over $[-1,1]$-type intervals can oscillate wildly near endpoints as $n$ increases. Fix: Chebyshev nodes or splines.
+\item \hl{Chebyshev nodes} (roots of $T_{n+1}$), on $[-1,1]$:
+\begin{equation*}
+x_k=\cos\!\Big(\tfrac{2k+1}{2(n+1)}\pi\Big),\ k=0,\dots,n
+\end{equation*}
+On $[a,b]$: $x_k=\tfrac{a+b}{2}+\tfrac{b-a}{2}\cos\!\Big(\tfrac{2k+1}{2(n+1)}\pi\Big)$. Cluster near endpoints; minimize max of $|\prod_{i=0}^n(x-x_i)|$ (interpolation error term) $\Rightarrow$ minimize Runge oscillation.
 \item \hl{Bézier curves:} defined by control points; curve passes through \emph{endpoint} control points only (not interior ones); used in computer graphics for smooth curve design; based on Bernstein polynomials as blending functions.
 \end{itemize}
 
-\section{8. Worked-Pattern Checklists}
+\section{9. Worked-Pattern Checklists}
 
 \subsection{Error Question Checklist}
 $\square$ compute $f(x_i)$ exactly $\square$ compute $\tilde f(x_i)$ $\square$ abs error $=|diff|$ $\square$ rel error $=$ abs/$|f|$ $\square$ if multiple points: MAE (avg of abs), RMSE (sqrt avg of sq).
@@ -196,7 +236,7 @@ $\square$ count points $m+1$ vs desired degree $n$ $\square$ write $m+1$ equatio
 \subsection{Lagrange Checklist}
 $\square$ list all nodes $\square$ for each needed $\ell_i$: multiply $(x-x_j)/(x_i-x_j)$ over all $j\ne i$ (don't forget \emph{every} other node, incl. non-adjacent ones) $\square$ sum $y_i\ell_i(x)$ for full $p(x)$ $\square$ evaluate at target, compare to true value for errors $\square$ extrapolate = same formula outside range, note reduced reliability.
 
-\section{9. Common Traps Summary}
+\section{10. Common Traps Summary}
 \begin{itemize}
 \item Forgetting \hl{zero coefficients} for missing powers in Horner tables.
 \item Confusing \hl{quotient} $q(x)$ degree (always one less than $p(x)$) after synthetic division.
@@ -212,11 +252,11 @@ $\square$ list all nodes $\square$ for each needed $\ell_i$: multiply $(x-x_j)/(
 \item Round only final numeric answers to 5 decimals; keep exact fractions/symbols mid-derivation.
 \end{itemize}
 
-\section{10. Quick Reference Values}
+\section{11. Quick Reference Values}
 $e\approx2.71828$, $\pi\approx3.14159$, $\sqrt2\approx1.41421$, $1/\sqrt2\approx0.70711$.
 $n!$: $5!=120,6!=720,7!=5040,8!=40320,9!=362880,10!=3628800$.
 
-\section{11. Worked Mini-Examples}
+\section{12. Worked Mini-Examples}
 
 \subsection{Horner: $p(x)=2x^3-3x^2+0x+5$ at $c=2$}
 Coeffs: $2,-3,0,5$.
@@ -249,6 +289,10 @@ So $p'(2)=12$.
 $p(x)=1\cdot\ell_0(x)+3\cdot\ell_1(x)+7\cdot\ell_2(x)$. At $x=1.5$: $\ell_0=\tfrac{(0.5)(-0.5)}{2}=-0.125$, $\ell_1=\tfrac{(1.5)(-0.5)}{-1}=0.75$, $\ell_2=\tfrac{(1.5)(0.5)}{2}=0.375$.
 $p(1.5)=1(-0.125)+3(0.75)+7(0.375)=-0.125+2.25+2.625=4.75$.
 
+\subsection{Divided Differences: nodes $(0,1),(1,3),(2,7)$}
+$f[x_0]=1,\ f[x_1]=3,\ f[x_2]=7$; $f[x_0,x_1]=\tfrac{3-1}{1-0}=2$, $f[x_1,x_2]=\tfrac{7-3}{2-1}=4$; $f[x_0,x_1,x_2]=\tfrac{4-2}{2-0}=1$.
+\hl{Newton form:} $p_2(x)=1+2x+1\cdot x(x-1)=1+2x+x^2-x=x^2+x+1$. \textbf{Check:} same poly as Lagrange (uniqueness). At $x=1.5$: $2.25+1.5+1=4.75$ $\checkmark$ matches.
+
 \subsection{Vandermonde det: nodes $0,1,2$}
 \begin{equation*}
 \det(X)=\prod_{0\le i<j\le2}(x_j-x_i)
@@ -263,7 +307,7 @@ Points $(2,5),(5,-1)$: $m+1=2$, so $m=1$; want degree $n=3$ (4 coeffs $a_0,a_1,a
 \subsection{Truncation error bound example}
 $f(x)=\sin(3x)$, $n=8$ (so $n+1=9$), interval $[-3,4]$, $x_0=0$: $f^{(9)}(x)=\pm3^9\cos(3x)$ or $\pm3^9\sin(3x)\Rightarrow M=3^9=19683$. $d=\max(|{-3}|,|4|)=4$.
 \begin{equation*}
-|R_8(x)|\le\frac{19683\cdot4^9}{9!}=\frac{19683\cdot262144}{362880}\approx14230
+|R_8(x)|\le\frac{19683\cdot4^9}{9!}=\frac{19683\cdot262144}{362880}\approx14219
 \end{equation*}
 (Large bound is fine — the point is applying the formula correctly, not that it's tight.)
 
