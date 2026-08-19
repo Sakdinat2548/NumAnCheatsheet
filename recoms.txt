@@ -1,0 +1,69 @@
+Midterm Exam Instructions
+Numerical Analysis (SCI19 3111)
+Note: Students are not allowed to use phones or tablets during the exam. Calculators are
+allowed. In addition, each student may bring one A4 sheet of paper with any notes they wish
+to prepare (a cheat sheet).
+Note: There is no specific dress code for the exam.
+The exam will consist of a multiple-choice section and a written section, with a total of 30
+points.
+Below is an approximate list of topics that may be covered on the exam. Answers to most
+questions can be found in the lecture notes and scans of the lectures (available on e-Learning)
+or in the references provided therein.
+
+Theoretical Topics
+1. The purpose of numerical analysis. Why an exact solution is not always available or
+practical to obtain.
+2. Exact solution, closed-form solution, analytical solution, and approximate solution (ap-
+proximation). Locality of approximation.
+3. Approximation errors: absolute and relative error. Mean Absolute Error (MAE) and
+Root Mean Square Error (RMSE) for a solution given on a discrete set of points.
+4. The differences between the standard form, nested (Horner) form, and centered form of
+a polynomial.
+5. The connection between repeated applications of Horner’s method for evaluating a poly-
+nomial and its derivatives at a given point.
+6. The truncation error of a Taylor polynomial in integral and Lagrange forms. Understand-
+ing the basic relationship between these two representations.
+7. The difference between interpolation and approximation.
+8. The main types of interpolation, together with their advantages and limitations.
+9. The Vandermonde matrix: where it arises in numerical analysis and how to compute
+its determinant. Why is the Vandermonde determinant guaranteed to be nonzero in
+interpolation problems?
+10. Overdetermined and underdetermined systems arising in polynomial interpolation prob-
+lems. The number of free parameters in such systems and the corresponding families of
+solutions (basic understanding).
+11. The purpose of interpolation. The difference between interpolation and extrapolation.
+12. Lagrange basis polynomials. Understanding why these functions form a basis and why
+they are independent of the function being interpolated.
+13. The concept of divided differences and the Newton interpolation formula. The advantages
+of the Newton form compared with the Lagrange form.
+14. Computational grids (lattices) and their nodes. Uniform and non-uniform grids. Runge’s
+phenomenon. Chebyshev nodes.
+15. Endpoint interpolation: B´ezier curves, their role in computer graphics.
+
+Topics for Practical Problems
+1. General recommendation: review the basic rules of differentiation, including the chain
+rule and product rule, as well as basic integration techniques, including integration by
+1
+parts.
+2. Computing approximation errors using the standard formulas for absolute error, relative
+error, MAE, and RMSE.
+3. Converting between the standard, nested (Horner), and centered forms of a polynomial.
+Estimating the number of arithmetic operations (FLOPs) required to evaluate a polyno-
+mial at a given point.
+4. Using Horner’s method to evaluate a polynomial at a given point. Polynomial division by
+ax − b, where a and b are constants, using Horner’s method (synthetic division). Com-
+puting the derivative of a polynomial at a given point using Horner’s method. Applying
+Horner’s method to polynomials of arbitrary finite degree n.
+5. Approximating a function using a Taylor polynomial.
+6. Truncation error for Taylor polynomials in integral and Lagrange forms. Estimating the
+maximum truncation error on an interval, including the use of the Sandwich Theorem.
+Determining how many terms of a Taylor expansion are required to achieve a prescribed
+error tolerance.
+7. Taylor and Maclaurin series. Determining whether a Taylor series converges to the func-
+tion based on the behavior of the truncation error.
+8. Polynomial interpolation. Formulating the interpolation problem as a system of linear
+equations, including its matrix form. Computing the Vandermonde determinant.
+9. Constructing the Lagrange interpolation polynomial and evaluating it at a given point.
+10. Writing the first- and second-order divided differences for a given function (basic under-
+standing only; no Newton interpolation formula is required).
+11. Constructing simple B´ezier curves from given points.
