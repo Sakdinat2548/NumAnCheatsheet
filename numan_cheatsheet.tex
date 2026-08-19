@@ -289,6 +289,17 @@ So $p'(2)=12$.
 $p(x)=1\cdot\ell_0(x)+3\cdot\ell_1(x)+7\cdot\ell_2(x)$. At $x=1.5$: $\ell_0=\tfrac{(0.5)(-0.5)}{2}=-0.125$, $\ell_1=\tfrac{(1.5)(-0.5)}{-1}=0.75$, $\ell_2=\tfrac{(1.5)(0.5)}{2}=0.375$.
 $p(1.5)=1(-0.125)+3(0.75)+7(0.375)=-0.125+2.25+2.625=4.75$.
 
+\subsection{Lagrange + errors: arctan (Quiz 5)}
+$f(x)=\arctan x$, nodes $0,1,3$ ($y=0,0.785,1.249$).
+\begin{align*}
+\ell_0(x)&=\tfrac{(x-1)(x-3)}{(0-1)(0-3)}=\tfrac{(x-1)(x-3)}{3}\\
+\ell_1(x)&=\tfrac{x(x-3)}{(1-0)(1-3)}=\tfrac{x(x-3)}{-2}\\
+\ell_2(x)&=\tfrac{x(x-1)}{(3-0)(3-1)}=\tfrac{x(x-1)}{6}
+\end{align*}
+$p(x)=0\ell_0+0.785\ell_1+1.249\ell_2$. At $x=2$: $\ell_1=\tfrac{2(-1)}{-2}=1$, $\ell_2=\tfrac{2(1)}{6}=\tfrac13$ $\Rightarrow p(2)=0.785+\tfrac{1.249}{3}=1.20133$. \\
+\textbf{Errors} vs $\arctan(2)\approx1.107$: $E_{abs}=|1.107-1.20133|=0.09433$, $E_{rel}=\tfrac{0.09433}{1.107}=0.0852$ (8.5\%). \\
+\textbf{Extrapolate} $x=-0.5$ (outside $[0,3]$): $p(-0.5)=0.785\ell_1(-0.5)+1.249\ell_2(-0.5)=-0.53075$ (true $\arctan(-0.5)=-0.46365$ — note large error: extrapolation unreliable).
+
 \subsection{Divided Differences: nodes $(0,1),(1,3),(2,7)$}
 $f[x_0]=1,\ f[x_1]=3,\ f[x_2]=7$; $f[x_0,x_1]=\tfrac{3-1}{1-0}=2$, $f[x_1,x_2]=\tfrac{7-3}{2-1}=4$; $f[x_0,x_1,x_2]=\tfrac{4-2}{2-0}=1$.
 \hl{Newton form:} $p_2(x)=1+2x+1\cdot x(x-1)=1+2x+x^2-x=x^2+x+1$. \textbf{Check:} same poly as Lagrange (uniqueness). At $x=1.5$: $2.25+1.5+1=4.75$ $\checkmark$ matches.
@@ -301,8 +312,35 @@ $f[x_0]=1,\ f[x_1]=3,\ f[x_2]=7$; $f[x_0,x_1]=\tfrac{3-1}{1-0}=2$, $f[x_1,x_2]=\
 =(1{-}0)(2{-}0)(2{-}1)=1\cdot2\cdot1=2\ne0
 \end{equation*}
 
-\subsection{Free Parameters: 2 points, degree $\le3$}
-Points $(2,5),(5,-1)$: $m+1=2$, so $m=1$; want degree $n=3$ (4 coeffs $a_0,a_1,a_2,a_3$). Equations: 2. Free params $=n-m=3-1=2$ — e.g. $a_2,a_3$ free; solve $a_0,a_1$ in terms of them from the 2 constraints.
+\subsection{Degree-1 Interp: $\{(2,5),(5,-1)\}$ (Quiz 4 Q1)}
+$p_1(x)=y_0+\dfrac{y_1-y_0}{x_1-x_0}(x-x_0)=5+\dfrac{-1-5}{5-2}(x-2)=5-2(x-2)=-2x+9$.
+Check: $p_1(2)=5$, $p_1(5)=-1$. $\checkmark$ (Also: slope $m=-2$ through both pts.)
+
+\subsection{Degree-4 System \& det: 5 pts (Quiz 4 Q2)}
+Points $\{(0,3),(1,2),(2,5),(4,9),(7,8)\}$, degree 4: $p_4(x)=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4$.
+\hl{System} $Xa=y$, rows $=$ points, cols $=$ powers $0..4$:
+{\footnotesize
+\begin{equation*}
+\begin{pmatrix}1&0&0&0&0\\ 1&1&1&1&1\\ 1&2&4&8&16\\ 1&4&16&64&256\\ 1&7&49&343&2401\end{pmatrix}\!
+\begin{pmatrix}a_0\\a_1\\a_2\\a_3\\a_4\end{pmatrix}
+=\!\begin{pmatrix}3\\2\\5\\9\\8\end{pmatrix}
+\end{equation*}
+}
+\hl{det:} $\det X=\prod_{i<j}(x_j-x_i)$ over the $5$ nodes ($10$ ordered pairs $i<j$):
+\begin{equation*}
+\det X=(1)(2)(1)(4)(3)(2)(7)(6)(5)(3)=30240\ne0
+\end{equation*}
+\hl{Solving:} first eq gives $a_0=3$; back-substitute remaining 4 eqs (e.g. Gaussian elim) for $a_1..a_4$. Nonsingular $\Rightarrow$ unique degree-4 poly.
+
+\subsection{Free Parameters: 2 points, degree $\le3$ (Quiz 4 Q3)}
+Points $(2,5),(5,-1)$: $m+1=2$, so $m=1$; want degree $n=3$ (4 coeffs $a_0,a_1,a_2,a_3$). Equations: 2. Free params $=n-m=3-1=2$ — $a_2,a_3$ free.
+\hl{Construct the family:} constraints $a_0+2a_1+4a_2+8a_3=5$ and $a_0+5a_1+25a_2+125a_3=-1$. Subtract: $3a_1+21a_2+117a_3=-6\Rightarrow a_1=-2-7a_2-39a_3$; then $a_0=9+10a_2+70a_3$.
+\hl{Family:} $p(x)=(9{+}10a_2{+}70a_3)+(-2{-}7a_2{-}39a_3)x+a_2x^2+a_3x^3$, any $a_2,a_3$. Check: $p(2)=5,\ p(5)=-1$ $\forall a_2,a_3$. $\square$
+
+\subsection{Error calc: $\sin x\approx x$ (Quiz 1)}
+Exact $f(x)=\sin x$, approx $\tilde f(x)=x$. At $x=0.01$: $E_{abs}=|\sin(0.01)-0.01|\approx|0.00999983-0.01|=1.67\times10^{-7}$; $E_{rel}=\tfrac{1.67\times10^{-7}}{\sin(0.01)}\approx1.67\times10^{-5}$.
+\textbf{MAE} over $x=-0.01,0.01,0.03$: errors $1.67\times10^{-7},1.67\times10^{-7},4.50\times10^{-6}$; $\text{MAE}=\tfrac{1.67+1.67+45.0}{3}\times10^{-7}\approx1.61\times10^{-6}$.
+\textbf{RMSE} $=\sqrt{\tfrac{(1.67)^2+(1.67)^2+(45.0)^2}{3}}\times10^{-7}\approx2.60\times10^{-6}$ (larger than MAE — squares penalize the big error).
 
 \subsection{Truncation error bound example}
 $f(x)=\sin(3x)$, $n=8$ (so $n+1=9$), interval $[-3,4]$, $x_0=0$: $f^{(9)}(x)=\pm3^9\cos(3x)$ or $\pm3^9\sin(3x)\Rightarrow M=3^9=19683$. $d=\max(|{-3}|,|4|)=4$.
