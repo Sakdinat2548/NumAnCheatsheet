@@ -15,6 +15,11 @@
 \setlength{\parindent}{0pt}
 \setlength{\columnsep}{0.15in}
 \setlength{\columnseprule}{0.4pt}
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+\setlength{\abovedisplayshortskip}{1pt}
+\setlength{\belowdisplayshortskip}{1pt}
+\allowdisplaybreaks
 
 % Compact list environment
 \setlist[itemize]{itemsep=0pt,parsep=0pt,topsep=1pt,leftmargin=*,partopsep=0pt}
@@ -37,7 +42,6 @@
 \end{center}
 \sepline
 
-\raggedcolumns
 \begin{multicols}{3}
 
 \section{0. Prof's Blueprint (High Priority)}
@@ -127,8 +131,6 @@ Taylor series $=f(x)$ $\iff \lim_{n\to\infty}R_n(x)=0$. Writing the infinite sum
 \end{equation*}
 \hl{Trap:} degree-8 Maclaurin poly of an odd function still stops at $x^7$ term (even-degree coeffs are 0) — write poly \emph{through} degree 8, don't force an $x^8$ term.
 
-\columnbreak
-
 \section{4. Chain Rule / Derivative Practice}
 $[f(g(x))]'=f'(g(x))g'(x)$. Common combos: $2\sin x+e^x$; $1+\cos^2 x=1+(\cos x)^2\Rightarrow$ derivative $=-2\cos x\sin x=-\sin(2x)$.
 \hl{Trap:} evaluate derivatives \emph{at the center} $x_0$ before plugging into Taylor coeff $f^{(k)}(x_0)/k!$ — don't leave symbolic.
@@ -173,8 +175,6 @@ Properties: $\ell_i(x_j)=\delta_{ij}$ (1 if $i=j$, else 0); basis \emph{depends 
 \item \hl{Chebyshev nodes:} cluster near interval endpoints; specifically chosen to \emph{minimize} Runge oscillation — preferred over uniform for high-degree interpolation.
 \item \hl{Bézier curves:} defined by control points; curve passes through \emph{endpoint} control points only (not interior ones); used in computer graphics for smooth curve design; based on Bernstein polynomials as blending functions.
 \end{itemize}
-
-\columnbreak
 
 \section{8. Worked-Pattern Checklists}
 
