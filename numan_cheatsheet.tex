@@ -3,6 +3,7 @@
 \usepackage{lmodern}
 \usepackage{multicol}
 \usepackage{amsmath,amssymb}
+\usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage[dvipsnames]{xcolor}
@@ -20,6 +21,7 @@
 \setlength{\abovedisplayshortskip}{1pt}
 \setlength{\belowdisplayshortskip}{1pt}
 \allowdisplaybreaks
+\emergencystretch=2em
 
 % Compact list environment
 \setlist[itemize]{itemsep=0pt,parsep=0pt,topsep=1pt,leftmargin=*,partopsep=0pt}
@@ -47,7 +49,7 @@
 \section{0. Prof's Blueprint (High Priority)}
 \begin{itemize}
 \item \hl{Errors:} abs/rel error, MAE, RMSE on discrete points.
-\item \hl{Polynomial forms:} standard vs nested (Horner) vs centered; FLOP counts.
+\item \hl{Polynomial forms:} standard, nested (Horner), or centered; FLOP counts.
 \item \hl{Horner:} evaluate $p(c)$; synthetic division by $ax-b$; derivative via repeated Horner.
 \item \hl{Taylor:} construct poly at given center; truncation error integral \& Lagrange form; bound on interval (Sandwich Thm); find $n$ for tolerance; Maclaurin/Taylor series convergence.
 \item \hl{Interpolation:} setup linear system + matrix form $Xa=y$; Vandermonde det (why nonzero); over/underdetermined \& free parameters; Lagrange basis $\ell_i(x)$ \& poly $p(x)$; extrapolation vs interpolation; divided differences (1st/2nd order only, no full Newton); Chebyshev nodes, Runge phenomenon; Bézier curves (basic).
@@ -151,7 +153,7 @@ Given $(x_0,y_0),(x_1,y_1)$: $p_1(x)=y_0+\dfrac{y_1-y_0}{x_1-x_0}(x-x_0)$.
 \subsection{Main Types of Interpolation (Th.8)}
 \begin{itemize}
 \item \hl{Linear (piecewise):} connect consecutive points by line segments. Simple, cheap, $C^0$ only (kinks at nodes). Good for monotone data; crude derivative info.
-\item \hl{Global poly} (Lagrange/Newton/Vandermonde): one degree-$n$ poly through $n{+}1$ pts; $C^\infty$; \hl{unique} for distinct nodes. Limit: high degree $\Rightarrow$ ill-conditioned, Runge.
+\item \hl{Global poly:} Lagrange/Newton/Vandermonde — one degree-$n$ poly through $n{+}1$ pts; $C^\infty$; \hl{unique} for distinct nodes. High degree $\Rightarrow$ ill-conditioned, Runge.
 \item \hl{Cubic splines:} piecewise cubic with matched $f,f',f''$ at nodes; $C^2$ smooth, local updates, avoids Runge — best for many nodes.
 \item \hl{Hermite:} matches $f$ \emph{and} $f'$ at nodes ($2n{+}2$ conditions $\Rightarrow$ degree $2n{+}1$).
 \end{itemize}
@@ -197,7 +199,10 @@ f[x_i,x_{i+1}]=\frac{f(x_{i+1})-f(x_i)}{x_{i+1}-x_i}
 \begin{equation*}
 f[x_i,x_{i+1},x_{i+2}]=\frac{f[x_{i+1},x_{i+2}]-f[x_i,x_{i+1}]}{x_{i+2}-x_i}
 \end{equation*}
-General (order $k$): $f[x_i,\dots,x_{i+k}]=\dfrac{f[x_{i+1},\dots,x_{i+k}]-f[x_i,\dots,x_{i+k-1}]}{x_{i+k}-x_i}$, denom $=$ last $-$ first node.
+General (order $k$), denom $=$ last $-$ first node:
+\begin{equation*}
+\resizebox{\linewidth}{!}{$f[x_i,\dots,x_{i+k}]=\dfrac{f[x_{i+1},\dots,x_{i+k}]-f[x_i,\dots,x_{i+k-1}]}{x_{i+k}-x_i}$}
+\end{equation*}
 
 \subsection{Newton Interpolation Formula (Th.13)}
 \begin{equation*}
@@ -399,6 +404,17 @@ Quadratic ($n{=}2$): $B(t)=(1{-}t)^2P_0+2t(1{-}t)P_1+t^2P_2$. Cubic ($n{=}3$): u
 B(0.5)&=0.25(0,0)+2(0.5)(0.5)(1,2)+0.25(3,0)\\
 &=(0,0)+(0.5,1)+(0.75,0)=(1.25,\,1)
 \end{align*}
+
+\subsection{Common Maclaurin Series (convergence)}
+\begin{itemize}
+\item $e^x=\sum\frac{x^k}{k!}$ (all $\mathbb R$)
+\item $\sin x=\sum\frac{(-1)^k x^{2k+1}}{(2k+1)!}$ (all $\mathbb R$)
+\item $\cos x=\sum\frac{(-1)^k x^{2k}}{(2k)!}$ (all $\mathbb R$)
+\item $\frac1{1-x}=\sum x^k$ $(|x|<1)$
+\item $\ln(1+x)=\sum\frac{(-1)^{k+1}x^k}{k}$ $(|x|<1)$
+\item $\tan^{-1}x=\sum\frac{(-1)^k x^{2k+1}}{2k+1}$ $(|x|\le1)$
+\end{itemize}
+\hl{Trap:} writing the infinite sum doesn't prove $f$ equals it — must show $R_n\to0$ (see \S4).
 
 \end{multicols}
 \end{document}
