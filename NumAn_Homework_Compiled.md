@@ -243,4 +243,115 @@ $$h(x) = \alpha f(x) + \beta g(x).$$
 Estimate suitable values of the coefficients $\alpha$ and $\beta$. In other words, express $h(x)$ approximately as a linear combination of the basis functions $f(x)$ and $g(x)$.
 
 *Hint: Select two points at which at least one of the functions $f$ or $g$ is nonzero. Evaluate (approximately) the values of $f$, $g$, and $h$ at these points, construct a system of two linear equations, and solve it to obtain approximate values of $\alpha$ and $\beta$. If your calculations are correct, you should obtain values close to $\alpha \approx 0.5$ and $\beta \approx 2$.*
+
+---
+
+## Homework 09 (Lecture 15)
+
+**Source:** NumAn - homework09.pdf, Lecture 15
+
+**Content Type: Core Formula**
+**Content Text:**
+$$a = (X^T X)^{-1} X^T y$$
+(Linear regression formula using the pseudoinverse.)
+
+**Content Type: Core Formula**
+**Content Text:**
+$$a_1 = \frac{\overline{xy} - \bar{x}\bar{y}}{\overline{x^2} - (\bar{x})^2}, \qquad a_0 = \bar{y} - a_1 \bar{x}$$
+(Standard formulas for one-dimensional linear regression, $m = 1$.)
+
+**Section:** Question 1
+**Content Type: Worked Example/Proof**
+**Content Text:**
+Verify that the formula for linear regression using the pseudoinverse,
+$$a = (X^T X)^{-1} X^T y,$$
+reduces to the standard formulas for one-dimensional linear regression ($m = 1$), namely,
+$$a_1 = \frac{\overline{xy} - \bar{x}\bar{y}}{\overline{x^2} - (\bar{x})^2}, \qquad a_0 = \bar{y} - a_1 \bar{x}.$$
+
+**Section:** Question 2
+**Content Type: Worked Example/Proof**
+**Content Text:**
+For the case of two independent variables and three data points, i.e., $m = 2$ and $n = 2$ (with the data points indexed starting from 0), write down the matrix
+$$X^{+} = (X^T X)^{-1} X^T$$
+appearing in the pseudoinverse formula.
+
+**Section:** Question 3
+**Content Type: Theorem/Property**
+**Content Text:**
+Verify that
+$$X^{+}X = I,$$
+i.e., the pseudoinverse satisfies one of the key properties of an inverse matrix. Think, does the analogous relation
+$$XX^{+} = I$$
+also hold?
+
+**Section:** Question 4
+**Content Type: Worked Example/Proof**
+**Content Text:**
+Complete the calculation started in the lecture for linearized regression using the following transformed data:
+
+| $\tilde{x}$ | 1 | 2 | 3 | 5 |
+|---|---|---|---|---|
+| $\tilde{y}$ | $\ln 8$ | $\ln 4$ | $\ln 2$ | $0$ |
+
+Find $a_0$ and $a_1$ such that
+$$\tilde{y} = a_0 + a_1 \tilde{x}.$$
+Then transform the result back to the original model
+$$y = A e^{Bx},$$
+and verify that $B < 0$.
+
+Finally, plot the resulting function $y(x)$ using a suitable computer algebra system, such as Maxima or Maple, and verify that it provides a reasonable approximation to the original data:
+
+| $x$ | 1 | 2 | 3 | 5 |
+|---|---|---|---|---|
+| $y$ | 8 | 4 | 2 | 1 |
+
+---
+
+## Homework 10 (Lecture 20)
+
+**Source:** NumAn - homework10.pdf, Lecture 20
+
+**Content Type: Core Formula**
+**Content Text:**
+$$y = \frac{1}{2}(\cos x - \sin x) + Ce^x$$
+(Proposed general solution of $y' = y - \cos x$.)
+
+**Content Type: Core Formula**
+**Content Text:**
+$$y' = \frac{y}{x} + 2x^2, \qquad y(1) = 4$$
+(Initial value / Cauchy problem, with general solution $y = (x^2 + C)x$.)
+
+**Section:** Question 1
+**Content Type: Worked Example/Proof**
+**Content Text:**
+Determine whether
+$$y = \frac{1}{2}(\cos x - \sin x) + Ce^x$$
+is the general solution of the differential equation
+$$y' = y - \cos x.$$
+
+**Section:** Question 2
+**Content Type: Worked Example/Proof**
+**Content Text:**
+Consider the initial value (Cauchy) problem
+$$y' = \frac{y}{x} + 2x^2, \qquad y(1) = 4.$$
+
+a) Find the solution of the Cauchy problem, given that the general solution is
+$$y = (x^2 + C)x.$$
+
+b) Verify that the given general solution indeed satisfies the ODE.
+
+c) Using the initial data $(x_0, y_0) = (1, 4)$, construct the first three points
+$$(x_1, y_1), (x_2, y_2), (x_3, y_3)$$
+of the numerical solution using Euler's method. Plot the resulting polygonal approximation.
+
+d) Repeat the previous task using the midpoint method.
+
+e) Compare the exact and approximate solutions at $x_2$ by calculating the absolute errors of the numerical approximations.
+
+**Section:** Question 3
+**Content Type: Worked Example/Proof**
+**Content Text:**
+As an exercise, write down the classical Runge–Kutta scheme (RK4) for the ODE
+$$y' = y + x.$$
+Performing further numerical calculations is not required.
 ```
