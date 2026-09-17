@@ -2,24 +2,24 @@
 
 ## COURSE CONFIGURATION (fill this in before starting)
 ```
-COURSE: Numerical Analysis (SCI19 3111)
-YEAR/SEMESTER: 2026
-EXAM: midterm + final (one sheet each)
-FILE NAME: midterm/numan_cheatsheet.tex, final/numan_final_cheatsheet.tex
-SUPPLIED SOURCES: quiz text pasted in chat, midterm/recomsMid.txt, final/NumAn_Final_Exam_Recommendations.md, NumAn_Homework_Compiled.md, NumAn_Lectures_14-20_Compiled.md, NumAn_QuizzesFinalHalf_Compiled.md, quiz3Answers.md
-OFFICIAL ANSWERS AVAILABLE?: yes — official answers override the sheet on conflict
+COURSE: <subject + code, e.g. Linear Algebra (SCI19 XXXX)>
+YEAR/SEMESTER: <e.g. 2026>
+EXAM: <e.g. midterm / final>
+FILE NAME: <e.g. midterm/linalg_cheatsheet.tex, final/linalg_final_cheatsheet.tex>
+SUPPLIED SOURCES: <quiz text pasted in chat, recoms file, homework/lecture .md files, quiz answer files>
+OFFICIAL ANSWERS AVAILABLE?: <yes/no — if yes, they override the sheet on conflict>
 
 ## COURSE-SPECIFIC TRAPS TO LOOK FOR (maintain during the session)
 Start from these generic categories, then fill in course-specific instances.
 Add every new trap discovered (from quizzes, answers, or edge cases):
-- parity/symmetry: odd fn (sin(3x)) has no even Taylor terms; a "degree-8" poly stops at x^7; even indices invalid → map R_8 to n=9/x<0.3012 or n=7/x<0.1673; bounds use (2m+2)! with 12^{2m+2} (Q4 answer m=20, 2m+2=42, NOT n=40)
-- degenerate cases: singular Vandermonde (repeated nodes => det=0), under/overdetermined systems => free parameters (n-m of them)
-- sign/domain constraints: convergence radii (geometric/ln/arctan |x|<=1 vs e^x,sin,cos all R); extrapolation outside node/data range unreliable (regression prediction, Lagrange)
-- off-by-one indexing: n vs n+1 ("degree <= n" needs n+1 points; R_n uses (n+1)!); Simpson needs n EVEN; FLOPs nested 2n vs standard n(n+3)/2
-- naive-vs-structural bounds: even-degree poly of odd fn equals preceding odd one (deg-40 err = R_39 = 12^40/40!, NOT 12^41/41!); X^+X=I but XX^+≠I in general
-- prove-vs-assert: infinite series ≠ proof of equality — must show R_n→0; ODE candidate must be differentiated AND substituted (Quiz9 Q2 fails: residual sin2x−2cos2x≠0)
-- rounding: default 5 dp uniformly; don't mix 3-dp inputs into 5-dp computations; displayed rounded inputs must reproduce displayed intermediates (f_5=0.84842, NOT .443)
-- source slips: lecture/quiz/compiled notes DO contain arithmetic slips — recompute every worked number independently. Found: f_3=3/4 unsquared (left 7/32, NOT 17/64); Ax/(B+x) a_0=0.743 wrong (A≈2.71, B≈4.98); Euler y_2=1.5625 dropped x_1 (correct 1.625, knock-on y_3); IVP C=2/e forgot +4 (correct 6/e)
+- parity/symmetry: <e.g. odd fn has no even Taylor terms; a "degree-8" poly stops at x^7; even indices may be invalid and must map to adjacent valid ones; bounds/indices shift accordingly>
+- degenerate cases: <e.g. singular Vandermonde (repeated nodes => det=0), under/overdetermined systems => free parameters>
+- sign/domain constraints: <e.g. convergence radii, extrapolation outside node range is unreliable>
+- off-by-one indexing: <e.g. n vs n+1, "degree <= n" needs n+1 points>
+- naive-vs-structural bounds: <e.g. a literal formula application may use the wrong index when terms vanish — an even-degree poly of an odd fn equals the preceding odd one, so its error is the lower-index remainder, not the naive one>
+- prove-vs-assert: <e.g. writing the infinite series does NOT prove equality — must show remainder -> 0>
+- rounding: default 5 dp applied uniformly; don't mix 3-dp inputs into 5-dp computations; displayed rounded inputs must reproduce displayed intermediates (recompute the chain from the rounded values, don't copy exact-value intermediates)
+- source slips: lecture/quiz/compiled notes DO contain arithmetic slips (unsquared terms, dropped addends, knock-on errors) — recompute every worked number independently; a correct derivation beats a wrong official intermediate
 ```
 
 ## Role
@@ -72,45 +72,3 @@ then check the `.log`:
 
 ## Output contract
 Emit ONLY the raw, production-ready LaTeX code (from `\documentclass` to `\end{document}`), no conversational filler. If the task runs long, prefer one complete compilable file over a stub. Do not use emojis. Do not add code comments unless the user asks.
-
-<!-- graft:start -->
-## Graft — repo context graph
-
-This repo is indexed in `graft/`: small linked markdown nodes that explain each
-system and carry exact file:line spans, kept in sync with the code through git.
-
-For ANY task here — understanding how something works, finding where code lives,
-or scoping a change — get context from the graph before grepping or opening
-source files. Re-ask freely (it's cheap) and reuse literal identifiers you
-already have (symbol, error string, file name) as the query. New to this repo?
-Run `graft map` first — a token-budgeted orientation (dir clusters, hubs,
-hotspots), no LLM, no key.
-
-- Run `graft ask "<your question>" --source` → ranked nodes with the relevant
-  code spans inlined (each hit's ≤8-line crux by default; `--full` for whole
-  definitions when the crux isn't enough). Match the tool to the task shape:
-  for understanding or editing, the top node IS the answer — cite its
-  `covers:` file:line spans and edit straight from `--source`. For
-  exhaustive tasks ("every occurrence / every caller of this pattern"), ranked
-  results are top-N, not complete — run `graft grep "<literal>"` instead
-  (exhaustive over indexed files, grouped by enclosing symbol), falling back
-  to raw `grep -rn` only for unindexed files.
-- `graft skeleton <file>` → every definition's signature + span, ~10× cheaper
-  than reading the file; use it to skim an API surface.
-- `graft callers <symbol>` gives precomputed, exact edges — who calls this.
-  Add `--direction out` for what it calls, or `--depth N` to walk
-  transitively for the full blast radius. For structural questions, skip
-  ranking and use this directly.
-- Or browse: `graft/INDEX.md` lists every node; follow the links.
-- Monorepos and folders of multiple repos rank fairly across sub-projects —
-  hits carry `[scope/]` labels naming which one they're from. Narrow with
-  `graft ask "<task>" --in <scope>/` once you know where you're working.
-
-If a returned span is truncated ("+N more lines"), open the file at that exact
-range before finalizing. Only open source files when a node genuinely lacks a
-needed detail, and then at the exact file:line the node points to — never
-re-read whole files.
-
-After big code changes, refresh the graph with `graft build` (deterministic,
-no API key, $0).
-<!-- graft:end -->

@@ -1,0 +1,300 @@
+\documentclass[9pt]{extarticle}
+\usepackage[a4paper,margin=0.25in]{geometry}
+\usepackage{lmodern}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{0.15in}
+\setlength{\columnseprule}{0.4pt}
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+\setlength{\abovedisplayshortskip}{1pt}
+\setlength{\belowdisplayshortskip}{1pt}
+\allowdisplaybreaks
+\emergencystretch=2em
+
+% Compact list environment
+\setlist[itemize]{itemsep=0pt,parsep=0pt,topsep=1pt,leftmargin=*,partopsep=0pt}
+\setlist[enumerate]{itemsep=0pt,parsep=0pt,topsep=1pt,leftmargin=*,partopsep=0pt}
+
+\titleformat{\section}{\normalfont\bfseries\small\color{RoyalBlue}}{\thesection}{0.3em}{}
+\titlespacing{\section}{0pt}{3pt}{2pt}
+\titleformat{\subsection}{\normalfont\bfseries\footnotesize\color{OliveGreen}}{}{0em}{}
+\titlespacing{\subsection}{0pt}{2pt}{1pt}
+
+\newcommand{\hl}[1]{\textbf{\textcolor{BrickRed}{#1}}}
+\newcommand{\sepline}{\vspace{1pt}\hrule\vspace{2pt}}
+
+% Compact highlight box for key equations / ideas
+\newtcolorbox{keybox}{colback=Goldenrod!10,colframe=BrickRed!75!black,boxrule=0.6pt,arc=2pt,left=3pt,right=3pt,top=2pt,bottom=2pt,boxsep=0pt}
+
+\begin{document}
+\footnotesize
+
+\begin{center}
+{\bfseries\large Numerical Analysis (SCI19 3111) --- Final Cheat Sheet}\\
+{\scriptsize Regression $\cdot$ Integration $\cdot$ ODEs $\cdot$ Linear Algebra (+ midterm recap)}
+\end{center}
+\sepline
+
+\begin{multicols}{3}
+
+\section{0. Prof's Blueprint (High Priority)}
+\begin{itemize}
+\item \hl{Regression:} fit + predict; linearization + delinearization; pick model from graph; Hessian + definiteness. Multivariable: $X^TX\bar a=X^T\bar y$, pseudoinverse. ML: features, decision boundary, $\sigma$-function.
+\item \hl{Integration:} draw rectangles ($\alpha$-formula), trapezoids, parabolas; compute rect/trap on uniform + non-uniform grids; Simpson on uniform. Accuracy estimates in $h$.
+\item \hl{ODEs:} first-order IVP; exact-solution checks; Euler + midpoint steps + errors; \hl{RK4 scheme} written down ($k_1..k_4$), no numbers needed. Accuracy estimates (no derivation).
+\item \hl{Starred (may be excluded):} matrix/det basics, Laplace, Gaussian elimination, LU, det for $n>3$, writing RK scheme.
+\item MCQ + written, 30 pts. 1 A4 sheet. Calculators OK; no phones.
+\end{itemize}
+
+\section{1. Regression / Data Fitting (Th.1--6)}
+\hl{Regression $\ne$ interpolation:} interpolation trusts every measurement and passes through ALL points; regression assumes noise and finds the best OVERALL trend, passing through (almost) none.
+Deviations $d_i=y_i-\phi(x_i)$, data $(x_i,y_i)$, $i=0..n$ ($n{+}1$ points).
+\hl{Error choices:} naive $S=\sum d_i$ (rejected: $+,-$ cancel); abs $S=\sum|d_i|$ (rejected: kink at 0, no derivative); \hl{squared} $S=\sum d_i^2$ (chosen: smooth everywhere, so ``set gradient $=0$'' gives solvable linear equations; big misses punished quadratically).
+Example (Lec14): pts $(1,2),(2,1)$, line through $(1,1),(2,2)$: $d_0=1,d_1=-1$: naive $S=0$ (cancels!), abs $S=2$, squared $S=2$.
+
+\subsection{Linear regression}
+$\hat y=a_0+a_1x$, $S=\sum(y_i-a_0-a_1x_i)^2$. Minimize: $\tfrac{\partial S}{\partial a_0}=0,\ \tfrac{\partial S}{\partial a_1}=0$.
+$\partial_{a_0}$: $\sum y_i-(n{+}1)a_0-a_1\sum x_i=0$; $\partial_{a_1}$: $\sum x_iy_i-a_0\sum x_i-a_1\sum x_i^2=0$.\\
+Divide by $n{+}1$ $\Rightarrow$ $a_0+a_1\bar x=\bar y$, $a_0\bar x+a_1\overline{x^2}=\overline{xy}$; Cramer gives
+\begin{keybox}
+\centering
+$\displaystyle a_1=\frac{\overline{xy}-\bar x\bar y}{\overline{x^2}-\bar x\cdot\bar x},\qquad a_0=\bar y-a_1\bar x$
+\end{keybox}
+with $\bar x=\tfrac1{n+1}\sum x_i$, $\overline{x^2}=\tfrac1{n+1}\sum x_i^2$, $\overline{xy}=\tfrac1{n+1}\sum x_iy_i$.\\
+\hl{Trap:} $\overline{x^2}\ne\bar x^2$; denominator $=0$ iff all $x_i$ equal (no fit possible).
+
+\subsection{Hessian + minimum test}
+\begin{equation*}
+\resizebox{\linewidth}{!}{$H=\begin{pmatrix}S_{a_0a_0}&S_{a_0a_1}\\S_{a_1a_0}&S_{a_1a_1}\end{pmatrix},\ S_{a_0a_0}=2(n{+}1),\ S_{a_0a_1}=2\sum x_i,\ S_{a_1a_1}=2\sum x_i^2$}
+\end{equation*}
+\begin{keybox}
+\centering
+$\displaystyle \det H=4\big[(n{+}1)\sum x_i^2-(\sum x_i)^2\big]$; min $\iff S_{a_0a_0}>0$ AND $\det H>0$
+\end{keybox}
+Intuition: $H$ = curvature of the error bowl; positive-definite = bowl opens upward = exactly one bottom. \hl{Cauchy--Schwarz} $\Rightarrow\det H\ge0$; $>0$ if $\ge2$ distinct $x_i$ $\Rightarrow$ unique global min (strictly convex).
+
+\subsection{Multivariable + pseudoinverse}
+$\hat y=a_0+a_1x_1+\cdots+a_mx_m$, $X$ is $(n{+}1)\times(m{+}1)$ with first col of 1's. $S=\|\bar y-X\bar a\|^2$.
+\begin{keybox}
+\centering
+$\displaystyle X^TX\bar a=X^T\bar y,\qquad \bar a=\underbrace{(X^TX)^{-1}X^T}_{X^+}\bar y$
+\end{keybox}
+$X^+=$ Moore--Penrose pseudoinverse ($=X^{-1}$ when $X$ square). Idea: $X^TX\bar a=X^T\bar y$ projects $\bar y$ onto the column space of $X$ (closest achievable fit); $X^+$ is that projection written as a formula. \hl{Trap:} $X^+X=I$ holds; $XX^+=I$ generally does NOT.
+
+\subsection{ML: classification}
+Features = measured inputs $(x_1,x_2)$; model outputs a score; plane $a_0+a_1x_1+a_2x_2=0\cap x_1x_2$-plane = \hl{decision boundary} (class 1 vs 2). Logistic $\sigma(z)=\tfrac1{1+e^{-z}}: \mathbb R\to[0,1]$ squashes the score to a probability; classifier $\sigma(a_0+a_1x_1+a_2x_2)$.
+
+\section{2. Linearization}
+\hl{Goal:} transform $(\tilde x,\tilde y)$ so model is linear; fit; inverse-transform back. Why logs work: $\ln$ turns $\times$ into $+$ and powers into $\times$ (e.g. $\ln(Ae^{Bx})=\ln A+Bx$). Steps: (1) change vars; (2) fit $\tilde y=a_0+a_1\tilde x$; (3) recover $A,B$; (4) check fit.
+\begin{itemize}
+\item $y=Ae^{Bx}$: $\tilde x=x$, $\tilde y=\ln y$; $a_0=\ln A$, $a_1=B$ $\Leftrightarrow$ $A=e^{a_0}$.
+\item $y=Ax^n$: $\tilde x=\ln x$, $\tilde y=\ln y$; $a_0=\ln A$, $a_1=n$.
+\item $y=A+\tfrac{B}{x}$: $\tilde x=\tfrac1x$, $\tilde y=y$; $a_0=A$, $a_1=B$.
+\item $y=\tfrac1{A+Bx}$: $\tilde x=x$, $\tilde y=\tfrac1y$; $a_0=A$, $a_1=B$.
+\item $y=\tfrac{Ax}{B+x}$: $\tilde x=\tfrac1x$, $\tilde y=\tfrac1y$; $a_0=\tfrac1A$, $a_1=\tfrac{B}{A}$ $\Leftrightarrow$ $A=\tfrac1{a_0}$, $B=\tfrac{a_1}{a_0}$.
+\end{itemize}
+\hl{Trap:} not everything linearizes (e.g. $a_0e^{-x}\sin(a_1+2\pi x)$). \hl{Model from graph:} straight $\to$ linear; explosive growth $\to Ae^{Bx}$; power curve $\to Ax^n$; saturating hyperbola $\to Ax/(B+x)$; reciprocal decay $\to A+B/x$.
+
+\section{3. Grids + Riemann Sums}
+Partition $a=x_0<\cdots<x_n=b$, $h_i=x_i-x_{i-1}$, sample $x_i^*\in[x_{i-1},x_i]$: $\int_a^bf\approx\sum f(x_i^*)h_i$.
+\hl{Uniform:} $h_i\equiv h=\tfrac{b-a}{n}$, $n{+}1$ points. \hl{Non-uniform:} varying $h_i$ (adaptive: fine where $f$ changes fast, coarse elsewhere). Idea: spend grid points where the function wiggles; a uniform grid wastes them where $f$ is flat and starves them where $f$ is steep.
+\hl{Riemann integral} $=\lim_{\max h_j\to0}\sum h_if(x_i^*)$; $f$ bounded, at most countably many jumps (isolated jumps are OK, the area under one point is zero).
+
+\section{4. Rectangle / Trapezoid / Simpson}
+\hl{Sample point:} $x_i^*=\alpha x_{i-1}+(1-\alpha)x_i$: $\alpha=1$ left, $\alpha=0$ right, $\alpha=\tfrac12$ midpoint. (Quiz7: $0.2x_{i-1}+0.8x_i$ is $\alpha=0.2$.)
+General non-uniform: left $\sum h_if(x_{i-1})$, right $\sum h_if(x_i)$, mid $\sum h_if(\tfrac{x_{i-1}+x_i}2)$.
+\begin{keybox}
+\centering
+$\displaystyle \tilde I_{\text{Tr}}=\tfrac12\sum_{i=1}^n\big(f(x_{i-1})+f(x_i)\big)h_i$
+\end{keybox}
+Uniform trapezoid: $\tfrac{h(f_0+f_n)}2+h\sum_{i=1}^{n-1}f_i$.
+\hl{Trap idea:} one strip = rectangle $hQ_1$ + triangle $\tfrac h2(Q_2-Q_1)$ $=h(Q_1+Q_2)/2$; uniform version averages neighbors (interior $f_i$ counted twice $\to$ single sum).
+\hl{Simpson} ($n=2m$ even, uniform): fits parabola on each pair. Why $O(h^4)$? A parabola matches $f$'s value, slope AND curvature, so the leftover is two orders smaller than trapezoid (which matches only value + slope). Cost: more $f$-evaluations per step.
+\begin{keybox}
+\centering
+$\displaystyle I_{\text{parab}}=\tfrac{h}{3}\big\{f_0+f_n+4\sum_{\text{odd }i}f_i+2\sum_{\text{even }i<n}f_i\big\}$
+\end{keybox}
+\hl{Sketch:} rectangles = bars at $x_i^*$; trapezoids = straight segments node-to-node; Simpson = parabola arcs per pair (blank axes: mark $n{+}1$ nodes first). Simpson weights: endpoints $\times1$, odd indices $\times4$, even interior $\times2$.
+
+\subsection{Accuracy estimates}
+\begin{itemize}
+\item left/right rectangle $O(h)$; midpoint $O(h^2)$; trapezoid $O(h^2)$; Simpson $O(h^4)$.
+\item Read $O(h^p)$ as: halving $h$ divides the error by $2^p$ (rect $\div2$, mid/trap $\div4$, Simpson $\div16$).
+\item If $|h|<1$: midpoint beats left/right; trap $\approx$ midpoint order.
+\item Left-rect global: $|E|\le\tfrac{M_1(b-a)}2h$, $M_1=\max|f'|$. Midpoint: $|E|\le\tfrac{M_2(b-a)}{24}h^2$. (Taylor + symmetry kills $f'$ term.)
+\item No elementary antiderivative ($\int e^{x^2}dx$, $\int\tfrac{dx}{\ln x}$): cross-check Simpson vs trapezoid.
+\end{itemize}
+
+\section{5. ODEs: IVP + Numeric Methods}
+$y'=f(x,y)$: slope field tells the direction at every point; a solution follows the arrows. General solution $y(x,C)$ = whole family of curves; IVP (Cauchy) $+y(x_0)=y_0$ picks the ONE curve through $(x_0,y_0)$ (fix $C$ by plugging IC; existence/uniqueness assumed).
+\hl{Check-solution trap:} differentiate candidate AND plug into ODE — both must hold for ALL $C$.
+\hl{Bridge (Lec19):} Euler comes from the finite difference $y'\approx\tfrac{y_{i+1}-y_i}{h}$: replace $y'$ in $y'=f(x,y)$ and solve for $y_{i+1}$.
+\begin{keybox}
+\centering
+$\displaystyle y_{i+1}=y_i+hf(x_i,y_i),\quad x_{i+1}=x_i+h\quad\text{(Euler)}$
+\end{keybox}
+\begin{keybox}
+\centering
+$\displaystyle y_{i+1}=y_i+hf(x_{i+\frac12},y_{i+\frac12}),\quad x_{i+\frac12}=x_i+\tfrac h2,\ y_{i+\frac12}=y_i+\tfrac h2f(x_i,y_i)$
+\end{keybox}
+\hl{RK4:} weighted average of 4 trial slopes with weights $(1,2,2,1)/6$: $k_1=f(x_n,y_n)$; $k_2=f(x_n{+}\tfrac h2,y_n{+}\tfrac h2k_1)$; $k_3=f(x_n{+}\tfrac h2,y_n{+}\tfrac h2k_2)$; $k_4=f(x_n{+}h,y_n{+}hk_3)$.\\
+$y_{n+1}=y_n+\tfrac h6(k_1{+}2k_2{+}2k_3{+}k_4)$. Price: 4 $f$-evaluations per step for $O(h^4)$.
+\hl{Global errors:} Euler $O(h)$ (local $O(h^2)\times N\sim1/h$); midpoint $O(h^2)$; RK4 $O(h^4)$ (4 evals/step).
+\hl{Euler error idea:} Taylor $y(x{+}h)=y(x)+hy'(x)+\tfrac{h^2}2y''(\xi)$; one Euler step from exact $y(x_i)$ misses by $O(h^2)$ (local); $N=(b-x_0)/h=O(1/h)$ steps accumulate to $O(h)$ global.
+\hl{Midpoint idea:} predict midpoint slope with one Euler half-step, then step full $h$ along it; symmetric $\Rightarrow$ local $O(h^3)$, global $O(h^2)$.
+
+\section{6. Linear Algebra* (starred)}
+$\det=$ volume scale factor of the matrix map; $\det\ne0\iff$ invertible ($\det=0$ = space collapses). $\det(AB)=\det A\det B$.\\
+\hl{Laplace:} expand along row/col with $(-1)^{i+j}$ cofactors (pick the row/col with most zeros). Elimination: row ops change det by sign/scale (swap $\to$ $-$, scale row by $c$ $\to$ $\times c$); $\det=$ product of $U$ diagonal.\\
+\hl{LU:} $A=LU$ records elimination ($L$ = unit-lower multipliers, $U$ = upper result); solve $Ly=b$, then $Ux=y$ — two cheap triangular passes instead of re-eliminating. \hl{Worked:} $A=\big(\begin{smallmatrix}2&1&0\\1&3&1\\0&2&4\end{smallmatrix}\big)$: $R_2-\tfrac12R_1$, $R_3-\tfrac45R_2'$ $\to$ $U$ diag $(2,2.5,3.2)$, $\det=2\cdot2.5\cdot3.2=16$.
+
+\section{7. Midterm Recap (compact)}
+\hl{Taylor:} $f(x)=\sum_{k=0}^n\tfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k+R_n$, $R_n=\tfrac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}$, $|R_n|\le\tfrac{Md^{n+1}}{(n+1)!}$.\\
+Odd fn: only odd powers (deg 8 $\to x^7$); index $R_{2m+1}$, bound $\tfrac{12^{2m+2}}{(2m+2)!}$.
+\hl{Maclaurin:} $e^x,\sin,\cos$ converge $\forall\mathbb R$; $\tfrac1{1-x}=\sum x^k$, $\ln(1{+}x)$, $\arctan$ for $|x|<1$.
+\hl{Horner:} tableau at $c$ gives $p(c)$ (last) + quotient $q$; tableau on $q$ gives $p'(c)$.
+\hl{Interpolation:} $\ell_i(x)=\prod_{j\ne i}\tfrac{x-x_j}{x_i-x_j}$, $p=\sum y_i\ell_i$; err $=\tfrac{f^{(n+1)}(\xi)}{(n+1)!}\prod(x-x_i)$ ($=0$ at nodes).\\
+Vandermonde $\det=\prod_{i<j}(x_j-x_i)\ne0$ (distinct nodes); DD: $f[x_i,x_{i+1}]=\tfrac{\Delta f}{\Delta x}$, Newton $p_n=f[x_0]+\sum f[x_0{..}x_k]\prod_{j<k}(x-x_j)$.
+
+\section{8. Worked Mini-Examples}
+\begin{sloppypar}\raggedright
+
+\subsection{Coffee regression (Quiz 6)}
+Given $x:0,1,2,3$; $y:3,5,8,7$ ($n{+}1{=}4$ pts).
+Step 1 — sums (add term by term): $\sum x_i=0{+}1{+}2{+}3=6$; $\sum y_i=3{+}5{+}8{+}7=23$; $\sum x_i^2=0{+}1{+}4{+}9=14$; $\sum x_iy_i=0{+}5{+}16{+}21=42$.
+Step 2 — means (divide by 4): $\bar x=6/4=1.5$; $\bar y=23/4=5.75$; $\overline{x^2}=14/4=3.5$; $\overline{xy}=42/4=10.5$.
+Step 3 — coeffs (plug into boxed formula): $a_1=\tfrac{10.5-1.5\cdot5.75}{3.5-1.5^2}$\\
+$=\tfrac{10.5-8.625}{3.5-2.25}=\tfrac{1.875}{1.25}=1.5$; $a_0=5.75-1.5\cdot1.5$\\
+$=5.75-2.25=3.5$. $\boxed{\hat y=3.5+1.5x}$.
+Step 4 — predict $x{=}4$: $\hat y=3.5+1.5\cdot4=3.5+6=9.5$ (mark $(4,9.5)$ on the scatter plot with the line).
+\hl{Plot recipe (Quiz6 Q2):} scatter the 4 data points, draw the line through $(0,3.5)$ and $(4,9.5)$ — regression line need NOT pass through data points.
+Step 5 — check fit: $\hat y:3.5,5.0,6.5,8.0$ vs $y:3,5,8,7$; residuals $-0.5,0,1.5,-1.0$; squared error $S=0.25+0+2.25+1=3.5$ (this $S$ is what least squares minimized).
+\hl{Battery prediction:} at $t{=}70$: $0.714\cdot70+3.57=53.55\%$ (extrapolation — flag as less reliable).
+\hl{Hessian:} from Step 1 sums ($\sum x_i=6$, $\sum x_i^2=14$): $S_{a_0a_0}=2\cdot4=8$, $S_{a_0a_1}=2\cdot6=12$, $S_{a_1a_1}=2\cdot14=28$;\\
+$\det H=8\cdot28-12^2=224-144=80>0$ (+ $8>0$) $\Rightarrow$ min.
+
+\subsection{Battery fit (Lec 14)}
+Given $t:0,10,20,30,40,50,60$; charge $5,10,15,25,35,40,45$ ($n{+}1{=}7$).
+Sums: $\sum t_i=0{+}10{+}20{+}30{+}40{+}50{+}60=210$; $\sum y_i=5{+}10{+}15{+}25{+}35{+}40{+}45=175$; $\sum t_i^2=0{+}100{+}400{+}900{+}1600{+}2500{+}3600=9100$; $\sum t_iy_i=0{+}100{+}300{+}750{+}1400{+}2000{+}2700=7250$.
+Means (divide by 7): $\bar x=210/7=30$; $\bar y=175/7=25$; $\overline{x^2}=9100/7=1300$; $\overline{xy}=7250/7\approx1035.71$.
+Coeffs: $a_1=\tfrac{1035.71-30\cdot25}{1300-30^2}=\tfrac{1035.71-750}{1300-900}$\\
+$=\tfrac{285.71}{400}\approx0.714$; $a_0=25-0.714285\cdot30$\\
+$=25-21.43\approx3.57$. $\boxed{\phi(x)=0.714x+3.57}$.
+Check fit: $\hat y:3.57,10.71,17.85,24.99,32.13,39.27,46.41$ vs $y:5,10,15,25,35,40,45$\\
+(residuals $1.43,-0.71,-2.85,0.01,2.87,0.73,-1.41$).
+
+\subsection{Exp linearization (HW09)}
+Given $x:1,2,3,5$, $y:8,4,2,1$; model $y=Ae^{Bx}$ $\Rightarrow$ transform $\tilde x=x$, $\tilde y=\ln y$.
+Step 0 — transform each $y$: $\ln8\approx2.07944$, $\ln4\approx1.38629$, $\ln2\approx0.69315$, $\ln1=0$. So $\tilde x:1,2,3,5$; $\tilde y:2.07944,1.38629,0.69315,0$.
+Step 1 — means ($n{+}1{=}4$): $\bar{\tilde x}=(1{+}2{+}3{+}5)/4=11/4=2.75$; $\bar{\tilde y}=(2.07944{+}1.38629{+}0.69315{+}0)/4=4.15888/4\approx1.03972$ (note $=\ln64/4=1.5\ln2$); $\overline{\tilde x^2}=(1{+}4{+}9{+}25)/4=39/4=9.75$; $\overline{\tilde x\tilde y}=(1\cdot2.07944{+}2\cdot1.38629{+}3\cdot0.69315{+}5\cdot0)/4=6.93147/4\approx1.73287$ (note $=2.5\ln2$).
+Step 2 — fit: $a_1=\tfrac{1.73287-2.75\cdot1.03972}{9.75-2.75^2}=\tfrac{1.73287-2.85923}{9.75-7.5625}$\\
+$=\tfrac{-1.12636}{2.1875}\approx-0.5149$; $a_0=1.03972-(-0.5149)\cdot2.75$\\
+$=1.03972+1.41598\approx2.4557$.
+Step 3 — back-transform ($A=e^{a_0}$, $B=a_1$): $A=e^{2.4557}\approx11.65$, $B\approx-0.515<0$. Check: $\hat y=11.65e^{-0.515x}$ gives $7.0,4.2,2.5,0.9$ vs $8,4,2,1$ — reasonable.
+\hl{Nonlinear example (Lec15):} $x:1,2,3,4$, $y:0.45,0.81,1.05,1.13$ for $y=\tfrac{Ax}{B+x}$: $\tilde x=1/x$, $\tilde y=1/y$ give $a_1\approx1.834$, $a_0\approx0.368$,\\
+so $A=1/a_0\approx2.71$, $B=a_1/a_0\approx4.98$.
+
+\subsection{Trapezoid $\sin x$ (Quiz 7)}
+Given $[0,3\pi/2]$, uniform $h=\pi/4$ $\Rightarrow$ $n=(3\pi/2)/(\pi/4)=6$ subintervals, 7 nodes $x_i=i\pi/4$.
+Step 1 — evaluate $f(x)=\sin x$: $\sin0=0$; $\sin\frac\pi4=\tfrac{\sqrt2}2\approx0.70711$; $\sin\frac\pi2=1$; $\sin\frac{3\pi}4=\tfrac{\sqrt2}2$; $\sin\pi=0$; $\sin\frac{5\pi}4=-\tfrac{\sqrt2}2$; $\sin\frac{3\pi}2=-1$.
+Step 2 — uniform trapezoid (endpoints half-weighted): $\tilde I=\tfrac h2(f_0{+}f_6)+h\sum_{i=1}^{5}f_i$ with $\sum_{1}^{5}f_i=\tfrac{\sqrt2}2+1+\tfrac{\sqrt2}2+0-\tfrac{\sqrt2}2=1+\tfrac{\sqrt2}2\approx1.70711$.
+Step 3 — multiply out: $\tilde I=\tfrac h2(f_0{+}f_6)+h\sum_{1}^{5}f_i$\\
+$=\tfrac\pi4\big(\tfrac12(-1)+1.70711\big)=\tfrac\pi4(1.20711)\approx0.78540\cdot1.20711\approx0.94806$.
+Step 4 — exact $I=\int_0^{3\pi/2}\sin x\,dx=[-\cos x]_0^{3\pi/2}=-\cos\tfrac{3\pi}2+\cos0=0+1=1$; err $=|1-0.94806|\approx0.05194$.
+\hl{How to draw trapezoids (Pract.6):} (1) mark all $n{+}1$ nodes on the axis; (2) plot $(x_i,f(x_i))$; (3) join consecutive points with straight segments; (4) each strip is a trapezoid (drop verticals to the axis). Parabolas (Simpson): same nodes, one arc per pair through its 3 points.
+
+\subsection{Simpson $\int_2^4\tfrac{dx}{\ln x}$ (Quiz 8)}
+Given $n=8$ (even $\checkmark$), 9 points, $h=(4-2)/8=0.25$. Nodes $x_i=2+0.25i$: $2,2.25,2.5,2.75,3,3.25,3.5,3.75,4$.
+Step 1 — evaluate $f(x)=1/\ln x$ at each node: $f_0=1/\ln2\approx1.44270$; $f_1=1/\ln2.25\approx1.23315$; $f_2=1/\ln2.5\approx1.09136$; $f_3=1/\ln2.75\approx0.98853$; $f_4=1/\ln3\approx0.91024$; $f_5=1/\ln3.25\approx0.84842$; $f_6=1/\ln3.5\approx0.79824$; $f_7=1/\ln3.75\approx0.75657$; $f_8=1/\ln4\approx0.72135$.
+Step 2 — weight (ends $\times1$, odd $i$ $\times4$, even $i$ $\times2$): $4\sum_{\text{odd}}=4(1.23315{+}0.98853{+}0.84842{+}0.75657)=4(3.82667)=15.30668$; $2\sum_{\text{even}}=2(1.09136{+}0.91024{+}0.79824)=2(2.79984)=5.59968$.
+Step 3 — assemble: $I=\tfrac{0.25}3(1.44270+15.30668+5.59968+0.72135)$\\
+$=\tfrac{0.25}3(23.07041)\approx0.083333\cdot23.07041\approx1.92253$.
+
+\subsection{Euler + midpoint $y'=x-4y$, $y(0)=-3/4$ (Quiz 9)}
+$h=0.2$, $f(x,y)=x-4y$. \hl{Euler:} $f_0=0-4(-0.75)=3$: $y_1=-0.75+0.2(3)=-0.15$; $f_1=0.2-4(-0.15)=0.8$: $y_2=-0.15+0.2(0.8)=0.01$; $f_2=0.4-0.04=0.36$: $y_3=0.01+0.2(0.36)=0.082$.
+\hl{Midpoint:} half-step $(0.1,-0.75+0.1(3))=(0.1,-0.45)$, $f=0.1+1.8=1.9$ $\to y_1=-0.75+0.2(1.9)=-0.37$; half-step $(0.3,-0.37+0.1(1.68))=(0.3,-0.202)$, $f=0.3+0.808=1.108$ $\to y_2=-0.37+0.2(1.108)=-0.1484$.
+Exact $y(0.4)\approx-0.101304$ (given in quiz; from closed form $y=x/4-1/16-\tfrac{11}{16}e^{-4x}$): Euler err $=|{-0.101304}-0.01|\approx0.11130$; midpoint err $=|{-0.101304}-(-0.1484)|\approx0.04710$.
+\hl{IVP from general sol:} $y=-\tfrac14+\tfrac x2+Ce^{-2x}$, $(x_0,y_0)=(\tfrac12,\tfrac14)$: $\tfrac14=-\tfrac14+\tfrac14+Ce^{-1}$ $\Rightarrow$ $C=e/4\approx0.6796$, $y^*=-\tfrac14+\tfrac x2+\tfrac e4e^{-2x}$.
+\hl{HW10 Q2 pattern:} $y'=\tfrac yx+2x^2$, $(1,4)$, general $y=(x^2+C)x$: $4=(1+C)\cdot1\Rightarrow C=3$, $y^*=(x^2+3)x$. Euler pattern: $x_1=1+h$, $y_1=4+h(4/1+2)=4+6h$ (since $f(1,4)=6$). Midpoint pattern: $x_{1/2}=1+h/2$, $y_{1/2}=4+(h/2)\cdot6=4+3h$.
+\hl{Check trap:} $y=Ce^x-2\cos2x-2\sin2x$ is \emph{not} a sol of $y'=y+5\sin2x$: $y'=Ce^x+4\sin2x-4\cos2x$, but $y+5\sin2x=Ce^x-2\cos2x+3\sin2x$; difference $=\sin2x-2\cos2x\ne0$.\\
+But $y=\tfrac12(\cos x-\sin x)+Ce^x$ \emph{is} a sol of $y'=y-\cos x$: $y'=\tfrac12(-\sin x-\cos x)+Ce^x=y-\cos x$.\\
+\hl{Rule:} differentiate candidate AND plug into ODE — both must hold $\forall C$.
+\hl{Decision boundary mini-example:} plane $-1+x_1+x_2=0$: point $(0,0)$ gives $-1<0$ (class 1), $(1,1)$ gives $+1>0$ (class 2); $\sigma(-1+x_1+x_2)$ maps these to $\approx0.27$ and $\approx0.73$.
+\hl{RK4 schemes (no numbers needed):} for $y'=y+x$: $k_1=y_i{+}x_i$, $k_2=y_i{+}\tfrac h2k_1{+}x_i{+}\tfrac h2$, $k_3=y_i{+}\tfrac h2k_2{+}x_i{+}\tfrac h2$, $k_4=y_i{+}hk_3{+}x_i{+}h$.\\
+For $y'=xy+1/x$ ($h{=}1/12$): $k_1=x_iy_i+1/x_i$; $k_2=(x_i{+}\tfrac1{24})(y_i{+}\tfrac{k_1}{24})+1/(x_i{+}\tfrac1{24})$; $k_3$ same with $k_2$; $k_4=(x_i{+}\tfrac1{12})(y_i{+}\tfrac{k_3}{12})+1/(x_i{+}\tfrac1{12})$.
+
+\subsection{Rectangle lattice nodes (Quiz 7)}
+Given $x_k=\tfrac{3\ln(1+k/5)}{\ln2}-1$, $k=0..5$. Sample: $x_1=\tfrac{3\ln1.2}{\ln2}-1$\\
+$=\tfrac{3(0.18232)}{0.69315}-1=\tfrac{0.54697}{0.69315}-1=0.78910-1=-0.21090$;\\
+$x_0=\tfrac{3\ln1}{\ln2}-1=-1$; $x_5=\tfrac{3\ln2}{\ln2}-1=2$.\\
+Full list: $-1.00000$, $-0.21090$, $0.45628$, $1.03422$, $1.54399$, $2.00000$.
+$x_i^*=0.2x_{i-1}+0.8x_i$: $-0.36872$, $0.32285$, $0.91863$, $1.44204$, $1.90880$.\\
+Rect $i$ has width $h_i=x_i-x_{i-1}$, height $f(x_i^*)$ ($f=x^3-1.25x^2$). \hl{How to draw (Pract.5):} (1) mark the $n{+}1$ nodes on the $x$-axis; (2) for each subinterval compute $x_i^*$ via the $\alpha$-formula (any $\alpha$: $1/3$, $2/3$, $0.2$, midpoint); (3) go up to the curve at $f(x_i^*)$ — that height is the bar top; (4) draw the bar over $[x_{i-1},x_i]$ (works below the axis too: height negative $\Rightarrow$ signed area).
+
+\subsection{Accuracy table $\int_0^1x^2dx$ (Lec17, $h=0.25$)}
+Nodes $0,\tfrac14,\tfrac12,\tfrac34,1$; $f(x)=x^2$ gives $0,\tfrac1{16},\tfrac14,\tfrac9{16},1$.
+Left $=\tfrac{17}{64}$? \hl{No:} $f_3=(\tfrac34)^2=\tfrac9{16}$, not $\tfrac34$. Correct left uses $f_0..f_3$: $=\tfrac14(0+\tfrac1{16}+\tfrac14+\tfrac9{16})=\tfrac14(\tfrac{14}{16})$\\
+$=\tfrac7{32}\approx0.21875$, err $=|0.33333-0.21875|\approx0.11458$.\\
+Mid: midpoints $\tfrac18,\tfrac38,\tfrac58,\tfrac78$, $f^*: \tfrac1{64},\tfrac9{64},\tfrac{25}{64},\tfrac{49}{64}$; $\tilde I=\tfrac14\cdot\tfrac{84}{64}\approx0.32813$ (err $0.00521$).\\
+Right $=\tfrac14(\tfrac1{16}+\tfrac14+\tfrac9{16}+1)=\tfrac{15}{32}\approx0.46875$ (err $0.13542$).\\
+Trap $=\tfrac{11}{32}\approx0.34375$ (err $0.01042$).
+\hl{Derivation idea (Th.10):} Taylor $f(x)=f(x_{i-1})+f'(\xi_x)(x-x_{i-1})$; integrate over $[x_{i-1},x_i]$: local err $|E_i|\le M_1h_i^2/2$; sum: $|E|\le\tfrac{M_1}2\sum h_i^2$; uniform: $\sum h_i^2=nh^2$, $nh=b-a$\\
+$\Rightarrow$ $|E|\le\tfrac{M_1(b-a)}2h=O(h)$. Midpoint: expand at $c_i$; odd term $\int(x-c_i)=0$ vanishes $\Rightarrow O(h^2)$.
+
+\subsection{Simpson $\int_1^2e^{x^2}dx$ (Lec19, $n=4$)}
+Given $h=(2-1)/4=0.25$, nodes $x_i=1+0.25i$: $1,\tfrac54,\tfrac32,\tfrac74,2$.
+Step 1 — evaluate $f(x)=e^{x^2}$ (square $x$ first, then exponentiate): $f_0=e^{1}\approx2.71828$; $f_1=e^{(5/4)^2}=e^{1.5625}\approx4.77073$; $f_2=e^{(3/2)^2}=e^{2.25}\approx9.48774$; $f_3=e^{(7/4)^2}=e^{3.0625}\approx21.38094$; $f_4=e^{4}\approx54.59815$.\\
+$I=\tfrac{0.25}3(2.71828+4(26.15167)+2(9.48774)+54.59815)\approx15.0749$.\\
+Trap check: two double-intervals $T_1=h(f_0{+}f_2)\approx3.0475$, $T_2=h(f_2{+}f_4)\approx16.0225$, total $\approx19.07$ — same ballpark $\Rightarrow$ likely right.
+\hl{Simpson sketch (Quiz8 Q1):} $[0,240]$, 6 subintervals $\Rightarrow h=40$, nodes $0,40,\dots,240$; one parabola arc per pair of subintervals (3 arcs total); mark nodes, draw each arc through its 3 points.
+
+\subsection{Pseudoinverse $\to$ 1D formulas (HW09)}
+$X^TX\bar a=X^T\bar y$ with $X=[1\ x_i]$ gives $\big(\begin{smallmatrix}n{+}1&\sum x_i\\\sum x_i&\sum x_i^2\end{smallmatrix}\big)\big(\begin{smallmatrix}a_0\\a_1\end{smallmatrix}\big)=\big(\begin{smallmatrix}\sum y_i\\\sum x_iy_i\end{smallmatrix}\big)$; dividing by $n{+}1$ and solving (Cramer) returns\\
+$a_1=\tfrac{\overline{xy}-\bar x\bar y}{\overline{x^2}-\bar x^2}$, $a_0=\bar y-a_1\bar x$.
+\hl{HW09 Q2 setup ($m{=}2,n{=}2$, 3 pts):} $X$ is $3\times3$ (first col of 1's, then $x_1^{(i)},x_2^{(i)}$ rows); $X^+=(X^TX)^{-1}X^T$ is $3\times3$. \hl{Q3:} $X^+X=I$ always; $XX^+=I$ only if $X$ square nonsingular.
+
+\subsection{Euler $y'=y+x$ (Lec20, corrected)}
+$(x_0,y_0)=(0,1)$, $h=0.25$: $y_1=1+0.25(1)=1.25$; $y_2=1.25+0.25(1.5)=1.625$;\\
+$y_3=1.625+0.25(2.125)=2.15625$. (Compiled $1.5625/2.078125$ used $f_1=1.25$ instead of $0.25+1.25=1.5$ — knock-on slip.)\\
+Exact $y^*=2e^x-x-1$: $y(0.5)\approx1.79744$, $y(0.75)\approx2.48400$ — Euler visibly below.
+\hl{Midpoint on same ODE:} $(0.125,1.125)\to y_1=1+0.25(1.25)=1.3125$ vs exact $1.31805$ — much closer.
+\hl{Separable pattern:} $y'=x/y\Rightarrow y\,dy=x\,dx\Rightarrow y^2=x^2+C_1$. Circle IVP $y'=-x/y$, $(2,2)$: $y^2/2+x^2/2=C=4$ (radius 2).\\
+\hl{IVP slip:} $y'=y+x$, $(1,4)$: $4=Ce-2\Rightarrow C=6/e\approx2.207$ (compiled $2/e$ forgot $+4$: check $y(1)=6-2=4$ $\checkmark$).
+
+\subsection{Trapezoid, non-uniform lattice}
+Given nodes $0,0.25,1$ $\Rightarrow$ widths $h_1=0.25-0=0.25$, $h_2=1-0.25=0.75$; $f=x^2$ gives $f_0=0$, $f_1=0.0625$, $f_2=1$.
+$\tilde I=\tfrac12\big[(f_0{+}f_1)h_1+(f_1{+}f_2)h_2\big]$\\
+$=\tfrac12\big[(0{+}0.0625)(0.25)+(0.0625{+}1)(0.75)\big]$\\
+$=\tfrac12(0.015625+0.796875)=\tfrac12(0.8125)=0.40625$.\\
+Exact $\tfrac13$; err $=|0.33333-0.40625|\approx0.07292$.
+
+\subsection{Laplace expansion (starred)}
+$A=\big(\begin{smallmatrix}2&1&0\\1&3&1\\0&2&4\end{smallmatrix}\big)$ along row 1: $2(3\cdot4-1\cdot2)-1(1\cdot4-1\cdot0)+0=2\cdot10-4=16$ (matches elimination $\det=16$). Cofactor sign $(-1)^{i+j}$.
+
+\subsection{Final-exam traps}
+\begin{itemize}
+\item $x_i^*=\alpha x_{i-1}+(1-\alpha)x_i$: $\alpha{=}1$ LEFT, $\alpha{=}0$ RIGHT, $\alpha{=}\tfrac12$ MID (Quiz7 $\alpha{=}0.2$: near-right).
+\item Simpson needs $n$ EVEN ($n=2m$); parabola arcs cover pairs of subintervals.
+\item $X^+X=I$ but $XX^+\ne I$ in general.
+\item Hessian minimum needs BOTH $S_{a_0a_0}>0$ and $\det H>0$.
+\item Checking a candidate ODE solution: differentiate AND substitute — both must hold identically (Quiz9 Q2 fails, HW10 Q1 holds).
+\item Linearization changes what is minimized (error in $(\tilde x,\tilde y)$ space, not original); still acceptable.
+\item Predicting far outside the data range (extrapolation) is unreliable even with a good fit.
+\item Lecture/quiz arithmetic slips happen ($f_3=3/4$ unsquared; $a_0=0.743$): recompute $f_i$ and $a_0=\bar y-a_1\bar x$ yourself.
+\end{itemize}
+\end{sloppypar}
+
+\end{multicols}
+\end{document}
