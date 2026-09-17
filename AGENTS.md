@@ -5,7 +5,7 @@
 COURSE: Numerical Analysis (SCI19 3111)
 YEAR/SEMESTER: 2026
 FILE NAME: numan_cheatsheet.tex
-SUPPLIED SOURCES: quiz text pasted in chat, recoms.txt, NumAn_Homework_Compiled.md, quiz3Answers.md
+SUPPLIED SOURCES: quiz text pasted in chat, recoms.txt, NumAn_Homework_Compiled.md, quiz3Answers.md, NumAn_Lecture_14-20_Compiled.md, NumAn_Final_Exam_Recommendations.md, NumAn_QuizzesFinalHalf_Compiled.md
 OFFICIAL ANSWERS AVAILABLE?: yes — official answers override the sheet on conflict
 
 ## COURSE-SPECIFIC TRAPS TO LOOK FOR (maintain during the session)
