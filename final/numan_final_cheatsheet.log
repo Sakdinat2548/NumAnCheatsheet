@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Built by MSYS2 project) (preloaded format=pdflatex 2026.8.19)  18 SEP 2026 02:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Built by MSYS2 project) (preloaded format=pdflatex 2026.8.19)  18 SEP 2026 03:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -810,7 +810,7 @@ L3 programming layer <2026-01-19>
 Here is how much of TeX's memory you used:
  19017 strings out of 469515
  404116 string characters out of 5469684
- 964811 words of memory out of 5000000
+ 974512 words of memory out of 5000000
  47348 multiletter control sequences out of 15000+600000
  656642 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -829,7 +829,7 @@ c/lm/lmsy6.pfb><c:/msys64/ucrt64/share/texmf-dist/fonts/type1/public/lm/lmsy7.p
 fb><c:/msys64/ucrt64/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7
 .pfb><c:/msys64/ucrt64/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
 m7.pfb>
-Output written on numan_final_cheatsheet.pdf (2 pages, 285575 bytes).
+Output written on numan_final_cheatsheet.pdf (2 pages, 287534 bytes).
 PDF statistics:
  97 PDF objects out of 1000 (max. 8388607)
  61 compressed objects within 1 object stream

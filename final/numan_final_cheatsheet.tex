@@ -65,7 +65,7 @@ Deviations $d_i=y_i-\phi(x_i)$, data $(x_i,y_i)$, $i=0..n$ ($n{+}1$ points).
 Example (Lec14): pts $(1,2),(2,1)$, line through $(1,1),(2,2)$: $d_0=1,d_1=-1$: naive $S=0$ (cancels!), abs $S=2$, squared $S=2$.
 
 \subsection{Linear regression}
-$\hat y=a_0+a_1x$, $S=\sum(y_i-a_0-a_1x_i)^2$. Minimize: $\tfrac{\partial S}{\partial a_0}=0,\ \tfrac{\partial S}{\partial a_1}=0$.
+$\hat y=a_0+a_1x$, $S=\sum(y_i-a_0-a_1x_i)^2$. General fit $\phi(x,a_0{..}a_\ell)$: $\tfrac{\partial S}{\partial a_k}=-2\sum_{i=0}^n(y_i-\phi(\cdots))\tfrac{\partial\phi}{\partial a_k}=0$, $k=0..\ell$ ($\ell{+}1$ equations). For the line this gives the two normal equations below.
 $\partial_{a_0}$: $\sum y_i-(n{+}1)a_0-a_1\sum x_i=0$; $\partial_{a_1}$: $\sum x_iy_i-a_0\sum x_i-a_1\sum x_i^2=0$.\\
 Divide by $n{+}1$ $\Rightarrow$ $a_0+a_1\bar x=\bar y$, $a_0\bar x+a_1\overline{x^2}=\overline{xy}$; Cramer gives
 \begin{keybox}
@@ -113,7 +113,7 @@ Partition $a=x_0<\cdots<x_n=b$, $h_i=x_i-x_{i-1}$, sample $x_i^*\in[x_{i-1},x_i]
 \hl{Riemann integral} $=\lim_{\max h_j\to0}\sum h_if(x_i^*)$; $f$ bounded, at most countably many jumps (isolated jumps are OK, the area under one point is zero).
 
 \section{4. Rectangle / Trapezoid / Simpson}
-\hl{Sample point:} $x_i^*=\alpha x_{i-1}+(1-\alpha)x_i$: $\alpha=1$ left, $\alpha=0$ right, $\alpha=\tfrac12$ midpoint. (Quiz7: $0.2x_{i-1}+0.8x_i$ is $\alpha=0.2$.)
+\hl{Sample point:} $x_i^*=\alpha x_{i-1}+(1-\alpha)x_i$: $\alpha=1$ left, $\alpha=0$ right, $\alpha=\tfrac12$ midpoint. (Quiz7: $0.2x_{i-1}+0.8x_i$ is $\alpha=0.2$; Lec16: $x_{i-1}+h_i/3$ is $\alpha=\tfrac23$, $x_{i-1}+2h_i/3$ is $\alpha=\tfrac13$.)
 General non-uniform: left $\sum h_if(x_{i-1})$, right $\sum h_if(x_i)$, mid $\sum h_if(\tfrac{x_{i-1}+x_i}2)$.
 \begin{keybox}
 \centering
@@ -156,17 +156,20 @@ $y_{n+1}=y_n+\tfrac h6(k_1{+}2k_2{+}2k_3{+}k_4)$. Price: 4 $f$-evaluations per s
 \hl{Midpoint idea:} predict midpoint slope with one Euler half-step, then step full $h$ along it; symmetric $\Rightarrow$ local $O(h^3)$, global $O(h^2)$.
 
 \section{6. Linear Algebra* (starred)}
-$\det=$ volume scale factor of the matrix map; $\det\ne0\iff$ invertible ($\det=0$ = space collapses). $\det(AB)=\det A\det B$.\\
+$\det=$ volume scale factor of the matrix map; $\det\ne0\iff$ invertible ($\det=0$ = space collapses). $\det(AB)=\det A\det B$. $Ax=b$ has a unique solution $\iff\det A\ne0\iff n$ pivots (else $0$ or $\infty$ solutions).\\
+\hl{Basic ops:} $\big(\begin{smallmatrix}1&2\\3&4\end{smallmatrix}\big)\big(\begin{smallmatrix}5\\6\end{smallmatrix}\big)=\big(\begin{smallmatrix}1\cdot5+2\cdot6\\3\cdot5+4\cdot6\end{smallmatrix}\big)=\big(\begin{smallmatrix}17\\39\end{smallmatrix}\big)$ (row $\cdot$ column).\\
 \hl{Laplace:} expand along row/col with $(-1)^{i+j}$ cofactors (pick the row/col with most zeros). Elimination: row ops change det by sign/scale (swap $\to$ $-$, scale row by $c$ $\to$ $\times c$); $\det=$ product of $U$ diagonal.\\
 \hl{LU:} $A=LU$ records elimination ($L$ = unit-lower multipliers, $U$ = upper result); solve $Ly=b$, then $Ux=y$ — two cheap triangular passes instead of re-eliminating. \hl{Worked:} $A=\big(\begin{smallmatrix}2&1&0\\1&3&1\\0&2&4\end{smallmatrix}\big)$: $R_2-\tfrac12R_1$, $R_3-\tfrac45R_2'$ $\to$ $U$ diag $(2,2.5,3.2)$, $\det=2\cdot2.5\cdot3.2=16$.
 
 \section{7. Midterm Recap (compact)}
-\hl{Taylor:} $f(x)=\sum_{k=0}^n\tfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k+R_n$, $R_n=\tfrac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}$, $|R_n|\le\tfrac{Md^{n+1}}{(n+1)!}$.\\
-Odd fn: only odd powers (deg 8 $\to x^7$); index $R_{2m+1}$, bound $\tfrac{12^{2m+2}}{(2m+2)!}$.
-\hl{Maclaurin:} $e^x,\sin,\cos$ converge $\forall\mathbb R$; $\tfrac1{1-x}=\sum x^k$, $\ln(1{+}x)$, $\arctan$ for $|x|<1$.
-\hl{Horner:} tableau at $c$ gives $p(c)$ (last) + quotient $q$; tableau on $q$ gives $p'(c)$.
-\hl{Interpolation:} $\ell_i(x)=\prod_{j\ne i}\tfrac{x-x_j}{x_i-x_j}$, $p=\sum y_i\ell_i$; err $=\tfrac{f^{(n+1)}(\xi)}{(n+1)!}\prod(x-x_i)$ ($=0$ at nodes).\\
-Vandermonde $\det=\prod_{i<j}(x_j-x_i)\ne0$ (distinct nodes); DD: $f[x_i,x_{i+1}]=\tfrac{\Delta f}{\Delta x}$, Newton $p_n=f[x_0]+\sum f[x_0{..}x_k]\prod_{j<k}(x-x_j)$.
+\begin{itemize}
+\item \hl{Taylor:} $f(x)=\sum_{k=0}^n\tfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k+R_n$, $R_n=\tfrac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}$, $|R_n|\le\tfrac{Md^{n+1}}{(n+1)!}$.
+\item Odd fn: only odd powers (deg 8 $\to x^7$); index $R_{2m+1}$, bound $\tfrac{12^{2m+2}}{(2m+2)!}$.
+\item \hl{Maclaurin:} $e^x,\sin,\cos$ converge $\forall\mathbb R$; $\tfrac1{1-x}=\sum x^k$, $\ln(1{+}x)$, $\arctan$ for $|x|<1$.
+\item \hl{Horner:} tableau at $c$ gives $p(c)$ (last) + quotient $q$; tableau on $q$ gives $p'(c)$.
+\item \hl{Interpolation:} $\ell_i(x)=\prod_{j\ne i}\tfrac{x-x_j}{x_i-x_j}$, $p=\sum y_i\ell_i$; err $=\tfrac{f^{(n+1)}(\xi)}{(n+1)!}\prod(x-x_i)$ ($=0$ at nodes).
+\item Vandermonde $\det=\prod_{i<j}(x_j-x_i)\ne0$ (distinct nodes); DD: $f[x_i,x_{i+1}]=\tfrac{\Delta f}{\Delta x}$, Newton $p_n=f[x_0]+\sum f[x_0{..}x_k]\prod_{j<k}(x-x_j)$.
+\end{itemize}
 
 \section{8. Worked Mini-Examples}
 \begin{sloppypar}\raggedright
@@ -236,8 +239,7 @@ But $y=\tfrac12(\cos x-\sin x)+Ce^x$ \emph{is} a sol of $y'=y-\cos x$: $y'=\tfra
 For $y'=xy+1/x$ ($h{=}1/12$): $k_1=x_iy_i+1/x_i$; $k_2=(x_i{+}\tfrac1{24})(y_i{+}\tfrac{k_1}{24})+1/(x_i{+}\tfrac1{24})$; $k_3$ same with $k_2$; $k_4=(x_i{+}\tfrac1{12})(y_i{+}\tfrac{k_3}{12})+1/(x_i{+}\tfrac1{12})$.
 
 \subsection{Rectangle lattice nodes (Quiz 7)}
-Given $x_k=\tfrac{3\ln(1+k/5)}{\ln2}-1$, $k=0..5$. Sample: $x_1=\tfrac{3\ln1.2}{\ln2}-1$\\
-$=\tfrac{3(0.18232)}{0.69315}-1=\tfrac{0.54697}{0.69315}-1=0.78910-1=-0.21090$;\\
+Given $x_k=\tfrac{3\ln(1+k/5)}{\ln2}-1$, $k=0..5$. Sample: $x_1=\tfrac{3\ln1.2}{\ln2}-1\approx-0.21090$ (since $3\ln1.2\approx0.54696$, $\ln2\approx0.69315$);\\
 $x_0=\tfrac{3\ln1}{\ln2}-1=-1$; $x_5=\tfrac{3\ln2}{\ln2}-1=2$.\\
 Full list: $-1.00000$, $-0.21090$, $0.45628$, $1.03422$, $1.54399$, $2.00000$.
 $x_i^*=0.2x_{i-1}+0.8x_i$: $-0.36872$, $0.32285$, $0.91863$, $1.44204$, $1.90880$.\\
@@ -257,12 +259,13 @@ $\Rightarrow$ $|E|\le\tfrac{M_1(b-a)}2h=O(h)$. Midpoint: expand at $c_i$; odd te
 Given $h=(2-1)/4=0.25$, nodes $x_i=1+0.25i$: $1,\tfrac54,\tfrac32,\tfrac74,2$.
 Step 1 — evaluate $f(x)=e^{x^2}$ (square $x$ first, then exponentiate): $f_0=e^{1}\approx2.71828$; $f_1=e^{(5/4)^2}=e^{1.5625}\approx4.77073$; $f_2=e^{(3/2)^2}=e^{2.25}\approx9.48774$; $f_3=e^{(7/4)^2}=e^{3.0625}\approx21.38094$; $f_4=e^{4}\approx54.59815$.\\
 $I=\tfrac{0.25}3(2.71828+4(26.15167)+2(9.48774)+54.59815)\approx15.0749$.\\
-Trap check: two double-intervals $T_1=h(f_0{+}f_2)\approx3.0475$, $T_2=h(f_2{+}f_4)\approx16.0225$, total $\approx19.07$ — same ballpark $\Rightarrow$ likely right.
+Trap check: two double-intervals $T_1=h(f_0{+}f_2)=0.25(2.71828+9.48774)=0.25(12.20602)\approx3.0515$, $T_2=h(f_2{+}f_4)=0.25(9.48774+54.59815)=0.25(64.08589)\approx16.0215$, total $\approx19.0730\to19.07$ — same ballpark $\Rightarrow$ likely right.
 \hl{Simpson sketch (Quiz8 Q1):} $[0,240]$, 6 subintervals $\Rightarrow h=40$, nodes $0,40,\dots,240$; one parabola arc per pair of subintervals (3 arcs total); mark nodes, draw each arc through its 3 points.
 
 \subsection{Pseudoinverse $\to$ 1D formulas (HW09)}
 $X^TX\bar a=X^T\bar y$ with $X=[1\ x_i]$ gives $\big(\begin{smallmatrix}n{+}1&\sum x_i\\\sum x_i&\sum x_i^2\end{smallmatrix}\big)\big(\begin{smallmatrix}a_0\\a_1\end{smallmatrix}\big)=\big(\begin{smallmatrix}\sum y_i\\\sum x_iy_i\end{smallmatrix}\big)$; dividing by $n{+}1$ and solving (Cramer) returns\\
 $a_1=\tfrac{\overline{xy}-\bar x\bar y}{\overline{x^2}-\bar x^2}$, $a_0=\bar y-a_1\bar x$.
+Cramer in full: $\Delta=(n{+}1)\sum x_i^2-(\sum x_i)^2$; $a_0=\tfrac{(\sum y_i)(\sum x_i^2)-(\sum x_i)(\sum x_iy_i)}{\Delta}$; $a_1=\tfrac{(n{+}1)(\sum x_iy_i)-(\sum x_i)(\sum y_i)}{\Delta}$; dividing top and bottom by $(n{+}1)^2$ gives the averaged formulas.
 \hl{HW09 Q2 setup ($m{=}2,n{=}2$, 3 pts):} $X$ is $3\times3$ (first col of 1's, then $x_1^{(i)},x_2^{(i)}$ rows); $X^+=(X^TX)^{-1}X^T$ is $3\times3$. \hl{Q3:} $X^+X=I$ always; $XX^+=I$ only if $X$ square nonsingular.
 
 \subsection{Euler $y'=y+x$ (Lec20, corrected)}
