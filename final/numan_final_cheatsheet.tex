@@ -40,6 +40,7 @@
 
 \begin{document}
 \footnotesize
+\linespread{1.08}\selectfont
 
 \begin{center}
 {\bfseries\large Numerical Analysis (SCI19 3111) --- Final Cheat Sheet}\\
@@ -76,11 +77,10 @@ with $\bar x=\tfrac1{n+1}\sum x_i$, $\overline{x^2}=\tfrac1{n+1}\sum x_i^2$, $\o
 \hl{Trap:} $\overline{x^2}\ne\bar x^2$; denominator $=0$ iff all $x_i$ equal (no fit possible).
 
 \subsection{Hessian + minimum test}
-\begin{equation*}
-\resizebox{\linewidth}{!}{$H=\begin{pmatrix}S_{a_0a_0}&S_{a_0a_1}\\S_{a_1a_0}&S_{a_1a_1}\end{pmatrix},\ S_{a_0a_0}=2(n{+}1),\ S_{a_0a_1}=2\sum x_i,\ S_{a_1a_1}=2\sum x_i^2$}
-\end{equation*}
 \begin{keybox}
 \centering
+$\displaystyle H=\begin{pmatrix}S_{a_0a_0}&S_{a_0a_1}\\S_{a_1a_0}&S_{a_1a_1}\end{pmatrix}$\\[1pt]
+$\displaystyle S_{a_0a_0}=2(n{+}1),\ S_{a_0a_1}=2\sum x_i,\ S_{a_1a_1}=2\sum x_i^2$\\[1pt]
 $\displaystyle \det H=4\big[(n{+}1)\sum x_i^2-(\sum x_i)^2\big]$; min $\iff S_{a_0a_0}>0$ AND $\det H>0$
 \end{keybox}
 Intuition: $H$ = curvature of the error bowl; positive-definite = bowl opens upward = exactly one bottom. \hl{Cauchy--Schwarz} $\Rightarrow\det H\ge0$; $>0$ if $\ge2$ distinct $x_i$ $\Rightarrow$ unique global min (strictly convex).

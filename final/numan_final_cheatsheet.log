@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Built by MSYS2 project) (preloaded format=pdflatex 2026.8.19)  18 SEP 2026 03:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Built by MSYS2 project) (preloaded format=pdflatex 2026.8.19)  20 SEP 2026 05:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -752,47 +752,47 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 4
-6.
+7.
 
 (c:/msys64/ucrt64/share/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-46.
+47.
 
 (c:/msys64/ucrt64/share/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-46.
+47.
 
 (c:/msys64/ucrt64/share/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 46.
+(Font)              <6> on input line 47.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 46.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 46.
+(Font)              <5> on input line 47.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 47.
 
 
 (c:/msys64/ucrt64/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 46.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 47.
 
 
 (c:/msys64/ucrt64/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 5
-4.
+5.
 
 (c:/msys64/ucrt64/share/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 54.
+(Font)              <7> on input line 55.
  [1
 
 {c:/msys64/ucrt64/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{c:/msys64/u
@@ -809,8 +809,8 @@ L3 programming layer <2026-01-19>
  ) 
 Here is how much of TeX's memory you used:
  19017 strings out of 469515
- 404116 string characters out of 5469684
- 974512 words of memory out of 5000000
+ 404106 string characters out of 5469684
+ 983464 words of memory out of 5000000
  47348 multiletter control sequences out of 15000+600000
  656642 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -829,7 +829,7 @@ c/lm/lmsy6.pfb><c:/msys64/ucrt64/share/texmf-dist/fonts/type1/public/lm/lmsy7.p
 fb><c:/msys64/ucrt64/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7
 .pfb><c:/msys64/ucrt64/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
 m7.pfb>
-Output written on numan_final_cheatsheet.pdf (2 pages, 287534 bytes).
+Output written on numan_final_cheatsheet.pdf (2 pages, 287459 bytes).
 PDF statistics:
  97 PDF objects out of 1000 (max. 8388607)
  61 compressed objects within 1 object stream
