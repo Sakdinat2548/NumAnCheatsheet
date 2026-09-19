@@ -35,6 +35,7 @@ CRITICAL: If PDFs are supplied but you cannot read them (no PDF-reading capabili
 - Extract repeating question types and heavily weighted concepts from the quizzes/homeworks; prioritize those in layout.
 - Keep the document ALWAYS exactly 2 A4 pages. When adding content, fill the bottom of page 2; when space runs out, trim low-priority prose before deleting worked examples.
 - If the user later supplies official/answer files or corrected answers, re-check your sheet against them and fix discrepancies — the official answer wins.
+- Page-2 fill measurement: the second page's text may live in a separate Form XObject stream, NOT the second `BT..TJ` stream (index-based detection picks fonts/XObjects). Measure per-stream text length and always confirm by extracting the tail text of the true page-2 stream.
 
 ## Mathematical correctness checklist (MANDATORY)
 - Verify EVERY numeric result (constants, coefficients, determinants, derivatives/integrals, error bounds, interpolated/extrapolated values, root-finding iterations, matrix operations, statistical quantities, etc.) by computation before writing it. Use a quick Python one-liner per batch. Confirm identities by evaluating both sides at several points.
@@ -57,6 +58,10 @@ CRITICAL: If PDFs are supplied but you cannot read them (no PDF-reading capabili
 - Equation wrapping rule: never let a line end with a bare `=`. Split chained equalities (`A=B=C≈D`) at controlled `\\` breaks so each line holds one complete computation step; every continuation line starts with its own `=`.
 - Highlight the 5-8 most important formulas/ideas with a compact `tcolorbox` (`keybox`: small padding, thin rule, e.g. gold background + dark-red frame). Use display-style math inside, never `equation*` inside the box.
 - Do NOT define `\hl` as `\textbf{\textcolor{...}}` and use it inside math mode — it breaks. Use `\textcolor{BrickRed}{...}` inside math, plain `\textbf` in text.
+- Same ban applies to ALL `\textbf`+`\textcolor` macros (`\wk`, `\ex`, `\kn`): math may appear INSIDE their braces, but never use them INSIDE `$...$` with content containing `^`, `_`, `\frac` (fatal "Missing $ inserted"). When an answer inside math needs color, close math first (`...\Rightarrow$\kn{H}.`), never wrap the caret.
+- Color system (function-based, MAX 4 colors + neutrals): RoyalBlue = structure + worked-example templates (`\ex`); OliveGreen = procedures/steps/checks (`\wk`: Step N, Check, recipes, methods); BrickRed = traps/conditions (`\hl`); Orange family = reference (`\kn` BurntOrange for headline answers, Apricot `obox` for relation lists, Apricot-tinted `kbox` for plug-in theorem boxes). Black/gray carry no meaning (body text, section rules).
+- Section rules: gray (`{\color{black!60}\titlerule[0.9pt]}`) to separate blue titles from blue `\ex` labels; subsection rules thin OliveGreen `0.4pt`.
+- Readability: `\linespread{1.2}` (raise only while page 2 has slack; compensate with trims if it overflows).
 - No literal Unicode symbols (✓, →, ×, etc.) in `.tex` under pdflatex+lmodern — fatal error. Use `$\checkmark$`, `$\Rightarrow$`, `$\times$`.
 - Worked-example skeleton (use everywhere): `Given ...` → `Step 1/2/3 ...` → boxed answer → `Check ...`. Plot/sketch questions get a numbered draw recipe (mark nodes → plot points → join → shade).
 - Section numbering: prefer automatic numbering (`\section{}`) or use hardcoded numbers consistently; if hardcoded, renumbering must be done manually when sections move.
