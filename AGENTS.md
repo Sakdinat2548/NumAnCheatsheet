@@ -6,7 +6,7 @@ COURSE: Numerical Analysis (SCI19 3111)
 YEAR/SEMESTER: 2026
 EXAM: midterm + final (one sheet each)
 FILE NAME: midterm/numan_cheatsheet.tex, final/numan_final_cheatsheet.tex
-SUPPLIED SOURCES: .md or .txt in '/study_materials' folder; quizzes, homeworks, and any professor notes. 
+SUPPLIED SOURCES: .md or .txt in '/study_materials' folder; quizzes, homeworks, and any professor notes. '/examples' folder has a reference cheatsheet for formatting and layout.
 OFFICIAL ANSWERS AVAILABLE?: not yet
 
 ## COURSE-SPECIFIC TRAPS TO LOOK FOR (maintain during the session)
