@@ -6,8 +6,8 @@ COURSE: Numerical Analysis (SCI19 3111)
 YEAR/SEMESTER: 2026
 EXAM: midterm + final (one sheet each)
 FILE NAME: midterm/numan_cheatsheet.tex, final/numan_final_cheatsheet.tex
-SUPPLIED SOURCES: quiz text pasted in chat, midterm/recomsMid.txt, final/NumAn_Final_Exam_Recommendations.md, NumAn_Homework_Compiled.md, NumAn_Lectures_14-20_Compiled.md, NumAn_QuizzesFinalHalf_Compiled.md, quiz3Answers.md
-OFFICIAL ANSWERS AVAILABLE?: yes — official answers override the sheet on conflict
+SUPPLIED SOURCES: .md or .txt in '/study_materials' folder; quizzes, homeworks, and any professor notes. 
+OFFICIAL ANSWERS AVAILABLE?: not yet
 
 ## COURSE-SPECIFIC TRAPS TO LOOK FOR (maintain during the session)
 Start from these generic categories, then fill in course-specific instances.
