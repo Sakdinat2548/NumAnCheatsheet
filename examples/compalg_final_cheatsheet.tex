@@ -48,7 +48,7 @@
 
 \AddToShipoutPicture*{%
 \AtTextUpperLeft{%
-\raisebox{6pt}{\makebox[\textwidth][r]{\scriptsize\textcolor{black!60}{Updated: 23 Sep 2026 06:45}}}%
+\raisebox{6pt}{\makebox[\textwidth][r]{\scriptsize\textcolor{black!60}{Updated: 23 Sep 2026 09:06}}}%
 }%
 }
 \begin{center}
@@ -62,7 +62,12 @@
 
 \section{Groups Recap + Euler $\varphi$}
 \begin{sloppypar}\raggedright
-\textbf{Group:} closure, identity $e$ (unique, $a{\circ}e{=}a$), associativity, inverses (unique). $(\mathbb Z,{+})$, $(\mathbb Z_n,{+})$ groups; $\mathbb Z_n^*$ group $\iff n$ prime. $|G|{=}\#$elem; $\mathrm{ord}(g)$ = smallest $n{>}0$ with $g^n{=}e$. \hl{Lagrange:} $\mathrm{ord}(g)\mid|G|$, $g^{|G|}{=}e$. \hl{Cyclic:} $G{=}\langle g\rangle\iff\mathrm{ord}(g){=}|G|$ (one generator makes all). \ex{Worked:} $|\mathbb Z_8^+|{=}8$, $\mathrm{ord}[1]{=}8$, $\mathrm{ord}[2]{=}4$, $\mathrm{ord}[7]{=}8$; gens $[1],[3],[5],[7]$.\\
+\textbf{Group:} closure, identity $e$ (unique, $a{\circ}e{=}a$), associativity, inverses (unique). $(\mathbb Z,{+})$ infinite group; $(\mathbb Z_n,{+})$ finite, always cyclic (gen $[1]$); $\mathbb Z_n^*$ group $\iff n$ prime. $|G|{=}\#$elem; $\mathrm{ord}(g)$ = smallest $n{>}0$ with $g^n{=}e$.\\
+$\begin{array}{l}
+\hl{Lagrange:}\ \mathrm{ord}(g)\mid|G|,\quad g^{|G|}{=}e\\
+\hl{Cyclic:}\ G{=}\langle g\rangle\iff\mathrm{ord}(g){=}|G|
+\end{array}$\\
+\ex{Worked:} $|\mathbb Z_8^+|{=}8$; $\mathrm{ord}[1]{=}8$; $\mathrm{ord}[2]{=}4$ ($2,4,6,0$); $\mathrm{ord}[7]{=}8$ ($7,6,5,4,3,2,1,0$); gens $[1],[3],[5],[7]$.\\
 $\varphi(n){=}\#\{1{\le}k{\le}n:\gcd{=}1\}$. \hl{Formulas:} $p$ prime $\varphi(p){=}p{-}1$; $\varphi(p^k){=}p^k{-}p^{k-1}$; coprime $\varphi(mn){=}\varphi(m)\varphi(n)$.\\
 \ex{Worked:} $\varphi(16){=}8$ ($1,3,5,7,9,11,13,15$); $\varphi(17){=}16$.\\
 $\begin{array}{l}
