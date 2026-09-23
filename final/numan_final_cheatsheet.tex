@@ -4,6 +4,7 @@
 \usepackage{multicol}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
+\usepackage{eso-pic}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage[dvipsnames]{xcolor}
@@ -44,6 +45,11 @@
 \begin{document}
 \footnotesize
 
+\AddToShipoutPicture*{%
+\AtTextUpperLeft{%
+\raisebox{6pt}{\makebox[\textwidth][r]{\scriptsize\textcolor{black!60}{Updated: 23 Sep 2026 08:00}}}%
+}%
+}
 \begin{center}
 \colorbox{ForestGreen!12}{\parbox{0.97\linewidth}{\centering
 {\bfseries\large\color{ForestGreen} Numerical Analysis (SCI19 3111) --- Final Cheat Sheet}\\[1.5pt]
@@ -78,7 +84,7 @@ $\displaystyle H=\begin{pmatrix}S_{a_0a_0}&S_{a_0a_1}\\S_{a_1a_0}&S_{a_1a_1}\end
 $\displaystyle S_{a_0a_0}=2(n{+}1),\ S_{a_0a_1}=2\sum x_i,\ S_{a_1a_1}=2\sum x_i^2$\\[1pt]
 $\displaystyle \det H=4\big[(n{+}1)\sum x_i^2-(\sum x_i)^2\big]$; min $\iff S_{a_0a_0}>0$ AND $\det H>0$
 \end{kbox}
-Intuition: $H$ = curvature of the error bowl; positive-definite = bowl opens upward = exactly one bottom. \textbf{Cauchy--Schwarz} $\Rightarrow\det H\ge0$; $>0$ if $\ge2$ distinct $x_i$ $\Rightarrow$ unique global min (strictly convex).
+Intuition: $H$ = curvature of the error bowl; positive-definite = exactly one bottom. \textbf{Cauchy--Schwarz} $\Rightarrow\det H\ge0$; $>0$ if $\ge2$ distinct $x_i$ $\Rightarrow$ unique global min.
 
 \subsection{Multivariable + pseudoinverse}
 $\hat y=a_0+a_1x_1+\cdots+a_mx_m$, $X$ is $(n{+}1)\times(m{+}1)$ with first col of 1's. $S=\|\bar y-X\bar a\|^2$.
@@ -86,14 +92,14 @@ $\hat y=a_0+a_1x_1+\cdots+a_mx_m$, $X$ is $(n{+}1)\times(m{+}1)$ with first col 
 \centering
 $\displaystyle X^TX\bar a=X^T\bar y,\qquad \bar a=\underbrace{(X^TX)^{-1}X^T}_{X^+}\bar y$
 \end{kbox}
-$X^+=$ Moore--Penrose pseudoinverse ($=X^{-1}$ when $X$ square). Idea: $X^TX\bar a=X^T\bar y$ projects $\bar y$ onto the column space of $X$ (closest achievable fit); $X^+$ is that projection written as a formula. \hl{Trap:} $X^+X=I$ holds; $XX^+=I$ generally does NOT.
+$X^+=$ Moore--Penrose pseudoinverse ($=X^{-1}$ when $X$ square). Idea: projects $\bar y$ onto the column space of $X$. \hl{Trap:} $X^+X=I$ holds; $XX^+=I$ generally does NOT.
 
 \subsection{ML: classification}
-Features = measured inputs $(x_1,x_2)$; model outputs a score; plane $a_0+a_1x_1+a_2x_2=0\cap x_1x_2$-plane = \hl{decision boundary} (class 1 vs 2). Logistic $\sigma(z)=\tfrac1{1+e^{-z}}: \mathbb R\to[0,1]$ squashes the score to a probability; classifier $\sigma(a_0+a_1x_1+a_2x_2)$.
+Features = inputs $(x_1,x_2)$; plane $a_0+a_1x_1+a_2x_2=0\cap x_1x_2$-plane = \hl{decision boundary} (class 1 vs 2). Logistic $\sigma(z)=\tfrac1{1+e^{-z}}: \mathbb R\to[0,1]$; classifier $\sigma(a_0+a_1x_1+a_2x_2)$.
 \end{sloppypar}
 
 \section{Linearization}
-\wk{Goal:} transform $(\tilde x,\tilde y)$ so model is linear; fit; inverse-transform back. Why logs work: $\ln$ turns $\times$ into $+$ and powers into $\times$ (e.g. $\ln(Ae^{Bx})=\ln A+Bx$). Steps: (1) change vars; (2) fit $\tilde y=a_0+a_1\tilde x$; (3) recover $A,B$; (4) check fit.
+\wk{Goal:} transform $(\tilde x,\tilde y)$ so model is linear; fit; inverse-transform back. Logs turn $\times$ into $+$ and powers into $\times$. Steps: (1) change vars; (2) fit $\tilde y=a_0+a_1\tilde x$; (3) recover $A,B$; (4) check fit.
 \begin{itemize}
 \item $y=Ae^{Bx}$: $\tilde x=x$, $\tilde y=\ln y$; $a_0=\ln A$, $a_1=B$ $\Leftrightarrow$ $A=e^{a_0}$.
 \item $y=Ax^n$: $\tilde x=\ln x$, $\tilde y=\ln y$; $a_0=\ln A$, $a_1=n$.
@@ -106,8 +112,8 @@ Features = measured inputs $(x_1,x_2)$; model outputs a score; plane $a_0+a_1x_1
 \section{Grids + Riemann Sums}
 \begin{sloppypar}\raggedright
 Partition $a=x_0<\cdots<x_n=b$, $h_i=x_i-x_{i-1}$, sample $x_i^*\in[x_{i-1},x_i]$: $\int_a^bf\approx\sum f(x_i^*)h_i$.
-\textbf{Uniform:} $h_i\equiv h=\tfrac{b-a}{n}$, $n{+}1$ points. \textbf{Non-uniform:} varying $h_i$ (adaptive: fine where $f$ changes fast, coarse elsewhere). Idea: spend grid points where the function wiggles; a uniform grid wastes them where $f$ is flat and starves them where $f$ is steep.
-\textbf{Riemann integral} $=\lim_{\max h_j\to0}\sum h_if(x_i^*)$; $f$ bounded, at most countably many jumps (isolated jumps are OK, the area under one point is zero).
+\textbf{Uniform:} $h_i\equiv h=\tfrac{b-a}{n}$, $n{+}1$ points. \textbf{Non-uniform:} varying $h_i$ (adaptive: fine where $f$ changes fast, coarse elsewhere).
+\textbf{Riemann integral} $=\lim_{\max h_j\to0}\sum h_if(x_i^*)$; $f$ bounded, at most countably many jumps.
 \end{sloppypar}
 
 \section{Rectangle / Trapezoid / Simpson}
@@ -120,7 +126,7 @@ $\displaystyle \tilde I_{\text{Tr}}=\tfrac12\sum_{i=1}^n\big(f(x_{i-1})+f(x_i)\b
 \end{kbox}
 Uniform trapezoid: $\tfrac{h(f_0+f_n)}2+h\sum_{i=1}^{n-1}f_i$.
 \wk{Trap idea:} one strip = rectangle $hQ_1$ + triangle $\tfrac h2(Q_2-Q_1)$ $=h(Q_1+Q_2)/2$; uniform version averages neighbors (interior $f_i$ counted twice $\to$ single sum).
-\textbf{Simpson} ($n=2m$ even, uniform): fits parabola on each pair. Why $O(h^4)$? A parabola matches $f$'s value, slope AND curvature, so the leftover is two orders smaller than trapezoid (which matches only value + slope). Cost: more $f$-evaluations per step.
+\textbf{Simpson} ($n=2m$ even, uniform): fits parabola on each pair. Why $O(h^4)$? Parabola matches value+slope+curvature (trap: only value+slope).
 \begin{kbox}
 \centering
 $\displaystyle I_{\text{parab}}=\tfrac{h}{3}\big\{f_0+f_n+4\sum_{\text{odd }i}f_i+2\sum_{\text{even }i<n}f_i\big\}$
@@ -131,15 +137,14 @@ $\displaystyle I_{\text{parab}}=\tfrac{h}{3}\big\{f_0+f_n+4\sum_{\text{odd }i}f_
 \begin{itemize}
 \item left/right rectangle $O(h)$; midpoint $O(h^2)$; trapezoid $O(h^2)$; Simpson $O(h^4)$.
 \item Read $O(h^p)$ as: halving $h$ divides the error by $2^p$ (rect $\div2$, mid/trap $\div4$, Simpson $\div16$).
-\item If $|h|<1$: midpoint beats left/right; trap $\approx$ midpoint order.
-\item Left-rect global: $|E|\le\tfrac{M_1(b-a)}2h$, $M_1=\max|f'|$. Midpoint: $|E|\le\tfrac{M_2(b-a)}{24}h^2$. (Taylor + symmetry kills $f'$ term.)
+\item Left-rect global: $|E|\le\tfrac{M_1(b-a)}2h$, $M_1=\max|f'|$. Midpoint: $|E|\le\tfrac{M_2(b-a)}{24}h^2$ (half the trapezoid constant $1/12$). (Taylor + symmetry kills $f'$ term.)
 \item No elementary antiderivative ($\int e^{x^2}dx$, $\int\tfrac{dx}{\ln x}$): cross-check Simpson vs trapezoid.
 \end{itemize}
 \end{sloppypar}
 
 \section{ODEs: IVP + Numeric Methods}
 \begin{sloppypar}\raggedright
-$y'=f(x,y)$: slope field tells the direction at every point; a solution follows the arrows. General solution $y(x,C)$ = whole family of curves; IVP (Cauchy) $+y(x_0)=y_0$ picks the ONE curve through $(x_0,y_0)$ (fix $C$ by plugging IC; existence/uniqueness assumed).
+$y'=f(x,y)$ (slope field = direction at each point). General solution $y(x,C)$ = whole family of curves; IVP (Cauchy) $+y(x_0)=y_0$ picks the ONE curve through $(x_0,y_0)$ (fix $C$ by plugging IC; existence/uniqueness assumed).
 \hl{Check-solution trap:} differentiate candidate AND plug into ODE — both must hold for ALL $C$.
 \wk{Bridge (Lec19):} Euler comes from the finite difference $y'\approx\tfrac{y_{i+1}-y_i}{h}$: replace $y'$ in $y'=f(x,y)$ and solve for $y_{i+1}$.
 \begin{kbox}
@@ -151,18 +156,25 @@ $\displaystyle y_{i+1}=y_i+hf(x_i,y_i),\quad x_{i+1}=x_i+h\quad\text{(Euler)}$
 $\displaystyle y_{i+1}=y_i+hf(x_{i+\frac12},y_{i+\frac12}),\quad x_{i+\frac12}=x_i+\tfrac h2,\ y_{i+\frac12}=y_i+\tfrac h2f(x_i,y_i)$
 \end{kbox}
 \textbf{RK4:} weighted average of 4 trial slopes with weights $(1,2,2,1)/6$: $k_1=f(x_n,y_n)$; $k_2=f(x_n{+}\tfrac h2,y_n{+}\tfrac h2k_1)$; $k_3=f(x_n{+}\tfrac h2,y_n{+}\tfrac h2k_2)$; $k_4=f(x_n{+}h,y_n{+}hk_3)$.\\
-$y_{n+1}=y_n+\tfrac h6(k_1{+}2k_2{+}2k_3{+}k_4)$. Price: 4 $f$-evaluations per step for $O(h^4)$.
+$y_{n+1}=y_n+\tfrac h6(k_1{+}2k_2{+}2k_3{+}k_4)$.
 \textbf{Global errors:} Euler $O(h)$ (local $O(h^2)\times N\sim1/h$); midpoint $O(h^2)$; RK4 $O(h^4)$ (4 evals/step).
-\wk{Euler error idea:} Taylor $y(x{+}h)=y(x)+hy'(x)+\tfrac{h^2}2y''(\xi)$; one Euler step from exact $y(x_i)$ misses by $O(h^2)$ (local); $N=(b-x_0)/h=O(1/h)$ steps accumulate to $O(h)$ global.
+\wk{Euler error idea:} Taylor gives local $O(h^2)$ per step; $N=(b-x_0)/h=O(1/h)$ steps accumulate to global $O(h)$.
 \wk{Midpoint idea:} predict midpoint slope with one Euler half-step, then step full $h$ along it; symmetric $\Rightarrow$ local $O(h^3)$, global $O(h^2)$.
 \end{sloppypar}
 
-\section{Linear Algebra* (starred)}
+\section{Linear Algebra}
 \begin{sloppypar}\raggedright
-$\det=$ volume scale factor of the matrix map; $\det\ne0\iff$ invertible ($\det=0$ = space collapses). $\det(AB)=\det A\det B$. $Ax=b$ has a unique solution $\iff\det A\ne0\iff n$ pivots (else $0$ or $\infty$ solutions).\\
+$\det=$ oriented area (2D) / volume (3D), up to sign; $\det\ne0\iff$ invertible. $\det(AB)=\det A\det B$. $Ax=b$ unique $\iff\det A\ne0\iff n$ pivots.\\
+\textbf{Scalar product:} $\bar a{\cdot}\bar b=a^xb^x+a^yb^y=|\bar a||\bar b|\cos\alpha$ (+$a^zb^z$ in 3D); $|\bar a|=\sqrt{(a^x)^2+(a^y)^2}$.\\
 \ex{Basic ops:} $\big(\begin{smallmatrix}1&2\\3&4\end{smallmatrix}\big)\big(\begin{smallmatrix}5\\6\end{smallmatrix}\big)=\big(\begin{smallmatrix}1\cdot5+2\cdot6\\3\cdot5+4\cdot6\end{smallmatrix}\big)=\big(\begin{smallmatrix}17\\39\end{smallmatrix}\big)$ (row $\cdot$ column).\\
-\textbf{Laplace:} expand along row/col with $(-1)^{i+j}$ cofactors (pick the row/col with most zeros). Elimination: row ops change det by sign/scale (swap $\to$ $-$, scale row by $c$ $\to$ $\times c$); $\det=$ product of $U$ diagonal.\\
-\textbf{LU:} $A=LU$ records elimination ($L$ = unit-lower multipliers, $U$ = upper result); solve $Ly=b$, then $Ux=y$ — two cheap triangular passes instead of re-eliminating. \ex{Worked:} $A=\big(\begin{smallmatrix}2&1&0\\1&3&1\\0&2&4\end{smallmatrix}\big)$: $R_2-\tfrac12R_1$, $R_3-\tfrac45R_2'$ $\to$ $U$ diag $(2,2.5,3.2)$, $\det=2\cdot2.5\cdot3.2=16$.
+\textbf{Projection (scalar length):} $\mathrm{proj}_{\bar b}\bar a=\tfrac{\bar a\cdot\bar b}{|\bar b|}=|\bar a|\cos\alpha$. Basis: $\mathrm{proj}_{\bar\imath}\bar a=a^x$, $\mathrm{proj}_{\bar\jmath}\bar a=a^y$. \ex{Worked:} $\bar a=(0,1)$, $\bar b=(2,0)$: $\mathrm{proj}_{\bar\jmath}\bar a=1$, $\mathrm{proj}_{\bar\imath}\bar b=2$.\\
+\textbf{Area:} parallelogram $S=a^yb^x-a^xb^y=-\det$; area $=|S|=|\det|$. \ex{Worked:} $u=(3,1),v=(1,2)$: $S=1\cdot1-3\cdot2=-5$, area $5$. \textbf{Volume (3D):} $|\det|$ of the $3\times3$; \ex{Worked:} $\mathrm{diag}(1,2,3)$ volume $=6$.\\
+\textbf{Minor/cofactor:} $\mathrm{Minor}(a_{ij})$ = det deleting row $i$, col $j$; $\mathrm{cofac}(a_{ij})=(-1)^{i+j}\mathrm{Minor}(a_{ij})$. \ex{Worked:} $\mathrm{cofac}(a_{23})=-(a_{11}a_{32}-a_{31}a_{12})=a_{31}a_{12}-a_{11}a_{32}$.\\
+\textbf{Laplace:} $\det A=\sum_j a_{kj}\mathrm{cofac}(a_{kj})$ (any row $k$). \textbf{Row swap} flips sign. \ex{Worked:} $A=[[1,2,3],[4,5,6],[7,8,10]]$: cofactors $2,2,-3$ $\Rightarrow$ $\det=1(2)+2(2)+3(-3)=-3$.\\
+\textbf{Triangular:} zeros above (lower) or below (upper) diagonal; $\det=$ product of diagonal. \ex{Worked (5$\times$5):} $\mathrm{diag}(1,2,3,4,5)$ $\Rightarrow$ $\det=120=5!$.\\
+\textbf{LU:} $A=LU$ ($L$ unit-lower, $U$ upper; set $\ell_{ii}=1$). \ex{Worked (2$\times$2):} $[[1,2],[3,4]]=[[1,0],[3,1]][[1,2],[0,-2]]$ ($u_{22}=4-3\cdot2=-2$). \textbf{Det:} $\det A=\det L\cdot\det U$; here $1\cdot(-2)=-2$ \wk{Check} $=1\cdot4-2\cdot3$.\\
+\ex{Worked (3$\times$3):} $[[1,2,3],[4,5,6],[7,8,10]]=[[1,0,0],[4,1,0],[7,2,1]][[1,2,3],[0,-3,-6],[0,0,1]]$ ($\ell_1{=}4,u_4{=}-3,u_5{=}-6,\ell_2{=}7,\ell_3{=}2,u_6{=}1$); $\det=1\cdot(-3)\cdot1=-3$.\\
+\textbf{Solve $Ax=y$:} $Ax=L(Ux)=y$; set $z=Ux$: solve $Lz=y$ (forward), then $Ux=z$ (backward). \ex{Worked:} $A$ above, $y=[1,-1]^T$: $z_1=1$, $3+z_2=-1\Rightarrow z_2=-4$; $-2x_2=-4\Rightarrow x_2=2$, $x_1+4=1\Rightarrow x_1=-3$. $\boxed{x=[-3,2]^T}$ \wk{Check:} $Ax=[1,-1]^T$.
 \end{sloppypar}
 
 \section{Midterm Recap (compact)}
@@ -289,8 +301,10 @@ $=\tfrac12\big[(0{+}0.0625)(0.25)+(0.0625{+}1)(0.75)\big]$\\
 $=\tfrac12(0.015625+0.796875)=\tfrac12(0.8125)=0.40625$.\\
 Exact $\tfrac13$; err $=|0.33333-0.40625|\approx0.07292$.
 
-\subsection{Laplace expansion (starred)}
-$A=\big(\begin{smallmatrix}2&1&0\\1&3&1\\0&2&4\end{smallmatrix}\big)$ along row 1: $2(3\cdot4-1\cdot2)-1(1\cdot4-1\cdot0)+0=2\cdot10-4=16$ (matches elimination $\det=16$). Cofactor sign $(-1)^{i+j}$.
+\subsection{Laplace expansion}
+Given $A=[[1,2,3],[4,5,6],[7,8,10]]$, expand along row 1.
+Step 1 — cofactors: $\mathrm{cofac}(a_{11})=+(5\cdot10-6\cdot8)=50-48=2$; $\mathrm{cofac}(a_{12})=-(4\cdot10-7\cdot6)=-(40-42)=2$; $\mathrm{cofac}(a_{13})=+(4\cdot8-5\cdot7)=32-35=-3$.
+Step 2 — assemble: $\det A=1(2)+2(2)+3(-3)=2+4-9=-3$ (matches LU $\det=1\cdot(-3)\cdot1$).
 \end{sloppypar}
 
 \end{multicols}
