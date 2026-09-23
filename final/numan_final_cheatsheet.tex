@@ -40,14 +40,14 @@
 \newcommand{\ex}[1]{\textbf{\textcolor{RoyalBlue}{#1}}}
 \newcommand{\sepline}{\vspace{1pt}{\color{RoyalBlue}\hrule}\vspace{3pt}}
 
-\newtcolorbox{kbox}{colback=Goldenrod!10,colframe=RoyalBlue!70,boxrule=0.6pt,arc=1.5pt,left=1.5pt,right=1.5pt,top=0.5pt,bottom=0.5pt,boxsep=0pt}
+\newtcolorbox{kbox}{colback=Goldenrod!10,colframe=RoyalBlue!70,boxrule=0.6pt,arc=1.5pt,left=1.5pt,right=1.5pt,top=0.5pt,bottom=0.5pt,boxsep=0pt,before skip=1pt,after skip=1pt}
 
 \begin{document}
 \footnotesize
 
 \AddToShipoutPicture*{%
 \AtTextUpperLeft{%
-\raisebox{6pt}{\makebox[\textwidth][r]{\scriptsize\textcolor{black!60}{Updated: 23 Sep 2026 08:53}}}%
+\raisebox{6pt}{\makebox[\textwidth][r]{\normalfont\scriptsize\textcolor{black!60}{Updated: 23 Sep 2026 19:34}}}%
 }%
 }
 \begin{center}
@@ -74,13 +74,13 @@ Divide by $n{+}1$ $\Rightarrow$ $a_0+a_1\bar x=\bar y$, $a_0\bar x+a_1\overline{
 \centering
 $\displaystyle a_1=\frac{\overline{xy}-\bar x\bar y}{\overline{x^2}-\bar x\cdot\bar x},\qquad a_0=\bar y-a_1\bar x$
 \end{kbox}
-with $\bar x=\tfrac1{n+1}\sum x_i$, $\overline{x^2}=\tfrac1{n+1}\sum x_i^2$, $\overline{xy}=\tfrac1{n+1}\sum x_iy_i$.\\
+with $\bar x=\tfrac1{n+1}\sum x_i$, $\bar y=\tfrac1{n+1}\sum y_i$, $\overline{x^2}=\tfrac1{n+1}\sum x_i^2$, $\overline{xy}=\tfrac1{n+1}\sum x_iy_i$.\\
 \hl{Trap:} $\overline{x^2}\ne\bar x^2$; denominator $=0$ iff all $x_i$ equal (no fit possible).
 
 \subsection{Hessian + minimum test}
 \begin{kbox}
 \centering
-$\displaystyle H=\begin{pmatrix}S_{a_0a_0}&S_{a_0a_1}\\S_{a_1a_0}&S_{a_1a_1}\end{pmatrix}$\\[1pt]
+$H=\left(\begin{smallmatrix}S_{a_0a_0}&S_{a_0a_1}\\S_{a_1a_0}&S_{a_1a_1}\end{smallmatrix}\right)$\\[-2pt]
 $\displaystyle S_{a_0a_0}=2(n{+}1),\ S_{a_0a_1}=2\sum x_i,\ S_{a_1a_1}=2\sum x_i^2$\\[1pt]
 $\displaystyle \det H=4\big[(n{+}1)\sum x_i^2-(\sum x_i)^2\big]$; min $\iff S_{a_0a_0}>0$ AND $\det H>0$
 \end{kbox}
@@ -102,7 +102,7 @@ Features = inputs $(x_1,x_2)$; plane $a_0+a_1x_1+a_2x_2=0\cap x_1x_2$-plane = \h
 \wk{Goal:} transform $(\tilde x,\tilde y)$ so model is linear; fit; inverse-transform back. Logs turn $\times$ into $+$ and powers into $\times$. Steps: (1) change vars; (2) fit $\tilde y=a_0+a_1\tilde x$; (3) recover $A,B$; (4) check fit.
 \begin{itemize}
 \item $y=Ae^{Bx}$: $\tilde x=x$, $\tilde y=\ln y$; $a_0=\ln A$, $a_1=B$ $\Leftrightarrow$ $\textcolor{BrickRed}{A=e^{a_0}}$.
-\item $y=Ax^n$: $\tilde x=\ln x$, $\tilde y=\ln y$; $a_0=\ln A$, $a_1=n$.
+\item $y=Ax^n$: $\tilde x=\ln x$, $\tilde y=\ln y$; $a_0=\ln A$, $a_1=n$ $\Leftrightarrow$ $\textcolor{BrickRed}{A=e^{a_0}}$.
 \item $y=A+\tfrac{B}{x}$: $\tilde x=\tfrac1x$, $\tilde y=y$; $a_0=A$, $a_1=B$.
 \item $y=\tfrac1{A+Bx}$: $\tilde x=x$, $\tilde y=\tfrac1y$; $a_0=A$, $a_1=B$.
 \item $y=\tfrac{Ax}{B+x}$: $\tilde x=\tfrac1x$, $\tilde y=\tfrac1y$; $a_0=\tfrac1A$, $a_1=\tfrac{B}{A}$ $\Leftrightarrow$ $\textcolor{BrickRed}{A=\tfrac1{a_0},\,B=\tfrac{a_1}{a_0}}$.
@@ -118,24 +118,25 @@ Partition $a=x_0<\cdots<x_n=b$, $h_i=x_i-x_{i-1}$, sample $x_i^*\in[x_{i-1},x_i]
 
 \section{Rectangle / Trapezoid / Simpson}
 \begin{sloppypar}\raggedright
-\textbf{Sample point:} $x_i^*=\alpha x_{i-1}+(1-\alpha)x_i$: $\alpha=1$ left, $0$ right, $\tfrac12$ mid. (Quiz7 $\alpha=0.2$; Lec16 $x_{i-1}+h_i/3\Rightarrow\alpha=\tfrac23$, $+2h_i/3\Rightarrow\alpha=\tfrac13$.)
+\textbf{Sample point:} $x_i^*=\alpha x_{i-1}+(1-\alpha)x_i$: $\alpha=1$ left, $0$ right, $\tfrac12$ mid. (e.g. Quiz7 $\alpha=0.2$.)
 General non-uniform: left $\sum h_if(x_{i-1})$, right $\sum h_if(x_i)$, mid $\sum h_if(\tfrac{x_{i-1}+x_i}2)$.
 \begin{kbox}
 \centering
-$\displaystyle \tilde I_{\text{Tr}}=\tfrac12\sum_{i=1}^n\big(f(x_{i-1})+f(x_i)\big)h_i$
+$\tilde I_{\text{Tr}}=\tfrac12\sum_{i=1}^n\big(f(x_{i-1})+f(x_i)\big)h_i$
 \end{kbox}
 Uniform trapezoid: $\tfrac{h(f_0+f_n)}2+h\sum_{i=1}^{n-1}f_i$.
 \wk{Trap idea:} one strip = rectangle $hQ_1$ + triangle $\tfrac h2(Q_2-Q_1)$ $=h(Q_1+Q_2)/2$; uniform version averages neighbors (interior $f_i$ counted twice $\to$ single sum).
-\textbf{Simpson} ($n=2m$ even, uniform): fits parabola on each pair. Why $O(h^4)$? Parabola matches value+slope+curvature (trap: only value+slope).
+\wk{Iterative (halve $h$, reuse):} $S_1=f_0+f_1$; double $N$ by adding $2\times$(new-node $f$'s): $S_2=S_1+2f_1^{\text{new}}$, $S_4=S_2+2(f_1+f_3)^{\text{new}}$ — evaluate only new nodes (relabelled each doubling).
+\textbf{Simpson} ($n=2m$ even, uniform): fits parabola on each pair (one pair needs 2 subintervals $\Rightarrow$ $n$ even). Why $O(h^4)$? Parabola matches value+slope+curvature (trap: only value+slope).
 \begin{kbox}
 \centering
-$\displaystyle I_{\text{parab}}=\tfrac{h}{3}\big\{f_0+f_n+4\sum_{\text{odd }i}f_i+2\sum_{\text{even }i<n}f_i\big\}$
+$I_{\text{parab}}=\tfrac{h}{3}\big\{f_0+f_n+4\sum_{\text{odd }i}f_i+2\sum_{\text{even }i<n}f_i\big\}$
 \end{kbox}
 
 \subsection{Accuracy estimates}
 \begin{itemize}
 \item left/right rectangle $O(h)$; midpoint $O(h^2)$; trapezoid $O(h^2)$; Simpson $O(h^4)$.
-\item Read $O(h^p)$ as: halving $h$ divides the error by $2^p$ (rect $\div2$, mid/trap $\div4$, Simpson $\div16$).
+\item Read $O(h^p)$ as: halving $h$ divides the error by $2^p$ (rect $\div2$, mid/trap $\div4$, Simpson $\div16$). E.g. $\int_0^2x^3dx=4$: $T_1=8,T_2=5,T_4=4.25$; err $4,1,0.25$ ($\div4$ each halving).
 \item Left-rect global: $|E|\le\tfrac{M_1(b-a)}2h$, $M_1=\max|f'|$. Midpoint: $|E|\le\tfrac{M_2(b-a)}{24}h^2$ (half the trapezoid constant $1/12$). (Taylor + symmetry kills $f'$ term.)
 \item No elementary antiderivative ($\int e^{x^2}dx$, $\int\tfrac{dx}{\ln x}$): cross-check Simpson vs trapezoid.
 \end{itemize}
@@ -146,6 +147,9 @@ $\displaystyle I_{\text{parab}}=\tfrac{h}{3}\big\{f_0+f_n+4\sum_{\text{odd }i}f_
 $y'=f(x,y)$ (slope field = direction at each point). General solution $y(x,C)$ = whole family of curves; IVP (Cauchy) $+y(x_0)=y_0$ picks the ONE curve through $(x_0,y_0)$ (fix $C$ by plugging IC; existence/uniqueness assumed).
 \hl{Check-solution trap:} differentiate candidate AND plug into ODE — both must hold for ALL $C$.
 \wk{Bridge (Lec19):} Euler comes from the finite difference $y'\approx\tfrac{y_{i+1}-y_i}{h}$: replace $y'$ in $y'=f(x,y)$ and solve for $y_{i+1}$.
+
+\subsection{Finite differences (VII-1)}
+\textbf{fwd:} $\tfrac{f(x+h)-f(x)}h$ $O(h)$; \textbf{bwd:} $\tfrac{f(x)-f(x-h)}h$ $O(h)$; \textbf{central:} $\tfrac{f(x+h)-f(x-h)}{2h}$ $O(h^2)$ = avg of fwd+bwd. \textbf{2nd:} central $f''\approx\tfrac{f(x+h)-2f(x)+f(x-h)}{h^2}$ $O(h^2)$. \textbf{Best $h$:} $(3\epsilon/M)^{1/3}$ ($\epsilon$ = rounding err, $M=\max|f'''|$).
 \begin{kbox}
 \centering
 $\displaystyle y_{i+1}=y_i+hf(x_i,y_i),\quad x_{i+1}=x_i+h\quad\text{(Euler)}$
@@ -167,25 +171,22 @@ $\displaystyle \textcolor{BrickRed}{y_{n+1}=y_n+\tfrac h6(k_1{+}2k_2{+}2k_3{+}k_
 \begin{sloppypar}\raggedright
 $\det=$ oriented area (2D) / volume (3D), up to sign; $\det\ne0\iff$ invertible. $\det(AB)=\det A\det B$. $Ax=b$ unique $\iff\det A\ne0\iff n$ pivots.\\
 \textbf{Scalar product:} $\bar a{\cdot}\bar b=a^xb^x+a^yb^y=|\bar a||\bar b|\cos\alpha$ (+$a^zb^z$ in 3D); $|\bar a|=\sqrt{(a^x)^2+(a^y)^2}$.\\
-\ex{Basic ops:} $\big(\begin{smallmatrix}1&2\\3&4\end{smallmatrix}\big)\big(\begin{smallmatrix}5\\6\end{smallmatrix}\big)=\big(\begin{smallmatrix}1\cdot5+2\cdot6\\3\cdot5+4\cdot6\end{smallmatrix}\big)=\big(\begin{smallmatrix}17\\39\end{smallmatrix}\big)$ (row $\cdot$ column).\\
+\ex{Basic ops:} $\big(\begin{smallmatrix}1&2\\3&4\end{smallmatrix}\big)\big(\begin{smallmatrix}5\\6\end{smallmatrix}\big)=\big(\begin{smallmatrix}17\\39\end{smallmatrix}\big)$ (row $\cdot$ column).\\
 \textbf{Projection:} $\mathrm{proj}_{\bar b}\bar a=\tfrac{\bar a\cdot\bar b}{|\bar b|}=|\bar a|\cos\alpha$; basis: $\mathrm{proj}_{\bar\imath}\bar a=a^x$, $\mathrm{proj}_{\bar\jmath}\bar a=a^y$ (\ex{e.g.} $(0,1),(2,0)$: $1,2$).\\
 \textbf{Area:} parallelogram $S=a^yb^x-a^xb^y=-\det$; area $=|S|=|\det|$. \ex{Worked:} $u=(3,1),v=(1,2)$: $S=1\cdot1-3\cdot2=-5$, area $5$. \textbf{Volume (3D):} $|\det|$ of the $3\times3$; \ex{Worked:} $\mathrm{diag}(1,2,3)$ volume $=6$. \ex{Non-diagonal:} sheet's $3\times3$ $A$ has $\det=-3\Rightarrow$ volume $3$.\\
 \textbf{Minor/cofactor:} $\mathrm{Minor}(a_{ij})$ = det deleting row $i$, col $j$; $\mathrm{cofac}(a_{ij})=(-1)^{i+j}\mathrm{Minor}(a_{ij})$. \ex{Worked:} $\mathrm{cofac}(a_{23})=-(a_{11}a_{32}-a_{31}a_{12})=a_{31}a_{12}-a_{11}a_{32}$.\\
-\textbf{Laplace:} $\det A=\sum_j a_{kj}\mathrm{cofac}(a_{kj})$ (any row $k$). \textbf{Row swap} flips sign. \ex{Worked:} $A=[[1,2,3],[4,5,6],[7,8,10]]$: cofactors $2,2,-3$ $\Rightarrow$ $\det=1(2)+2(2)+3(-3)=-3$.\\
+\textbf{Laplace:} $\det A=\sum_j a_{kj}\mathrm{cofac}(a_{kj})$ (any row $k$). \textbf{Row swap} flips sign. \ex{Worked:} $A=\big(\begin{smallmatrix}1&2&3\\4&5&6\\7&8&10\end{smallmatrix}\big)$: cofactors $2,2,-3$ $\Rightarrow$ $\det=1(2)+2(2)+3(-3)=-3$.\\
 \textbf{Triangular:} zeros above (lower) or below (upper) diagonal; $\det=$ product of diagonal. \ex{Worked (5$\times$5):} $\mathrm{diag}(1,2,3,4,5)$ $\Rightarrow$ $\det=120=5!$.\\
-\textbf{LU:} $A=LU$ ($L$ unit-lower, $U$ upper; set $\ell_{ii}=1$). \ex{Worked (2$\times$2):} $[[1,2],[3,4]]=[[1,0],[3,1]][[1,2],[0,-2]]$ ($u_{22}=4-3\cdot2=-2$). \textbf{Det:} $\det A=\det L\cdot\det U$; here $1\cdot(-2)=-2$ \wk{Check} $=1\cdot4-2\cdot3$.\\
-\ex{Worked (3$\times$3):} $[[1,2,3],[4,5,6],[7,8,10]]=[[1,0,0],[4,1,0],[7,2,1]][[1,2,3],[0,-3,-6],[0,0,1]]$ ($\ell_1{=}4,u_4{=}-3,u_5{=}-6,\ell_2{=}7,\ell_3{=}2,u_6{=}1$); $\det=1\cdot(-3)\cdot1=-3$.\\
+\textbf{LU:} $A=LU$ ($L$ unit-lower, $U$ upper; set $\ell_{ii}=1$). \ex{Worked (2$\times$2):} $\big(\begin{smallmatrix}1&2\\3&4\end{smallmatrix}\big)=\big(\begin{smallmatrix}1&0\\3&1\end{smallmatrix}\big)\big(\begin{smallmatrix}1&2\\0&-2\end{smallmatrix}\big)$ ($u_{22}=4-3\cdot2=-2$). \textbf{Det:} $\det A=\det L\cdot\det U$; here $1\cdot(-2)=-2$ \wk{Check} $=1\cdot4-2\cdot3$.\\
+\ex{Worked (3$\times$3):} $\big(\begin{smallmatrix}1&2&3\\4&5&6\\7&8&10\end{smallmatrix}\big)=\big(\begin{smallmatrix}1&0&0\\4&1&0\\7&2&1\end{smallmatrix}\big)\big(\begin{smallmatrix}1&2&3\\0&-3&-6\\0&0&1\end{smallmatrix}\big)$ ($\ell_1{=}4,u_4{=}-3,u_5{=}-6,\ell_2{=}7,\ell_3{=}2,u_6{=}1$); $\det=1\cdot(-3)\cdot1=-3$.\\
 \textbf{Solve $Ax=y$:} $Ax=L(Ux)=y$; set $z=Ux$: solve $Lz=y$ (forward), then $Ux=z$ (backward). \ex{Worked:} $A$ above, $y=[1,-1]^T$: $z_1=1$, $3+z_2=-1\Rightarrow z_2=-4$; $-2x_2=-4\Rightarrow x_2=2$, $x_1+4=1\Rightarrow x_1=-3$. $\boxed{x=[-3,2]^T}$ \wk{Check:} $Ax=[1,-1]^T$.
 \end{sloppypar}
 
 \section{Midterm Recap (compact)}
 \begin{sloppypar}\raggedright
 \begin{itemize}
-\item \textbf{Taylor:} $f(x)=\sum_{k=0}^n\tfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k+R_n$, $|R_n|\le\tfrac{Md^{n+1}}{(n+1)!}$; odd fn: only odd powers (deg 8 $\to x^7$), bound $\tfrac{12^{2m+2}}{(2m+2)!}$.
-\item \textbf{Maclaurin:} $e^x,\sin,\cos$ converge $\forall\mathbb R$; $\tfrac1{1-x}=\sum x^k$, $\ln(1{+}x)$, $\arctan$ for $|x|<1$.
-\item \textbf{Horner:} tableau at $c$ gives $p(c)$ (last) + quotient $q$; tableau on $q$ gives $p'(c)$.
-\item \textbf{Interpolation:} $\ell_i(x)=\prod_{j\ne i}\tfrac{x-x_j}{x_i-x_j}$, $p=\sum y_i\ell_i$; err $=\tfrac{f^{(n+1)}(\xi)}{(n+1)!}\prod(x-x_i)$ ($=0$ at nodes).
-\item Vandermonde $\det=\prod_{i<j}(x_j-x_i)\ne0$ (distinct nodes); DD: $f[x_i,x_{i+1}]=\tfrac{\Delta f}{\Delta x}$ (Newton form not required).
+\item \textbf{Taylor:} $f(x)=\sum_{k=0}^n\tfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k+R_n$, $|R_n|\le\tfrac{Md^{n+1}}{(n+1)!}$; odd fn $\to$ odd powers only (deg 8 $\to x^7$), bound $\tfrac{12^{2m+2}}{(2m+2)!}$. \textbf{Maclaurin:} $e^x,\sin,\cos$ $\forall\mathbb R$; $\tfrac1{1-x},\ln(1{+}x),\arctan$: $|x|<1$.
+\item \textbf{Horner:} tableau at $c$ $\to$ $p(c)$ + quotient $q$; again on $q$ $\to$ $p'(c)$. \textbf{Interp:} $\ell_i=\prod_{j\ne i}\tfrac{x-x_j}{x_i-x_j}$, $p=\sum y_i\ell_i$ (err $0$ at nodes); Vandermonde $\det=\prod_{i<j}(x_j-x_i)\ne0$; DD $f[x_i,x_{i+1}]=\tfrac{\Delta f}{\Delta x}$ (Newton not required).
 \end{itemize}
 \end{sloppypar}
 
@@ -251,8 +252,10 @@ Exact $y(0.4)\approx-0.101304$ (given; $y=x/4-1/16-\tfrac{11}{16}e^{-4x}$): Eule
 \ex{Quiz9 Q1 — IVP from general sol:} $y=-\tfrac14+\tfrac x2+Ce^{-2x}$, $(x_0,y_0)=(\tfrac12,\tfrac14)$: $\tfrac14=-\tfrac14+\tfrac14+Ce^{-1}$ $\Rightarrow$ $C=e/4\approx0.6796$, $y^*=-\tfrac14+\tfrac x2+\tfrac e4e^{-2x}$.
 \ex{HW10 Q2 pattern:} $y'=\tfrac yx+2x^2$, $(1,4)$, general $y=(x^2+C)x$: $4=(1+C)\cdot1\Rightarrow C=3$, $y^*=(x^2+3)x$. Euler pattern: $x_1=1+h$, $y_1=4+h(4/1+2)=4+6h$ (since $f(1,4)=6$). Midpoint pattern: $x_{1/2}=1+h/2$, $y_{1/2}=4+(h/2)\cdot6=4+3h$.
 \hl{Quiz9 Q2 — check trap (fail case):} $y=Ce^x-2\cos2x-2\sin2x$ is \emph{not} a sol of $y'=y+5\sin2x$: $y'=Ce^x+4\sin2x-4\cos2x$, but $y+5\sin2x=Ce^x-2\cos2x+3\sin2x$; difference $=\sin2x-2\cos2x\ne0$.\\
-\ex{Pass case (HW10 Q1):} $y=\tfrac12(\cos x-\sin x)+Ce^x$ \emph{is} a sol of $y'=y-\cos x$: $y'=\tfrac12(-\sin x-\cos x)+Ce^x=y-\cos x$.\\
-\wk{Rule:} differentiate candidate AND plug into ODE — both must hold $\forall C$.
+\ex{Pass case (HW10 Q1):} $y=\tfrac12(\cos x-\sin x)+Ce^x$ \emph{is} a sol of $y'=y-\cos x$: $y'=\tfrac12(-\sin x-\cos x)+Ce^x=y-\cos x$.
+
+\subsection{Finite-difference table drill (VII-1)}
+Given $x:0.2,0.3,0.4$; $f:-0.3341,-0.1769,0.0138$ ($h=0.1$). Fwd: at $0.2$: $\tfrac{-0.1769+0.3341}{0.1}=1.572$; at $0.3$: $1.907$. Bwd = same shifted ($1.572$ at $0.3$, $1.907$ at $0.4$). Central at $0.3$: $\tfrac{0.0138+0.3341}{0.2}=1.7395=\tfrac12(1.907+1.572)$. 2nd: $\tfrac{0.0138-2(-0.1769)-0.3341}{0.01}=3.35$.
 
 \subsection{Rectangle lattice nodes (Quiz 7)}
 Given $x_k=\tfrac{3\ln(1+k/5)}{\ln2}-1$, $k=0..5$. Sample: $x_1=\tfrac{3\ln1.2}{\ln2}-1\approx-0.21090$ (since $3\ln1.2\approx0.54696$, $\ln2\approx0.69315$);\\
@@ -289,7 +292,6 @@ $(x_0,y_0)=(0,1)$, $h=0.25$: $y_1=1+0.25(1)=1.25$; $y_2=1.25+0.25(1.5)=1.625$;\\
 $y_3=1.625+0.25(2.125)=2.15625$. (Compiled $1.5625/2.078125$ used $f_1=1.25$ instead of $0.25+1.25=1.5$ — knock-on slip.)\\
 Exact $y^*=2e^x-x-1$: $y(0.5)\approx1.79744$, $y(0.75)\approx2.48400$ — Euler visibly below.
 \ex{Midpoint on same ODE:} $(0.125,1.125)\to y_1=1+0.25(1.25)=1.3125$ vs exact $1.31805$ — much closer.\\
-\ex{Separate ODEs (Lec20):} $y'=x/y\Rightarrow y\,dy=x\,dx\Rightarrow y^2=x^2+C_1$. Circle IVP $y'=-x/y$, $(2,2)$: $y^2/2+x^2/2=C=4$ (radius 2).\\
 \hl{IVP slip (same ODE, HW pattern):} $y'=y+x$, $(1,4)$: $4=Ce-2\Rightarrow C=6/e\approx2.207$ (compiled $2/e$ forgot $+4$: check $y(1)=6-2=4$ $\checkmark$).
 
 \subsection{Trapezoid, non-uniform lattice}
@@ -300,10 +302,10 @@ $=\tfrac12(0.015625+0.796875)=\tfrac12(0.8125)=0.40625$.\\
 Exact $\tfrac13$; err $=|0.33333-0.40625|\approx0.07292$.
 
 \subsection{Laplace expansion}
-Given $A=[[1,2,3],[4,5,6],[7,8,10]]$, expand along row 1.
+Given $A=\big(\begin{smallmatrix}1&2&3\\4&5&6\\7&8&10\end{smallmatrix}\big)$, expand along row 1.
 \wk{Step 1} — cofactors: $\mathrm{cofac}(a_{11})=+(5\cdot10-6\cdot8)=50-48=2$; $\mathrm{cofac}(a_{12})=-(4\cdot10-7\cdot6)=-(40-42)=2$; $\mathrm{cofac}(a_{13})=+(4\cdot8-5\cdot7)=32-35=-3$.
 \wk{Step 2} — assemble: $\det A=1(2)+2(2)+3(-3)=2+4-9=-3$ (matches LU $\det=1\cdot(-3)\cdot1$).\\
-\ex{Row-swap + expand:} $D=\det[[5,6,7],[0,0,1],[8,9,10]]$: swap rows 1,2 (flip sign), expand along the zero-heavy row 1:\\
+\ex{Row-swap + expand:} $D=\det\big(\begin{smallmatrix}5&6&7\\0&0&1\\8&9&10\end{smallmatrix}\big)$: swap rows 1,2 (flip sign), expand along the zero-heavy row 1:\\
 $D=-(1\cdot(-1)^{1+3}(5\cdot9-6\cdot8))=-(-3)=3$.
 \end{sloppypar}
 
