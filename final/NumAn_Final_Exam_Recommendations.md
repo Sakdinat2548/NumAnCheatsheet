@@ -1,4 +1,3 @@
-```markdown
 ## Final Exam Instructions (Numerical Analysis, SCI19 3111)
 
 **Source:** NumAn_final_recommendations.pdf (updated version)
@@ -42,4 +41,3 @@ $$x_i^{*} = \alpha x_{i-1} + (1-\alpha) x_i, \qquad \alpha \in [0,1].$$
 11. Basic operations with matrices, vectors, and determinants. Projections of vectors. Areas and volumes.
 12. Laplace (cofactor) expansion of a determinant. Determinants of lower and upper triangular matrices. Computing the determinant of an $n \times n$ matrix for $n > 3$.
 13. LU decomposition for small matrices. Solving simple systems of linear equations using LU decomposition.
-```
