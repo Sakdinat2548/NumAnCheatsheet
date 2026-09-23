@@ -1,17 +1,14 @@
 # Agent Prompt: Build a 2-Page Exam Cheat Sheet (any math course)
 
 ## COURSE CONFIGURATION (fill this in before starting)
-```
 COURSE: Numerical Analysis (SCI19 3111)
 YEAR/SEMESTER: 2026
-EXAM: midterm + final (one sheet each)
 FILE NAME: midterm/numan_cheatsheet.tex, final/numan_final_cheatsheet.tex
+STATUS: both sheets at 2 pages, zero warnings; all numbers verified by computation
 SUPPLIED SOURCES: .md or .txt in '/study_materials' folder; quizzes, homeworks, and any professor notes. '/examples' folder has a reference cheatsheet for formatting and layout.
 OFFICIAL ANSWERS AVAILABLE?: not yet
 
 ## COURSE-SPECIFIC TRAPS TO LOOK FOR (maintain during the session)
-Start from these generic categories, then fill in course-specific instances.
-Add every new trap discovered (from quizzes, answers, or edge cases):
 - parity/symmetry: odd fn (sin(3x)) has no even Taylor terms; a "degree-8" poly stops at x^7; even indices invalid → map R_8 to n=9/x<0.3012 or n=7/x<0.1673; bounds use (2m+2)! with 12^{2m+2} (Q4 answer m=20, 2m+2=42, NOT n=40)
 - degenerate cases: singular Vandermonde (repeated nodes => det=0), under/overdetermined systems => free parameters (n-m of them)
 - sign/domain constraints: convergence radii (geometric/ln/arctan |x|<=1 vs e^x,sin,cos all R); extrapolation outside node/data range unreliable (regression prediction, Lagrange)
@@ -20,7 +17,6 @@ Add every new trap discovered (from quizzes, answers, or edge cases):
 - prove-vs-assert: infinite series ≠ proof of equality — must show R_n→0; ODE candidate must be differentiated AND substituted (Quiz9 Q2 fails: residual sin2x−2cos2x≠0)
 - rounding: default 5 dp uniformly; don't mix 3-dp inputs into 5-dp computations; displayed rounded inputs must reproduce displayed intermediates (f_5=0.84842, NOT .443)
 - source slips: lecture/quiz/compiled notes DO contain arithmetic slips — recompute every worked number independently. Found: f_3=3/4 unsquared (left 7/32, NOT 17/64); Ax/(B+x) a_0=0.743 wrong (A≈2.71, B≈4.98); Euler y_2=1.5625 dropped x_1 (correct 1.625, knock-on y_3); IVP C=2/e forgot +4 (correct 6/e)
-```
 
 ## Role
 Act as an expert LaTeX typesetter AND elite academic tutor. Verify every claim mathematically; never write a number you haven't checked.
