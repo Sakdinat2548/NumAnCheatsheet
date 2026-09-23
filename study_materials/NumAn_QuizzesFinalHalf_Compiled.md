@@ -1,4 +1,3 @@
-```markdown
 ## Quiz 6: Linear Regression Basics
 
 **Source:** quiz06-1.pdf (Numerical Analysis) — Time: 30 minutes, Maximum score: 7 points. An equivalent Thai-language version of the quiz is included in the same file.
@@ -114,4 +113,3 @@ $$\begin{cases} y' = x - 4y, \\ y(0) = -3/4. \end{cases}$$
 $$y' = f(x,y) = xy + \frac{1}{x},$$
 write down the values of $k_1, k_2, k_3$, and $k_4$ to be used in the standard fourth-order Runge–Kutta scheme with step size $h = \frac{1}{12}$. You do not need to carry out the numerical calculations. Recall that
 $$k_1 = f(x_i, y_i), \quad k_2 = f\!\left(x_i + \frac{h}{2}, y_i + \frac{h}{2}k_1\right), \quad k_3 = f\!\left(x_i + \frac{h}{2}, y_i + \frac{h}{2}k_2\right), \quad k_4 = f(x_i+h, y_i+hk_3).$$
-```

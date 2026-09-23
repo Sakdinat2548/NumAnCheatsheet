@@ -1,4 +1,3 @@
-```markdown
 ## Homework 01
 
 **Question 1:** Verify that
@@ -354,4 +353,3 @@ e) Compare the exact and approximate solutions at $x_2$ by calculating the absol
 As an exercise, write down the classical Runge–Kutta scheme (RK4) for the ODE
 $$y' = y + x.$$
 Performing further numerical calculations is not required.
-```
