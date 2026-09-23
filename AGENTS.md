@@ -76,6 +76,7 @@ Compile with:
 then check the `.log`:
 - Output must read "(2 pages, ...)" — exactly two A4 pages.
 - Drive the log to ZERO `Overfull`/`Underfull` \hbox warnings and zero `Overfull \vbox` warnings. Use the techniques above; only accept truly negligible (<1pt) leftovers as a last resort.
+- First-page timestamp: eso-pic shipout stamp (`\AddToShipoutPicture*` + `\AtTextUpperLeft` + `\raisebox{6pt}` into the margin, right-aligned via `\makebox[\textwidth][r]`) — applied AFTER page composition, so it provably moves nothing (verified: title baselines identical with/without; earlier in-flow and fancyhdr attempts shifted or hid it; 12pt sat on the edge, 6pt clears it). Single compile run suffices (no `remember picture`). Format: `{\scriptsize\textcolor{black!60}{Updated: 23 Sep 2026 06:45}}` (date + 24h local). Bump on EVERY content change.
 - After every content edit, recompile and re-verify page count + warnings.
 
 ## Output contract

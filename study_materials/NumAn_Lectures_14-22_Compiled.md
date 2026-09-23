@@ -412,3 +412,158 @@ Higher accuracy comes at the cost of more function evaluations of $f(x,y)$ per s
 
 **Remark (Nonuniform Meshes / Adaptive Grids):**
 Non-uniform ("adaptive") lattices adjust grid points according to the steepness/behavior of the solution; construction of adaptive grids is beyond the scope of the course.
+
+---
+
+## Lecture 20 (Final Remarks): Runge–Kutta Recap Example
+
+**Worked Example (IVP Setup Recap):**
+$$\begin{cases} y' = x+y \\ y(5)=3 \end{cases} \quad \Rightarrow \quad x_0=5,\ y_0=3$$
+Assume general solution $y = x+C$. Substituting $(x_0,y_0)=(5,3)$: $3 = 5+C \Rightarrow C=-2$. This solves the IVP (Cauchy problem).
+
+**Core Formula (Runge–Kutta Method Recap):**
+$$\begin{cases} y'=f(x,y) \\ y(x_0)=y_0 \end{cases} \implies y_{i+1} = y_i + \frac{h}{6}(k_1+2k_2+2k_3+k_4)$$
+Fourth-order Runge–Kutta method (RK4), global error $O(h^4)$.
+
+**Worked Example (RK4 Setup for $y'=f(x,y)=xy+\frac{1}{x}$, $h=\frac{1}{12}$):**
+$$k_1 = f(x_i,y_i) = x_iy_i+\frac{1}{x_i}$$
+$$k_2 = f\left(x_i+\frac{h}{2}, y_i+\frac{h}{2}k_1\right) = \left(x_i+\frac{h}{2}\right)\left(y_i+\frac{h}{2}k_1\right) + \frac{1}{x_i+\frac{h}{2}}$$
+$$y_{i+1} = y_i + \frac{h}{6}\left(k_1 + 2k_2 + 2k_3+k_4\right)$$
+Remark: "Idea: just apply the formulas."
+
+---
+
+## Lectures 21–22: Elements of Numerical Linear Algebra
+
+**Definition (Scalar Product):**
+For vectors $\bar{a}=(a^x,a^y)$, $\bar{b}=(b^x,b^y)$ (2D) or $\bar a=(a^x,a^y,a^z)$, $\bar b=(b^x,b^y,b^z)$ (3D):
+$$\bar{a}\cdot\bar{b} = a^xb^x+a^yb^y = |\bar a||\bar b|\cos\alpha$$
+where $|\bar a| = \|\bar a\|_2 = \sqrt{(a^x)^2+(a^y)^2}$ (length).
+
+**Definition (Projection of One Vector onto Another):**
+From geometry, with $\bar c = \text{proj}_{\bar b}\bar a$: $|\bar c| = |\bar a|\cos\alpha$, and since $\bar a \cdot \bar b = |\bar a||\bar b|\cos\alpha$:
+$$\boxed{\text{proj}_{\bar b}\bar{a} = \frac{\bar{a}\cdot\bar{b}}{|\bar{b}|}}, \qquad \text{proj}_{\bar a}\bar{b} = \frac{\bar{a}\cdot\bar{b}}{|\bar{a}|}$$
+
+**Definition (Standard Basis Projections):**
+With standard basis $\bar\imath=(1,0)$, $\bar\jmath=(0,1)$ (so $|\bar\imath|=|\bar\jmath|=1$):
+$$\text{proj}_{\bar\imath}\bar{a} = \frac{\bar a\cdot\bar\imath}{|\bar\imath|} = \bar a\cdot\bar\imath = a^x, \qquad \text{proj}_{\bar\jmath}\bar{a} = \frac{\bar a\cdot\bar\jmath}{|\bar\jmath|} = \bar a\cdot\bar\jmath = a^y$$
+
+**Worked Example (Projection Example):**
+$\bar a=(0,1)$, $\bar b=(2,0)$. $\text{proj}_{\bar\jmath}\bar a = \bar a\cdot\bar\jmath = a^y = 1$. $\text{proj}_{\bar\imath}\bar b = \bar b\cdot\bar\imath = b^x = 2$. Also $a^y b^x = 1\cdot2=2$.
+
+**Theorem/Property (Determinant as Oriented Area — Derivation):**
+For $\bar a=(a^x,a^y)$, $\bar b=(b^x,b^y)$, construct a bounding rectangle of area $R=a^yb^x$ and a corner rectangle $R_1=a^xb^y$. From the figure, the area of the parallelogram spanned by $\bar a,\bar b$ equals $R-R_1$:
+$$S = a^yb^x - a^xb^y$$
+And the determinant:
+$$\det: \left|\begin{matrix}\bar a\\ \bar b\end{matrix}\right| = \begin{vmatrix} a^x & b^x \\ a^y & b^y \end{vmatrix} = a^xb^y - b^xa^y = -S$$
+**Conclusion:** The area of the parallelogram equals $\det(\bar a\ \bar b)$, up to a sign ($\pm$).
+
+**Theorem/Property (2×2 Determinant as Oriented Area, alternate derivation):**
+Using areas $S_1 = a^xb^y$ (with one vector axis-aligned) and $S_2 = \begin{vmatrix}a^x & b^x\\ a^y & b^y\end{vmatrix}$-type expressions:
+$$S_1 = \begin{vmatrix} a^x & 0 \\ 0 & b^y \end{vmatrix} = a^xb^y - 0 = a^xb^y$$
+$$S_2 = \begin{vmatrix} a^x & b^x \\ a^y & b^y \end{vmatrix} = a^xb^y-a^yb^x$$
+$$-S_2 = \begin{vmatrix} b^x & a^x \\ b^y & a^y \end{vmatrix} = a^yb^x - a^xb^y$$
+$$S_1 - S_2 = \begin{vmatrix} a^x & b^x \\ a^y & b^y \end{vmatrix} = a^xb^y-b^xa^y$$
+**Property:** det of a $2\times2$ matrix is the oriented area of a parallelogram.
+
+**Theorem/Property (Determinant as Volume, 3D Extension):**
+For unit vector $(0,0,1)$ extended to 3D, "Volume $= d\cdot\beta\cdot 1 = $ Area":
+$$\begin{vmatrix} 0 & 0 & 1 \\ a^x & b^x & 0 \\ a^y & b^y & 0 \end{vmatrix} = \begin{vmatrix} a^x & b^x \\ a^y & b^y \end{vmatrix}$$
+
+**Theorem/Property (Determinant Column Property):**
+The determinant does not change if we add a column-vector orthogonal to its column-vectors (of length 1):
+$$\begin{vmatrix}a^x & b^x \\ a^y & b^y\end{vmatrix} = a^x\cdot b^y - a^y b^x = a^x\cdot\left|\begin{matrix}0&1\\b^y&0\end{matrix}\right|_{(1\times1)\text{-cofactor-like}} - b^x\left(\cdots\right)$$
+$$= a^x\left(\begin{vmatrix}0&1\\b^y&0\end{vmatrix}\right) - b^x\left(\begin{vmatrix}1&0\\a^y&0\end{vmatrix}\right)$$
+
+**Core Formula (3×3 Determinant Expansion via Projections):**
+For column vectors $\bar a,\bar b,\bar c$:
+$$\begin{vmatrix} a^x & b^x & c^x \\ a^y & b^y & c^y \\ a^z & b^z & c^z \end{vmatrix} = a^x\begin{vmatrix}1&0&0\\0&b^y&c^y\\0&b^z&c^z\end{vmatrix} + b^x\begin{vmatrix}0&1&0\\a^y&0&c^y\\a^z&0&c^z\end{vmatrix} + c^x\begin{vmatrix}0&0&1\\a^y&b^y&0\\a^z&b^z&0\end{vmatrix}$$
+using $\text{proj}_{yz}\bar b$, $\text{proj}_{yz}\bar c$ terms.
+
+**Definition (Minor and Cofactor):**
+For a matrix entry $a_{ij}$, the **minor** $\text{Minor}(a_{ij})$ is the determinant of the submatrix obtained by deleting row $i$ and column $j$.
+Example: $\text{Minor}(a_{11}) = \begin{vmatrix}a_{22}&a_{23}\\a_{32}&a_{33}\end{vmatrix}$, $\text{Minor}(a_{32}) = \begin{vmatrix}a_{11}&a_{13}\\a_{21}&a_{23}\end{vmatrix}$.
+
+$$\boxed{\text{cofactor}(a_{ij}) = (-1)^{i+j}\text{Minor}(a_{ij})}$$
+
+**Worked Example (Cofactor Calculation):**
+$$\text{cofac}(a_{23}) = (-1)^{2+3}\text{Minor}(a_{23}) = -\begin{vmatrix}a_{11}&a_{12}\\a_{31}&a_{32}\end{vmatrix} = -(a_{11}a_{32}-a_{31}a_{12}) = a_{31}a_{12}-a_{11}a_{32}$$
+
+**Theorem/Property (Laplace Expansion / Cofactor Expansion Formula):**
+$$\det A_{n\times n} = \sum_{j=1}^n a_{kj}\cdot\text{cofac}(a_{kj}), \quad k\in[1,n]$$
+E.g., expanding along the first row ($k=1$):
+$$\boxed{\det A_{n\times n} = \sum_{j=1}^n a_{1j}\cdot\text{cofac}(a_{1j})}$$
+
+**Worked Example (3×3 Determinant via Laplace Expansion):**
+$$A = \begin{vmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 7 & 8 & 10 \end{vmatrix}$$
+$$\text{cofac}(a_{11}) = (-1)^{1+1}\begin{vmatrix}5&6\\8&10\end{vmatrix} = 5\cdot10-6\cdot8$$
+$$\text{cofac}(a_{12}) = (-1)^{1+2}\begin{vmatrix}4&6\\7&10\end{vmatrix} = -(4\cdot10-7\cdot6)$$
+$$\text{cofac}(a_{13}) = (-1)^{1+3}\begin{vmatrix}4&5\\7&8\end{vmatrix} = 4\cdot8-5\cdot7$$
+$$\det A = 1\cdot(5\cdot10-6\cdot8) + 2\cdot(-1)(4\cdot10-7\cdot6) + 3\cdot(4\cdot8-5\cdot7)$$
+
+**Theorem/Property (Row Swap Property):**
+$$\begin{vmatrix}\text{row}_1\\ \text{row}_2\\ \vdots\end{vmatrix} = -\begin{vmatrix}\text{row}_2\\ \text{row}_1\\ \vdots\end{vmatrix}$$
+Example: $\begin{vmatrix}a^y & b^y\\ a^x & b^x\end{vmatrix} = a^yb^x - a^xb^y$.
+
+**Worked Example (Determinant via Row Swap and Cofactor Expansion):**
+$$\begin{vmatrix} 5&6&7\\ 0&0&1\\ 8&9&10 \end{vmatrix} = -\begin{vmatrix}0&0&1\\5&6&7\\8&9&10\end{vmatrix} = -\left(1\cdot\text{cofac}(1)\right) = -\left(1\cdot\begin{vmatrix}5&6\\8&9\end{vmatrix}\right) = -\begin{vmatrix}5&6\\8&9\end{vmatrix}$$
+
+**Definition (Triangular Matrices):**
+A **lower triangular matrix** has zero entries above the main diagonal:
+$$\begin{pmatrix}a_{11}& & \\ &a_{22}& \\ \text{(some numbers)}& &a_{nn}\end{pmatrix}, \quad \text{e.g. } \begin{pmatrix}1&0&0\\-1&2&0\\7&6&5\end{pmatrix}$$
+An **upper triangular matrix** has zero entries below the main diagonal:
+$$\begin{pmatrix}a_{11}&\text{(some numbers)}& \\ &a_{22}& \\ 0& &a_{nn}\end{pmatrix}, \quad \text{e.g. } \begin{pmatrix}1&-1&7\\0&2&6\\0&0&5\end{pmatrix}$$
+
+**Theorem/Property (Determinant of a Triangular Matrix):**
+$$\begin{vmatrix}a_{11}&0\\a_{21}&a_{22}\end{vmatrix} = a_{11}\cdot\text{cofac}(a_{11}) = a_{11}a_{22}$$
+$$\begin{vmatrix}a_{11}&0&0\\a_{21}&a_{22}&0\\a_{31}&a_{32}&a_{33}\end{vmatrix} = a_{11}\cdot\text{cofac}(a_{11}) = a_{11}\begin{vmatrix}a_{22}&0\\a_{32}&a_{33}\end{vmatrix} = a_{11}a_{22}\cdot\text{cofac}(a_{22}) = a_{11}a_{22}a_{33}$$
+$$\boxed{\det(\text{triangular})_{n\times n} = a_{11}\cdot a_{22}\cdots a_{nn}}$$
+
+**Worked Example (5×5 Triangular Determinant):**
+$$\det\begin{pmatrix}1&0&0&0&0\\7&2&0&0&0\\11&-8&3&0&0\\34&1&7&4&0\\81&-5&3&12&5\end{pmatrix} = 1\times2\times3\times4\times5 = 5! = 120$$
+
+**Definition (LU Decomposition):**
+Under suitable conditions, a matrix $A$ can be written as
+$$A = L\cdot U$$
+where $L$ is lower triangular and $U$ is upper triangular. (For a general nonsingular matrix, row permutations may be required, giving $PA=LU$ with permutation matrix $P$; this course restricts to cases requiring no permutations.)
+
+**Worked Example (2×2 LU Decomposition):**
+$$A = \begin{pmatrix}1&2\\3&4\end{pmatrix} = \begin{pmatrix}\ell_{11}&0\\ \ell_{21}&\ell_{22}\end{pmatrix}\begin{pmatrix}u_{11}&u_{12}\\0&u_{22}\end{pmatrix} = \begin{pmatrix}\ell_{11}u_{11} & \ell_{11}u_{12}\\ \ell_{21}u_{11} & \ell_{21}u_{12}+\ell_{22}u_{22}\end{pmatrix}$$
+This gives 4 equations, 6 unknowns; assume $\ell_{11}=1,\ \ell_{22}=1$:
+$$\begin{cases} 1 = u_{11} \\ 2 = u_{12} \\ 3 = \ell_{21}u_{11} \\ 4 = \ell_{21}u_{12}+u_{22} \end{cases} \implies u_{11}=1,\ u_{12}=2,\ \ell_{21}=3,\ u_{22}=4-3\cdot2=-2$$
+$$\boxed{\begin{pmatrix}1&2\\3&4\end{pmatrix} = \begin{pmatrix}1&0\\3&1\end{pmatrix}\begin{pmatrix}1&2\\0&-2\end{pmatrix}}$$
+
+**Theorem/Property (Multiplicative Property of Determinant):**
+$$\det(P\cdot Q) = \det P \cdot \det Q$$
+Hence, since $A = LU$:
+$$\boxed{\det A = \det L \cdot \det U}$$
+
+**Worked Example (Determinant via LU):**
+$$\det A = \begin{vmatrix}1&2\\3&4\end{vmatrix} = 1\cdot4-2\cdot3 = -2$$
+$$\det L = \begin{vmatrix}1&0\\3&1\end{vmatrix} = 1, \qquad \det U = \begin{vmatrix}1&2\\0&-2\end{vmatrix} = -2$$
+$$\det A = 1\cdot(-2) = -2 \checkmark$$
+
+**Worked Example (3×3 LU Decomposition):**
+$$A = \begin{pmatrix}1&2&3\\4&5&6\\7&8&10\end{pmatrix} = \begin{pmatrix}1&0&0\\\ell_1&1&0\\\ell_2&\ell_3&1\end{pmatrix}\begin{pmatrix}u_1&u_2&u_3\\0&u_4&u_5\\0&0&u_6\end{pmatrix}$$
+Matching entries:
+$$u_1=1,\ u_2=2,\ u_3=3$$
+$$\ell_1u_1=4 \Rightarrow \ell_1=4; \qquad \ell_1u_2+u_4=5 \Rightarrow u_4 = 5-4\cdot2=-3; \qquad \ell_1u_3+u_5=6 \Rightarrow u_5=6-4\cdot3=-6$$
+$$\ell_2u_1=7 \Rightarrow \ell_2=7$$
+$$\ell_2u_2+\ell_3u_4=8 \Rightarrow 14+\ell_3(-3)=8 \Rightarrow \ell_3=\frac{8-14}{-3}=2$$
+$$\ell_2u_3+\ell_3u_5+u_6=10 \Rightarrow 21+2(-6)+u_6=10 \Rightarrow u_6=10-21+12=1$$
+$$\boxed{\begin{pmatrix}1&2&3\\4&5&6\\7&8&10\end{pmatrix} = \begin{pmatrix}1&0&0\\4&1&0\\7&2&1\end{pmatrix}\begin{pmatrix}1&2&3\\0&-3&-6\\0&0&1\end{pmatrix}}$$
+Check: $\det L = 1\cdot1\cdot1=1$, $\det U = 1\cdot(-3)\cdot1=-3$, $\det A = 1\cdot(-3) = -3$.
+
+**Core Formula (LU Decomposition for Solving Linear Systems):**
+Given $A\bar x = \bar y$ with $A=LU$:
+$$Ax = L(Ux) = y \implies \begin{cases} Uz\ (\text{define } z=Ux) \\ Lz = y \end{cases} \implies \begin{cases} Lz = y \\ Ux = z \end{cases}$$
+In many cases, solving these two triangular systems (via **forward substitution** for $Lz=y$ and **backward substitution** for $Ux=z$) is much easier than solving the original system directly. This procedure is closely related to **Gaussian elimination**.
+
+**Worked Example (Solving $A\bar x=\bar y$ via LU Decomposition):**
+$$A = \begin{pmatrix}1&2\\3&4\end{pmatrix} = \begin{pmatrix}1&0\\3&1\end{pmatrix}\begin{pmatrix}1&2\\0&-2\end{pmatrix}, \qquad \bar y = \begin{pmatrix}1\\-1\end{pmatrix}$$
+Step 1 — solve $Lz=y$:
+$$\begin{pmatrix}1&0\\3&1\end{pmatrix}\begin{pmatrix}z_1\\z_2\end{pmatrix} = \begin{pmatrix}1\\-1\end{pmatrix} \implies \begin{cases} z_1=1 \\ 3z_1+z_2=-1 \end{cases} \implies z_1=1,\ z_2=-1-3=-4$$
+$$z = \begin{pmatrix}1\\-4\end{pmatrix}$$
+Step 2 — solve $Ux=z$:
+$$\begin{pmatrix}1&2\\0&-2\end{pmatrix}\begin{pmatrix}x_1\\x_2\end{pmatrix} = \begin{pmatrix}1\\-4\end{pmatrix} \implies \begin{cases} x_1+2x_2=1 \\ -2x_2=-4 \end{cases} \implies x_2=2,\ x_1=1-4=-3$$
+$$\boxed{x = \begin{pmatrix}-3\\2\end{pmatrix}}$$
