@@ -48,7 +48,7 @@
 
 \AddToShipoutPicture*{%
 \AtTextUpperLeft{%
-\raisebox{6pt}{\makebox[\textwidth][r]{\scriptsize\textcolor{black!60}{Updated: 23 Sep 2026 19:39}}}%
+\raisebox{6pt}{\makebox[\textwidth][r]{\normalfont\scriptsize\textcolor{black!60}{Updated: 24 Sep 2026 04:55}}}%
 }%
 }
 \begin{center}
@@ -62,12 +62,12 @@
 
 \section{Groups Recap + Euler $\varphi$}
 \begin{sloppypar}\raggedright
-\textbf{Group:} closure, identity $e$ (unique, $a{\circ}e{=}a$), associativity, inverses (unique). $(\mathbb Z,{+})$ infinite group; $(\mathbb Z_n,{+})$ finite, always cyclic (gen $[1]$); $\mathbb Z_n^*$ group $\iff n$ prime. $|G|{=}\#$elem; $\mathrm{ord}(g)$ = smallest $n{>}0$ with $g^n{=}e$.\\
+\textbf{Group:} closure, identity $e$ (unique, $a{\circ}e{=}a$), associativity, inverses (unique). $(\mathbb Z,{+})$ infinite group; $(\mathbb Z_n,{+})$ finite, always cyclic (gen $[1]_n$); $\mathbb Z_n^*$ group $\iff n$ prime. $|G|{=}\#$elem; $\mathrm{ord}(g)$ = smallest $n{>}0$ with $g^n{=}e$.\\
 $\begin{array}{l}
 \hl{Lagrange:}\ \mathrm{ord}(g)\mid|G|,\quad g^{|G|}{=}e\\
 \hl{Cyclic:}\ G{=}\langle g\rangle\iff\mathrm{ord}(g){=}|G|
 \end{array}$\\
-\ex{Worked:} $|\mathbb Z_8^+|{=}8$; $\mathrm{ord}[1]{=}8$; $\mathrm{ord}[2]{=}4$ ($2,4,6,0$); $\mathrm{ord}[7]{=}8$ ($7,6,5,4,3,2,1,0$); gens $[1],[3],[5],[7]$.\\
+\ex{Worked:} $|\mathbb Z_8^+|{=}8$; $\mathrm{ord}[1]_8{=}8$; $\mathrm{ord}[2]_8{=}4$ ($2,4,6,0$); $\mathrm{ord}[7]_8{=}8$ ($7,6,5,4,3,2,1,0$); gens $[1]_8,[3]_8,[5]_8,[7]_8$.\\
 $\varphi(n){=}\#\{1{\le}k{\le}n:\gcd{=}1\}$. \hl{Formulas:} $p$ prime $\varphi(p){=}p{-}1$; $\varphi(p^k){=}p^k{-}p^{k-1}$; coprime $\varphi(mn){=}\varphi(m)\varphi(n)$.\\
 \ex{Worked:} $\varphi(16){=}8$ ($1,3,5,7,9,11,13,15$).
 \end{sloppypar}
@@ -82,7 +82,7 @@ $\begin{array}{l}
 \begin{sloppypar}\raggedright
 \ex{Worked $3^{347}\bmod14$:} Given $\gcd(3,14){=}1$, $\varphi(14){=}6$.\\
 \wk{Step 1} (reduce exponent): $347{=}6{\cdot}57{+}5$ ($6{\cdot}57{=}342$).\\
-\wk{Step 2} (evaluate): $3^5{=}243$; $243{-}17{\cdot}14{=}243{-}238{=}5\Rightarrow\hl{[5]}$. \wk{Check:} $\mathrm{pow}{=}5$.
+\wk{Step 2} (evaluate): $3^5{=}243$; $243{-}17{\cdot}14{=}243{-}238{=}5\Rightarrow\hl{$[5]_{14}$}$. \wk{Check:} $\mathrm{pow}{=}5$.
 \end{sloppypar}
 
 \section{Crypto}
@@ -99,16 +99,24 @@ Y \wk{Step 3:} $16{\cdot}({-}5){=}{-}80$; ${-}80{+}3{\cdot}29{=}{-}80{+}87{=}7\R
 \begin{sloppypar}\raggedright
 Rect $z{=}a{+}bi$ (Re${=}a$, Im${=}b$), plane vector $(a,b)$. Polar $r(\cos\theta{+}i\sin\theta)$, $r{=}|z|{=}\sqrt{a^2{+}b^2}$. $|z|^2{=}z\bar z$, $\bar z{=}a{-}bi$.\\
 $+,-$ = vector $+$ (parallelogram). Mult: $(a{+}bi)(c{+}di){=}(ac{-}bd){+}(ad{+}bc)i$.\\
+\ex{Worked mult:} $(1{+}i)(2{-}3i){=}(2{+}3){+}(2{-}3)i{=}5{-}i$. \hl{Conj rule:} $\overline{z_1z_2}{=}\bar z_1\bar z_2$: $(1{-}i)(2{+}3i){=}5{+}i{=}\overline{5{-}i}$.\\
+\ex{Modulus + div (Quiz6):} $|z_1||z_2|{=}\sqrt2{\cdot}\sqrt{13}{=}\sqrt{26}$; $z_1/z_2{=}(1{+}i)(2{+}3i)/(4{+}9){=}({-}1{+}5i)/13$.\\
 \ex{Worked $3{+}4i$:} $|z|{=}5$, $z^{-1}{=}(3{-}4i)/25{=}0.12{-}0.16i$.\\
 \ex{Worked $(1{+}6i)/(1{-}6i)$:} $(1{+}6i)^2/37{=}({-}35{+}12i)/37$.\\
 ${\approx}{-}0.9459{+}0.3243i$ \wk{Check} ($37{\cdot}({-}0.9459){=}{-}35$, $37{\cdot}0.3243{=}12$).\\
 \end{sloppypar}
 \begin{kbox}\raggedright
 \textbf{Euler:} \hl{$e^{i\theta}{=}\cos\theta{+}i\sin\theta$}; \textbf{DeMoivre:} \hl{$(re^{i\theta})^n{=}r^n(\cos n\theta{+}i\sin n\theta)$}.\\
-\textbf{$n$-th roots:} \hl{$\sqrt[n]{r}(\cos(\theta{+}2k\pi)/n{+}i\sin(\theta{+}2k\pi)/n)$}, $k{=}0..n{-}1$.\\
+\textbf{$n$-th roots:} \hl{$\sqrt[n]{r}\left(\cos\frac{\theta{+}2k\pi}{n}{+}i\sin\frac{\theta{+}2k\pi}{n}\right)$}, $k{=}0..n{-}1$.\\
 \textbf{Div:} \hl{$z_1/z_2{=}z_1\bar z_2/|z_2|^2$}; \textbf{Inverse:} \hl{$z^{-1}{=}\bar z/|z|^2$}.\\
 \textbf{Polar mult:} \hl{$r_1r_2e^{i(\theta_1+\theta_2)}$}: $e^{i\pi/3}{\cdot}e^{i\pi/6}{=}e^{i\pi/2}{=}i$.
 \end{kbox}
+\begin{center}\scriptsize
+${\renewcommand{\arraystretch}{0.9}\begin{array}{c|ccccccc}\theta&\frac\pi6&\frac\pi4&\frac\pi3&\frac\pi2&\frac{2\pi}3&\frac{3\pi}4&\frac{5\pi}6\\\hline\sin&\frac12&\frac{\sqrt2}2&\frac{\sqrt3}2&1&\frac{\sqrt3}2&\frac{\sqrt2}2&\frac12\\\cos&\frac{\sqrt3}2&\frac{\sqrt2}2&\frac12&0&{-}\frac12&{-}\frac{\sqrt2}2&{-}\frac{\sqrt3}2\end{array}}$
+\end{center}
+\begin{sloppypar}\raggedright
+\hl{Periodicity:} $\sin(\theta{+}2\pi k){=}\sin\theta$, $\cos$ same; $\sin({-}\theta){=}{-}\sin\theta$, $\cos({-}\theta){=}\cos\theta$. \ex{Use (Quiz6 roots):} $\sqrt{2}\,e^{i\pi/6}{=}\sqrt2\left(\tfrac{\sqrt3}2{+}\tfrac i2\right){=}\tfrac{\sqrt3}{\sqrt2}{+}\tfrac{i}{\sqrt2}$.
+\end{sloppypar}
 \begin{sloppypar}\raggedright
 \ex{Worked $8e^{i\pi/3}$:} $8(\frac12{+}i\frac{\sqrt3}{2}){=}4{+}4\sqrt3\,i{\approx}4{+}6.9282i$.\\
 \ex{Worked $11e^{3\pi i/2}$:} $11(0{-}i){=}{-}11i$.\\
@@ -122,14 +130,14 @@ Groups: $(\mathbb C,{+})$ $e{=}0$ inv ${-}z$; $(\mathbb C^*,{\cdot})$ $e{=}1$ in
 
 \section{Roots of Unity}
 \begin{sloppypar}\raggedright
-Powers $\omega^0..\omega^{n-1}$ = all $n$ roots cyclically (regular $n$-gon on unit circle, angle $2\pi/n$ apart); primitive = generator; $n$ distinct roots of $z^n{-}1{=}0$.\\
+Powers $\omega_n^0..\omega_n^{n-1}$ = all $n$ roots cyclically (regular $n$-gon on unit circle, angle $2\pi/n$ apart); primitive = generator; $n$ distinct roots of $z^n{-}1{=}0$.\\
 \hl{Primitive:} $\omega_n^k$ generates all $\iff\gcd(k,n){=}1$; e.g. $n{=}8$: $k{=}1,3,5,7$. \wk{Why:} $\mathrm{ord}(\omega_n^k){=}n/\gcd(k,n)$ — shared factors shortcut the cycle (e.g. $\omega_8^2{=}\omega_4$, order $4$).\\
-\wk{Gen test:} $g^d{\ne}1$ for all proper divisors $d{\mid}n$ (Z13: $2^1,2^2,2^3,2^4,2^6{=}2,4,8,3,12{\ne}1$).\\
+\wk{Gen test:} $g^d{\ne}1$ for all proper divisors $d{\mid}n$ ($\mathbb Z_{13}^*$: $2^1,2^2,2^3,2^4,2^6{=}2,4,8,3,12{\ne}1$).\\
 \hl{Cyclic:} $C_n^*{=}\langle\omega_n\rangle$; reduce first: $\omega_8^2{=}\omega_4{=}i$.
 \end{sloppypar}
 \begin{kbox}\raggedright
 \textbf{Root:} \hl{$\omega_n{=}e^{2\pi i/n}$}.\\
-\textbf{Relations ($n$ even; last two $\forall n$):} $\omega^n{=}1$, $\omega^{n/2}{=}{-}1$, $\omega^2{=}\omega_{n/2}$, $\omega^{-1}{=}\bar\omega$, $\omega^{k+n/2}{=}{-}\omega^k$, $\omega^{2k}{=}\omega_{n/2}^k$, $\omega^{n-k}{=}\bar\omega^k$.
+\textbf{Relations ($n$ even; last two $\forall n$):} $\omega_n^n{=}1$, $\omega_n^{n/2}{=}{-}1$, $\omega_n^2{=}\omega_{n/2}$, $\omega_n^{-1}{=}\overline{\omega_n}$, $\omega_n^{k+n/2}{=}{-}\omega_n^k$, $\omega_n^{2k}{=}\omega_{n/2}^k$, $\omega_n^{n-k}{=}\overline{\omega_n^k}$.
 \end{kbox}
 \begin{sloppypar}\raggedright
 \ex{Worked $\omega_8{=}(1{+}i)/\sqrt2$:} $\omega_8^4{=}{-}1$, $\omega_8^8{=}1$, $\omega_8^{-5}{=}\omega_8^{-5+8}{=}\omega_8^3{=}({-}1{+}i)/\sqrt2$; $\omega_{16}^4{=}e^{8\pi i/16}{=}i{=}\omega_4$. $\sqrt{i}{=}(1{+}i)/\sqrt2$ (\wk{Check} $((1{+}i)/\sqrt2)^2{=}i$); $\sqrt{-i}{=}({-}1{+}i)/\sqrt2$.\\
@@ -137,14 +145,15 @@ Powers $\omega^0..\omega^{n-1}$ = all $n$ roots cyclically (regular $n$-gon on u
 \ex{Worked} $p{=}x^4{-}3x^3{+}x^2{-}2x{-}1$ at $\omega_4{=}i$: powers $\omega_4^2{=}{-}1$, $\omega_4^3{=}{-}i$, $\omega_4^4{=}1$.\\
 Then $1{-}3({-}i){+}({-}1){-}2i{-}1{=}1{+}3i{-}1{-}2i{-}1{=}{-}1{+}i$.\\
 Lecture: $3\omega_4^3{-}2\omega_4^2{+}2{+}\omega_4^8{=}3({-}i){+}2{+}2{+}1{=}5{-}3i$.\\
-\ex{Power drill:} $[(\omega_8^3)^4{-}1]$: $\omega_8^{12}{=}\omega_8^4{=}{-}1$, so ${-}1{-}1{=}{-}2$.
+\ex{Power drill:} $[(\omega_8^3)^4{-}1]$: $\omega_8^{12}{=}\omega_8^4{=}{-}1$, so ${-}1{-}1{=}{-}2$.\\
+\ex{C3 (Quiz6):} $\omega_3{=}\frac{-1{+}\sqrt3 i}{2}{=}e^{2\pi i/3}$, $\omega_3^2{=}\frac{-1{-}\sqrt3 i}{2}$, $\omega_3^3{=}1$; table via powers: $\omega_3^2{\cdot}\omega_3^2{=}\omega_3^4{=}\omega_3$; gens $\omega_3,\omega_3^2{\leftrightarrow}[1]_3,[2]_3$ ($\gcd{=}1$).
 \end{sloppypar}
 
 \section{Iso $C_n^*\cong\mathbb Z_n^+$}
 \begin{sloppypar}\raggedright
-\hl{Map $\omega_n^k\leftrightarrow[k]_n$;} ${\times}\leftrightarrow{+}$: $\omega^k\omega^l{=}\omega^{k+l}\leftrightarrow[k]{+}[l]{=}[k{+}l]$. Gen $\leftrightarrow$ gen. \hl{Iso:} bijection preserving op ($C_4^*$ table ${\equiv}$ $\mathbb Z_4^+$ table). \hl{Subgroup:} subset + closed under op.\\
-\ex{Worked $C_4\leftrightarrow\mathbb Z_4$:} $[0]{\leftrightarrow}1,[1]{\leftrightarrow}i,[2]{\leftrightarrow}{-}1,[3]{\leftrightarrow}{-}i$; $[1]{+}[2]{=}[3]\leftrightarrow i{\cdot}({-}1){=}{-}i$; $[3]{+}[2]{=}[5]{=}[1]\leftrightarrow({-}i)({-}1){=}i$. Tables same shape $\Rightarrow$ iso.\\
-\wk{No-iso test:} $|G|$ must match + generator orders; e.g. $|C_2^*|{=}2$ vs $|\mathbb Z_4^+|{=}4\Rightarrow$ no iso. \ex{Fill $C_5^*$ via iso:} $\omega_5^3{\cdot}\omega_5^4{=}\omega_5^7{=}\omega_5^2\leftrightarrow[3]{+}[4]{=}[7]{=}[2]$. Subgroups: $C_{2^m}^*{\subset}C_{2^{m+1}}^*$ ($z^{2^m}{=}1\Rightarrow(z^{2^m})^2{=}1$).
+\hl{Map $\omega_n^k\leftrightarrow[k]_n$;} ${\times}\leftrightarrow{+}$: $\omega_n^k\omega_n^l{=}\omega_n^{k+l}\leftrightarrow[k]_n{+}[l]_n{=}[k{+}l]_n$. Gen $\leftrightarrow$ gen. \hl{Iso:} bijection preserving op ($C_4^*$ table ${\equiv}$ $\mathbb Z_4^+$ table). \hl{Subgroup:} subset + closed under op.\\
+\ex{Worked $C_4\leftrightarrow\mathbb Z_4$:} $[0]_4{\leftrightarrow}1,[1]_4{\leftrightarrow}i,[2]_4{\leftrightarrow}{-}1,[3]_4{\leftrightarrow}{-}i$; $[1]_4{+}[2]_4{=}[3]_4\leftrightarrow i{\cdot}({-}1){=}{-}i$; $[3]_4{+}[2]_4{=}[5]_4{=}[1]_4\leftrightarrow({-}i)({-}1){=}i$. Tables same shape $\Rightarrow$ iso.\\
+\wk{No-iso test:} $|G|$ must match + generator orders; e.g. $|C_2^*|{=}2$ vs $|\mathbb Z_4^+|{=}4\Rightarrow$ no iso. \ex{Fill $C_5^*$ via iso:} $\omega_5^3{\cdot}\omega_5^4{=}\omega_5^7{=}\omega_5^2\leftrightarrow[3]_5{+}[4]_5{=}[7]_5{=}[2]_5$. Subgroups: $C_{2^m}^*{\subset}C_{2^{m+1}}^*$ ($z^{2^m}{=}1\Rightarrow(z^{2^m})^2{=}1$).
 \end{sloppypar}
 
 \section{Poly: FTA, Fields, Coeff/Value}
@@ -169,10 +178,10 @@ Alg closed: every $\deg{\ge}1$ has a root; $\mathbb C$ is (FTA); $\mathbb R$ is 
 Even/odd: $p(x){=}p_e(x^2){+}x\,p_o(x^2)$. \ex{Worked} $1{-}2x{+}3x^2{-}4x^3{+}5x^4{-}6x^5{+}7x^6{-}8x^7$: $p_e(y){=}1{+}3y{+}5y^2{+}7y^3$, $p_o(y){=}{-}2{-}4y{-}6y^2{-}8y^3$; depth of recursion tree ${=}3$ ($8{=}2^3$).
 \end{sloppypar}
 \begin{kbox}\raggedright
-\textbf{Butterfly} ($k{=}0..n/2{-}1$): \hl{$p(\omega^k){=}p_e(\omega^{2k}){+}\omega^k p_o(\omega^{2k})$; $p(\omega^{k+n/2}){=}p_e(\omega^{2k}){-}\omega^k p_o(\omega^{2k})$}. Needs $n{=}2^t$.
+\textbf{Butterfly} ($k{=}0..n/2{-}1$): \hl{$p(\omega_n^k){=}p_e(\omega_n^{2k}){+}\omega_n^k p_o(\omega_n^{2k})$; $p(\omega_n^{k+n/2}){=}p_e(\omega_n^{2k}){-}\omega_n^k p_o(\omega_n^{2k})$}. Needs $n{=}2^t$.
 \end{kbox}
 \begin{sloppypar}\raggedright
-\ex{Butterfly $n{=}4$ ($\omega{=}i$):}\\
+\ex{Butterfly $n{=}4$ ($\omega_4{=}i$):}\\
 $\begin{array}{ll}
 k{=}0: & p(1){=}p_e(1){+}p_o(1)\\
 & p({-}1){=}p_e(1){-}p_o(1)\\
@@ -182,7 +191,7 @@ k{=}1: & p(i){=}p_e({-}1){+}i\,p_o({-}1)\\
 \hl{$N_{\mathrm{FFT}}\ge2n{-}1$}, smallest pow2 (4+4 coeffs deg3: product deg6, 7 coeffs $\Rightarrow \hl{N{=}8}$). Pipeline: coeff$\to$FFT$\to$vals$\to$pointwise ${\times}\to$IFFT$\to$coeff. Zero-pad; extra points OK if same poly. \wk{Idea:} one $(p_e,p_o)$ pair gives two values (halves work).\\
 \end{sloppypar}
 \begin{kbox}\raggedright
-\textbf{IFFT:} $a_j{=}\frac{1}{n}\sum_{k=0}^{n-1}y_k(\omega^{-j})^k$, $j{=}0..n{-}1$.
+\textbf{IFFT:} $a_j{=}\frac{1}{n}\sum_{k=0}^{n-1}y_k(\omega_n^{-j})^k$, $j{=}0..n{-}1$.
 \end{kbox}
 \begin{sloppypar}\raggedright
 \hl{Costs:} FFT/IFFT $O(n\log n)$ (depth $\log n\times O(n)$/level); pointwise $O(n)$; total $O(n\log n)$.\\
@@ -201,7 +210,7 @@ G{:}\ &3,2{+}i,1,2{-}i\\
 H{=}F{\cdot}G{:}\ &0,3{-}i,2,3{+}i
 \end{array}$\\
 \ex{IFFT:} $a_0{=}(0{+}3{-}i{+}2{+}3{+}i)/4{=}8/4{=}2$; $a_1{=}({-}3i{-}1{-}2{+}3i{-}1)/4{=}{-}1$; $a_2{=}{-}1\Rightarrow$\hl{$h{=}2{-}x{-}x^2$} \wk{Check} OK.\\
-\ex{Worked IFFT $y{=}({-}1,i,1,2)$:} $(\omega^{-j})^k$ ($k{=}0..3$, $\omega{=}i$):\\
+\ex{Worked IFFT $y{=}({-}1,i,1,2)$:} $(\omega_4^{-j})^k$ ($k{=}0..3$, $\omega_4{=}i$):\\
 $\begin{array}{ll}
 j{=}0:\ 1,1,1,1 & j{=}1:\ 1,{-}i,{-}1,i\\
 j{=}2:\ 1,{-}1,1,{-}1 & j{=}3:\ 1,i,{-}1,{-}i
@@ -242,17 +251,18 @@ $x^3{-}10x^2{+}27x{-}18{=}0$: test $6$: $216{-}360{+}162{-}18{=}0$; roots $1,3,6
 \begin{sloppypar}\raggedright
 \ex{FFT size Qs:} $p$ with $n$ coeffs needs $n$ points forth+back; FFT needs pow2 so pad. $n{-}1{=}16\Rightarrow n{=}17$ (not pow2) $\Rightarrow$ \hl{cannot use directly}, pad to $32$. $(p(x))^2$: $\deg2(n{-}1)$, needs $2n{-}1$ pts $\to$ next pow2.\\
 \ex{IFFT $n{=}2$, $y{=}(1,1{+}i)$:} $x_0{=}1{=}\omega_2^0$, $x_1{=}{-}1{=}\omega_2^1$; $a_0{=}(y_0{+}y_1)/2{=}(2{+}i)/2{=}1{+}0.5i$; $a_1{=}(y_0{-}y_1)/2{=}{-}0.5i$. \wk{Check:} $p(1){=}1$, $p({-}1){=}1{+}i$.\\
-Gen $a_2$ formula ($n{=}4$): $a_2{=}(y_0{-}y_1{+}y_2{-}y_3)/4$ ($\omega^{-2k}{=}1,{-}1,1,{-}1$). \wk{Idea:} IFFT = FFT with $\omega^{-1}$, then $/n$ (\hl{trap:} forgetting $/n$ or the ${-}1$).\\
+Gen $a_2$ formula ($n{=}4$): $a_2{=}(y_0{-}y_1{+}y_2{-}y_3)/4$ ($\omega_4^{-2k}{=}1,{-}1,1,{-}1$). \wk{Idea:} IFFT = FFT with $\omega_n^{-1}$, then $/n$ (\hl{trap:} forgetting $/n$ or the ${-}1$).\\
 \ex{$C_8^*$ products} ($z_1{=}1$, $z_2{=}{-}1$, $z_5{=}(1{+}i)/\sqrt2$, $z_6{=}({-}1{+}i)/\sqrt2$, $z_7{=}(1{-}i)/\sqrt2$, $z_8{=}({-}1{-}i)/\sqrt2$):\\
 $z_2z_5{=}({-}1{-}i)/\sqrt2{=}z_8$; $z_5z_7{=}1{=}z_1$; $z_6z_8{=}1{=}z_1$. Inverse of $({-}1{-}i)/\sqrt2$: $|z|^2{=}1$, inv ${=}\bar z{=}({-}1{+}i)/\sqrt2{=}z_6$.\\
 \ex{Group tests:} $2a{+}7bi$ ($a,b{\in}\mathbb Z$) additive: closed, $e{=}0$, inv ${-}z$ $\Rightarrow$ \hl{group}. $3a{+}3bi$, $ab{\ne}0$ multiplicative: $1{=}3a{+}3bi\Rightarrow a{=}1/3{\notin}\mathbb Z$ $\Rightarrow$ \hl{not} (no identity).\\
-\ex{FFT $n{=}32$:} depth $5$ ($2^5{=}32$); butterfly pairs $(\omega^0,\omega^{16})$, $(\omega^1,\omega^{17})$; even/odd parts deg $15$, split again $\to4$ polys ($p_{ee},p_{eo},p_{oe},p_{oo}$). $C_n^+$ = cyclic additive order $n$ (${\cong}\mathbb Z_n^+$), gens $[k]$ with $\gcd(k,n){=}1$; chain $C_{2^m}^*{\subset}C_{2^{m+1}}^*$.
+\ex{D3 triangle symmetries (HW09):} $\{e,r,r^2,\ell_1,\ell_2,\ell_3\}$, $r$ = rot $120^{\circ}$, $\ell_i$ = reflections; $r^3{=}e$, $\ell_i^2{=}e$; rot${\cdot}$rot = rot, refl${\cdot}$refl = rot, mixed = refl (track one vertex to name it: $r^2{\cdot}\ell_1{=}\ell_2$, $r{\cdot}\ell_1{=}\ell_3$); order 6, non-abelian ($r\ell_1{\ne}\ell_1r$); $r^{-1}{=}r^2$, each $\ell_i$ self-inverse. ($b{\cdot}a$: apply $a$ first.)\\
+\ex{FFT $n{=}32$:} depth $5$ ($2^5{=}32$); butterfly pairs $(\omega_{32}^0,\omega_{32}^{16})$, $(\omega_{32}^1,\omega_{32}^{17})$; even/odd parts deg $15$, split again $\to4$ polys ($p_{ee},p_{eo},p_{oe},p_{oo}$). $C_n^+$ = cyclic additive order $n$ (${\cong}\mathbb Z_n^+$), gens $[k]_n$ with $\gcd(k,n){=}1$; chain $C_{2^m}^*{\subset}C_{2^{m+1}}^*$.
 \end{sloppypar}
 $\begin{array}{l}
-p(\omega^0)=p_e(1)+p_o(1)\\
-p(\omega^{16})=p_e(1)-p_o(1)\\
-p(\omega^1)=p_e(\omega^2)+\omega\,p_o(\omega^2)\\
-p(\omega^{17})=p_e(\omega^2)-\omega\,p_o(\omega^2)
+p(\omega_{32}^0)=p_e(1)+p_o(1)\\
+p(\omega_{32}^{16})=p_e(1)-p_o(1)\\
+p(\omega_{32}^1)=p_e(\omega_{32}^2)+\omega_{32}\,p_o(\omega_{32}^2)\\
+p(\omega_{32}^{17})=p_e(\omega_{32}^2)-\omega_{32}\,p_o(\omega_{32}^2)
 \end{array}$
 \begin{sloppypar}\raggedright
 \ex{Inconsistent check:} $\gcd(x{-}1,x{+}1){=}1$ ($\deg0$) $\Rightarrow$ \hl{inconsistent} ($(x{+}1){-}(x{-}1){=}2{\ne}0$).
@@ -345,10 +355,10 @@ $\begin{array}{c|cccc}*&1&i&{-}1&{-}i\\\hline1&1&i&{-}1&{-}i\\i&i&{-}1&{-}i&1\\{
 $\begin{array}{c|cccc}+&0&1&2&3\\\hline0&0&1&2&3\\1&1&2&3&0\\2&2&3&0&1\\3&3&0&1&2\end{array}$
 \end{center}
 \begin{sloppypar}\raggedright
-\ex{$C_5^*$ table via iso} ($\omega{=}\omega_5$; $\omega^i{\cdot}\omega^j{=}\omega^{(i+j)\bmod5}$):\\
+\ex{$C_5^*$ table via iso} ($\omega_5^i{\cdot}\omega_5^j{=}\omega_5^{(i+j)\bmod5}$):\\
 \end{sloppypar}
 \begin{center}\scriptsize
-${\renewcommand{\arraystretch}{0.82}\begin{array}{c|ccccc}*&1&\omega&\omega^2&\omega^3&\omega^4\\\hline1&1&\omega&\omega^2&\omega^3&\omega^4\\\omega&\omega&\omega^2&\omega^3&\omega^4&1\\\omega^2&\omega^2&\omega^3&\omega^4&1&\omega\\\omega^3&\omega^3&\omega^4&1&\omega&\omega^2\\\omega^4&\omega^4&1&\omega&\omega^2&\omega^3\end{array}}$
+${\renewcommand{\arraystretch}{0.82}\begin{array}{c|ccccc}*&1&\omega_5&\omega_5^2&\omega_5^3&\omega_5^4\\\hline1&1&\omega_5&\omega_5^2&\omega_5^3&\omega_5^4\\\omega_5&\omega_5&\omega_5^2&\omega_5^3&\omega_5^4&1\\\omega_5^2&\omega_5^2&\omega_5^3&\omega_5^4&1&\omega_5\\\omega_5^3&\omega_5^3&\omega_5^4&1&\omega_5&\omega_5^2\\\omega_5^4&\omega_5^4&1&\omega_5&\omega_5^2&\omega_5^3\end{array}}$
 \end{center}
 \begin{sloppypar}\raggedright
 \ex{Recover $h{=}a{+}bx{+}cx^2$ from values $(0,2,0)$ at $({-}2,0,1)$:} $a{-}2b{+}4c{=}0$, $a{=}2$, $a{+}b{+}c{=}0$.\\
