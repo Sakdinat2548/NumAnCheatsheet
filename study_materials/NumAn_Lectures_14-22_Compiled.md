@@ -455,7 +455,7 @@ $\bar a=(0,1)$, $\bar b=(2,0)$. $\operatorname{proj}_{\bar\jmath}\bar a = \bar a
 For $\bar a=(a^x,a^y)$, $\bar b=(b^x,b^y)$, construct a bounding rectangle of area $R=a^yb^x$ and a corner rectangle $R_1=a^xb^y$. From the figure, the area of the parallelogram spanned by $\bar a,\bar b$ equals $R-R_1$:
 $$S = a^yb^x - a^xb^y$$
 And the determinant:
-$$\det: \left|\begin{matrix}\bar a\\ \bar b\end{matrix}\right| = \begin{vmatrix} a^x & b^x \\ a^y & b^y \end{vmatrix} = a^xb^y - b^xa^y = -S$$
+$$\det: \begin{vmatrix}\bar a\\ \bar b\end{vmatrix} = \begin{vmatrix} a^x & b^x \\ a^y & b^y \end{vmatrix} = a^xb^y - b^xa^y = -S$$
 **Conclusion:** The area of the parallelogram equals $\det(\bar a\ \bar b)$, up to a sign ($\pm$).
 
 **Theorem/Property (2×2 Determinant as Oriented Area, alternate derivation):**
